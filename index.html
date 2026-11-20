@@ -772,6 +772,9 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 .bench-photo .bench-stage { display: block; margin-top: 0.2rem; font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .bench-photo .bench-fig, .bench-photo .bench-note { display: none; }
 .bench-photo.bench-photo--diagram img { filter: none; padding: 4px; }
+.bench-photo--diagram { overflow: visible; }
+.bench-bang { position: absolute; top: -1.6rem; right: -0.7rem; width: 2.2rem; height: auto; overflow: visible; color: var(--maroon); rotate: 8deg; pointer-events: none; z-index: 2; transition: rotate 0.3s ease, scale 0.3s ease; }
+.bench-photo:hover .bench-bang { rotate: 14deg; scale: 1.12; }
 .bench-photo:nth-child(odd) { --r: -1.6deg; --tr: -3deg; }
 .bench-photo:nth-child(even) { --r: 1.4deg; --tr: 3deg; }
 .bench-photo:nth-child(3n) { --r: -0.5deg; }
@@ -1700,6 +1703,14 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
         <ul class="bench-grid" id="bench-grid">
           <li class="bench-photo bench-photo--fit bench-photo--diagram" tabindex="0" role="button" aria-label="Enlarge photo: The blueprint">
             <span class="tape" aria-hidden="true"></span>
+            <svg class="bench-bang draw" viewBox="0 0 66 72" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" aria-hidden="true">
+              <path pathLength="1" d="M14 6C11 20 10 33 12 44"/>
+              <circle class="pop" cx="11.5" cy="56" r="2.6" fill="currentColor" stroke="none"/>
+              <path pathLength="1" d="M34 12C33 24 33.5 35 36 45" style="--d: 0.18s"/>
+              <circle class="pop" cx="37" cy="57" r="2.6" fill="currentColor" stroke="none"/>
+              <path pathLength="1" d="M56 4C54 17 54 29 57 40" style="--d: 0.36s"/>
+              <circle class="pop" cx="58" cy="52" r="2.6" fill="currentColor" stroke="none"/>
+            </svg>
             <img src="images/thesis/channel-design.png" alt="Diagram of the flow channel: a cell inlet with a serpentine, a three-way intersection with two angled sheath inlets, the electroporation zone, a mRNA inlet joining at 90 degrees, a second serpentine for mixing, and the outlet" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
             <figcaption><span class="bench-script">The blueprint</span><span class="bench-stage">Design</span><span class="bench-fig">The flow channel and how it evolved, D0 → D2.2</span><span class="bench-note"><span class="bench-note-lead">Cells enter on the left and tumble through a serpentine so fresh membrane keeps facing the field. Two sheath inlets at ±45° pin the cell stream to the centre line, the same distance from each electrode. The mRNA joins after the electroporation zone, so the field never touches it, and a second serpentine mixes it in before the outlet.</span><span class="bench-steps"><span><b>D0</b>A simple 1 mm channel to the EP zone, with the three-inlet intersection and a 45° cargo inlet.</span><span><b>D1</b>Sinusoidal serpentines for cell rotation and mixing, a wider EP zone so the 100 µm electrodes sit flush, and a funnel after the mRNA inlet.</span><span><b>D2</b>Testing showed clogging and channels that were too wide. Sharper curves (FEA showed better mixing), no funnel, the mRNA inlet turned from 45° to 90° to stop leakage, and the EP zone narrowed from 1000 µm to 100 µm, then 50 µm.</span><span><b>D2.1–2.2</b>A retaining wall and a straightened, shortened segment to stop the mold lifting off the wafer.</span></span></span></figcaption>
           </li>
