@@ -1,0 +1,1964 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<title>Arch Portfolio Draft</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Draft portfolio: beige line-art layout, folder-tab navigation and arch-framed photos, with the scroll reveal and intro animations carried over from Paulette's portfolio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+/* Layout: a paper sketchbook. Tan hero panel (line-art + stacked arches), a stack of
+   folder tabs as the index, then line-art sections that draw themselves on scroll.
+   Single deliberate light look (beige paper), so no dark-theme block. */
+:root {
+  --paper: #efe6d5;          /* page */
+  --paper-deep: #ddcbad;     /* hero panel, card wells */
+  --paper-light: #f7f1e6;    /* cards, modal */
+  --ink: #2c2420;            /* line art + text */
+  --muted: #6b5e52;
+  --line: rgba(44, 36, 32, 0.22);
+
+  /* folder + arch palette (from the folder-tab and arch references) */
+  --maroon: #4b1b24;
+  --rose: #e5c1bb;
+  --blush: #f0d8d0;
+  --sage: #c6cda8;
+  --butter: #ecd7a2;
+  --mist: #c9d5d2;
+  --stone: #d7ccbb;
+  --olive: #8b892e;
+
+  --display: 'Gloock', 'Bodoni Moda', Georgia, serif;
+  --body: 'Figtree', -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --script: 'Pinyon Script', 'Snell Roundhand', cursive;
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);   /* same curve as the old site */
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; color-scheme: light; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  /* paper grain, same trick as the old site */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+:focus-visible { outline: 2px solid var(--maroon); outline-offset: 3px; }
+
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------------- Type ---------------- */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.section-heading {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin: 0.3rem 0 0;
+  text-wrap: balance;
+}
+.section { padding-block: clamp(3.5rem, 8vw, 6rem) 0; }
+.section-head { display: grid; gap: 0.2rem; margin-bottom: 2rem; }
+.section-head p { margin: 0.6rem 0 0; max-width: 58ch; color: var(--muted); }
+
+.btn-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.3rem;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+.btn-line:hover { background: var(--ink); color: var(--paper-light); transform: translateY(-2px); }
+.btn-line.solid { background: var(--ink); color: var(--paper-light); }
+.btn-line.solid:hover { background: var(--maroon); border-color: var(--maroon); }
+
+/* ornamental double rule (from the "Hello!" reference) */
+.ornament { display: block; width: 100%; height: 22px; color: var(--ink); opacity: 0.75; }
+
+/* ---------------- Header ---------------- */
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1.3rem;
+}
+.brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; }
+.brand svg { width: 38px; height: 38px; flex: none; }
+.brand-name {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.main-nav { display: flex; gap: 1.6rem; align-items: center; }
+.main-nav a {
+  font-size: 0.86rem;
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+.main-nav a:hover, .main-nav a:first-child { border-bottom-color: var(--ink); }
+@media (max-width: 760px) { .main-nav { display: none; } }
+
+/* ---------------- Hero ---------------- */
+.hero-panel {
+  position: relative;
+  background: var(--paper-deep);
+  border-radius: 6px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: 1rem;
+  padding: clamp(2rem, 5vw, 3.5rem) clamp(1.4rem, 4vw, 3.5rem);
+  min-height: 520px;
+}
+.hero-lineart {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  color: var(--ink);
+  opacity: 0.55;
+}
+.hero-copy { position: relative; z-index: 1; min-width: 0; }
+.hero-copy .eyebrow {
+  display: inline-block;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 0.25rem;
+}
+.hero-copy h1 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 6.2vw, 4.6rem);
+  line-height: 0.98;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  margin: 0 0 0.6rem;
+}
+.hero-copy h1 em { font-style: normal; display: inline-block; }
+.hero-bio { max-width: 46ch; margin: 0 0 1rem; font-size: 1.02rem; }
+.hero-bio-more { color: var(--muted); font-size: 0.95rem; margin-bottom: 1.6rem; }
+.hero-hello { font-family: var(--script); font-size: clamp(1.8rem, 3vw, 2.4rem); line-height: 1; color: var(--maroon); margin: 1.2rem 0 -0.4rem; }
+.hero-sub { font-family: var(--display); font-size: clamp(1.15rem, 2vw, 1.45rem); color: var(--olive); margin: 0 0 1rem; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.icon-slot { display: grid; place-items: center; color: var(--ink); }
+.chip-icon { width: 100%; height: auto; rotate: 90deg; }
+.arch-stage { cursor: help; }
+.arch-stage:hover .hand-circle ellipse { stroke-dashoffset: 0; }
+.arch-script .hand-circle ellipse { stroke: var(--maroon); opacity: 0.55; }
+.hero-note {
+  font-family: var(--script);
+  font-size: 1.6rem;
+  line-height: 1.1;
+  color: var(--maroon);
+  margin: 1.6rem 0 0;
+  transform: rotate(-4deg);
+  transform-origin: left;
+}
+
+/* arch composition (stacked arches reference) */
+.arch-stage { position: relative; aspect-ratio: 1 / 0.98; max-width: 520px; width: 100%; justify-self: end; z-index: 1; }
+.arch {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 999px 999px 4px 4px;
+  box-shadow: 0 18px 30px -18px rgba(44, 36, 32, 0.55);
+}
+.arch img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* duotone: greyscale photo multiplied onto the arch colour */
+  filter: grayscale(1) contrast(1.05);
+  mix-blend-mode: multiply;
+}
+.arch-main { right: 6%; top: 3%; width: 54%; aspect-ratio: 1 / 1.42; background: var(--olive); }
+.arch-main img { filter: none; mix-blend-mode: normal; object-position: 50% 20%; }
+.arch-small { left: 4%; bottom: 3%; width: 38%; aspect-ratio: 1 / 1.36; background: var(--rose); }
+.arch-echo {
+  position: absolute;
+  right: calc(6% - 14px);
+  top: calc(3% + 14px);
+  width: 54%;
+  aspect-ratio: 1 / 1.42;
+  border: 1px solid var(--ink);
+  border-radius: 999px 999px 4px 4px;
+  opacity: 0.6;
+}
+.circle-echo {
+  position: absolute;
+  left: 30%;
+  bottom: 0;
+  width: 24%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  opacity: 0.5;
+}
+.arch-script {
+  position: absolute;
+  left: -1%;
+  top: 25%;
+  margin: 0;
+  font-family: var(--script);
+  font-size: clamp(1.9rem, 3.6vw, 2.8rem);
+  line-height: 1;
+  color: var(--maroon);
+  transform: rotate(-8deg);
+  pointer-events: none;
+  z-index: 2;
+}
+.badge { position: absolute; right: -7%; top: -11%; width: 20%; aspect-ratio: 1; z-index: 3; }
+.badge svg { width: 100%; height: 100%; overflow: visible; }
+.badge text { font-family: var(--mono); font-size: 11px; letter-spacing: 0.32em; fill: var(--ink); text-transform: uppercase; }
+.badge .spin { transform-origin: 50px 50px; }
+@media (prefers-reduced-motion: no-preference) {
+  .badge .spin { animation: spin 26s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+}
+
+/* discipline strip (the old hero sidebar list, laid flat) */
+.discipline-strip {
+  list-style: none;
+  margin: 0;
+  padding: 1rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.4rem 1.2rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+.discipline-strip li::before { content: "✦ "; color: var(--olive); }
+
+@media (max-width: 860px) {
+  .hero-panel { grid-template-columns: 1fr; min-height: 0; }
+  .arch-stage { justify-self: center; max-width: 420px; }
+  .arch-script { left: 3%; top: 22%; }
+}
+
+/* ---------------- Folder index ---------------- */
+.folders-section .wrap { position: relative; }
+.folder-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--maroon);
+}
+.folder-hint::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--maroon);
+}
+.folder-stack {
+  position: relative;
+  margin-top: 4.2rem;
+  --tab-h: 46px;
+  --strip: 48px;
+}
+.folder {
+  --r: 16px;
+  position: relative;
+  display: block;
+  height: 132px;
+  margin-top: calc(var(--strip) - 132px);
+  background: var(--c);
+  color: var(--fc, var(--ink));
+  text-decoration: none;
+  border-radius: 0 6px 0 0;
+  box-shadow: 0 -3px 10px -4px rgba(44, 36, 32, 0.28);
+  transition: transform 0.35s var(--ease-out);
+}
+.folder:first-child { margin-top: 0; border-top-left-radius: 6px; }
+.folder:last-child { height: 150px; border-radius: 0 6px 6px 6px; }
+.folder-tab {
+  position: absolute;
+  bottom: calc(100% - 1px);
+  left: var(--x);
+  height: var(--tab-h);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 2.2rem;
+  background: var(--c);
+  border-radius: var(--r) var(--r) 0 0;
+  font-family: var(--display);
+  font-size: clamp(1rem, 1.8vw, 1.22rem);
+  white-space: nowrap;
+}
+/* curved flares where the tab meets the sheet */
+.folder-tab::before, .folder-tab::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: var(--r);
+  height: var(--r);
+  background: radial-gradient(circle at var(--fx) 0, transparent calc(var(--r) - 0.5px), var(--c) var(--r));
+}
+.folder-tab::before { left: calc(var(--r) * -1); --fx: 0; }
+.folder-tab::after { right: calc(var(--r) * -1); --fx: 100%; }
+.folder-tab .arrow {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  opacity: 0;
+  translate: -6px 0;
+  transition: opacity 0.2s ease, translate 0.2s ease;
+}
+.folder:hover, .folder:focus-visible { transform: translateY(-10px); outline: none; }
+.folder:hover .arrow, .folder:focus-visible .arrow { opacity: 1; translate: 0 0; }
+.folder:focus-visible .folder-tab { text-decoration: underline; text-underline-offset: 4px; }
+.folder-foot {
+  position: absolute;
+  left: 1.4rem; right: 1.4rem; bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* paper scraps on top of the folders */
+.deco { position: absolute; pointer-events: none; z-index: 20; }
+.polaroid {
+  right: 4%;
+  top: -3.2rem;
+  width: 150px;
+  padding: 8px 8px 26px;
+  background: var(--paper-light);
+  box-shadow: 0 10px 18px -8px rgba(44, 36, 32, 0.45);
+  rotate: 6deg;
+}
+.polaroid img { aspect-ratio: 1 / 1; object-fit: cover; filter: sepia(0.25) saturate(0.8); }
+.polaroid figcaption {
+  position: absolute; left: 0; right: 0; bottom: 3px;
+  text-align: center;
+  font-family: var(--script);
+  font-size: 1.05rem;
+}
+.binder-clip {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  translate: -50% 0;
+  width: 46px;
+  height: 18px;
+  background: var(--ink);
+  border-radius: 3px 3px 1px 1px;
+}
+.binder-clip::before, .binder-clip::after {
+  content: "";
+  position: absolute;
+  bottom: 12px;
+  width: 14px;
+  height: 18px;
+  border: 2px solid #9a9187;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+}
+.binder-clip::before { left: 6px; rotate: -18deg; }
+.binder-clip::after { right: 6px; rotate: 18deg; }
+.butterfly { left: 58%; bottom: 46px; width: 92px; color: var(--maroon); rotate: -14deg; }
+.sprig { right: 26%; bottom: 34px; width: 70px; color: var(--olive); }
+
+@media (max-width: 700px) {
+  .folder-stack { --tab-h: 40px; --strip: 44px; }
+  .folder-tab { padding: 0 1.1rem; --r: 12px; }
+  .polaroid { display: none; }
+  .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; }
+  .sprig { display: none; }
+  .butterfly { width: 56px; left: auto; right: 6%; bottom: 40px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* the old toolbox "hop-and-wiggle", now on the first folder tab */
+  @keyframes folder-nudge {
+    0%, 30%, 100% { translate: 0 0; rotate: 0deg; }
+    6%  { translate: 0 -7px; rotate: -2deg; }
+    12% { translate: 0 0; rotate: 1.5deg; }
+    17% { translate: 0 -3px; rotate: -1deg; }
+    22% { translate: 0 0; rotate: 0.5deg; }
+  }
+  .folder-stack:not(.is-seen) .folder:first-child .folder-tab {
+    transform-origin: 50% 100%;
+    animation: folder-nudge 3.2s 2s ease-in-out 4;
+  }
+  @keyframes hint-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(75, 27, 36, 0.55); }
+    70%  { box-shadow: 0 0 0 7px rgba(75, 27, 36, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(75, 27, 36, 0); }
+  }
+  .folders-section:not(.is-seen) .folder-hint::before { animation: hint-pulse 1.8s 1.6s ease-out infinite backwards; }
+}
+
+/* ---------------- Work cards ---------------- */
+.filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.6rem; }
+.filter-btn {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  color: var(--ink);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.filter-btn:hover { border-color: var(--ink); }
+.filter-btn.active { background: var(--ink); color: var(--paper-light); border-color: var(--ink); }
+
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.6rem; }
+.card {
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.15s ease;
+}
+.card:hover, .card:focus-visible { transform: translateY(-3px); }
+.card-well {
+  aspect-ratio: 4 / 3;
+  background: var(--paper-deep);
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 20px -14px rgba(44, 36, 32, 0.6);
+  overflow: hidden;
+  transition: box-shadow 0.15s ease;
+}
+.card:hover .card-well, .card:focus-visible .card-well { box-shadow: 0 14px 26px -12px rgba(44, 36, 32, 0.55); }
+.card-well svg { width: 46%; height: auto; color: var(--ink); transition: transform 0.3s ease; }
+.card-well img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s var(--ease-out); }
+.card:hover .card-well img { transform: scale(1.04); }
+.card:hover .card-well svg { transform: scale(1.06); }
+.card h3 { font-family: var(--body); font-weight: 600; font-size: 1rem; margin: 0.9rem 0 0.25rem; }
+.card p { margin: 0 0 0.6rem; font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
+.card .more { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.card[hidden] { display: none; }
+
+/* ---------------- Skills (icon + blob row) ---------------- */
+.skills-wrap { text-align: center; }
+.objective { justify-items: center; margin-bottom: 3rem; }
+.center-heading { font-family: var(--display); font-weight: 400; font-size: clamp(1.6rem, 3vw, 2.1rem); color: var(--ink); margin: 0; }
+.spaced-serif { font-family: var(--display); font-size: 0.98rem; letter-spacing: 0.12em; line-height: 1.75; color: var(--muted); max-width: 62ch; margin: 1rem auto 0; text-wrap: balance; }
+.skills-heading { margin-bottom: 2rem; }
+.skill-row {
+  list-style: none; margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.4rem;
+  align-items: stretch;
+  text-align: center;
+}
+.skill {
+  grid-column: span 2;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 0.9rem;
+  padding: 1.7rem 1.3rem 1.5rem;
+  background: var(--paper-light);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 14px 26px -22px rgba(44, 36, 32, 0.55);
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s ease;
+}
+.skill:hover { transform: translateY(-3px); box-shadow: 0 18px 30px -22px rgba(44, 36, 32, 0.65); }
+.skill:nth-child(4) { grid-column: 2 / span 2; }
+.skill:nth-child(5) { grid-column: 4 / span 2; }
+.skill-head { display: grid; justify-items: center; gap: 0.5rem; }
+.skill-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; }
+.skill-tags li {
+  font-size: 0.76rem;
+  line-height: 1.25;
+  padding: 0.33rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(44, 36, 32, 0.22);
+  background: var(--tone, var(--paper-light));
+  color: var(--ink);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.skill-tags li { max-width: 100%; }
+.skill-tags li:hover { transform: translateY(-2px); box-shadow: 0 5px 10px -6px rgba(44, 36, 32, 0.5); }
+.skill[data-tone="rose"]   { --tone: #f2dcd8; }
+.skill[data-tone="sage"]   { --tone: #dde2c9; }
+.skill[data-tone="butter"] { --tone: #f5e6c4; }
+.skill[data-tone="mist"]   { --tone: #dde6e3; }
+.skill-art { width: 104px; height: 104px; color: var(--ink); overflow: visible; }
+.skill-art .blob { transform-origin: 48px 48px; opacity: 0.85; transition: transform 0.5s var(--ease-out); }
+.skill:hover .blob { transform: scale(1.12) rotate(-8deg); }
+.skill-label { font-family: var(--display); font-weight: 400; font-size: 1.05rem; letter-spacing: 0.12em; line-height: 1.35; margin: 0; }
+html.js-draw .skill-art .blob { transform: scale(0.4); opacity: 0; transition: transform 0.8s var(--ease-out), opacity 0.6s ease; }
+html.js-draw .skill-art.is-drawn .blob { transform: none; opacity: 0.85; transition-delay: var(--d, 0s); }
+html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rotate(-8deg); }
+@media (max-width: 980px) {
+  .skill-row { grid-template-columns: repeat(4, 1fr); }
+  .skill, .skill:nth-child(4), .skill:nth-child(5) { grid-column: span 2; }
+  .skill:nth-child(5) { grid-column: 2 / span 2; }
+}
+@media (max-width: 620px) {
+  .skill-row { grid-template-columns: 1fr; gap: 1.1rem; }
+  .skill, .skill:nth-child(4), .skill:nth-child(5) { grid-column: 1 / -1; }
+  .skill { padding: 1.4rem 1rem 1.2rem; }
+}
+@media (max-width: 520px) { .skill-art { width: 84px; height: 84px; } .skill-tags li { font-size: 0.72rem; } }
+
+/* ---------------- Thesis map ---------------- */
+.thesis-section .wrap { max-width: 1480px; }
+.thesis-section .section-head { margin-bottom: 1.4rem; }
+.thesis-section .section-head p { max-width: 62ch; }
+.thesis-main { display: grid; gap: 0; min-width: 0; }
+.thesis-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 0.85fr); gap: 1.8rem; align-items: start; min-width: 0; }
+.note-column { display: grid; gap: 1.2rem; min-width: 0; }
+.stop-links { display: grid; gap: 0.35rem; }
+.stop-link {
+  display: grid;
+  grid-template-columns: 1.6rem 1fr;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  background: none;
+  border: none;
+  border-left: 2px solid transparent;
+  padding: 0.3rem 0.4rem;
+  text-align: left;
+  cursor: pointer;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 0.86rem;
+  line-height: 1.3;
+  transition: background 0.15s ease, border-color 0.15s ease, padding-left 0.15s ease;
+}
+.stop-link:hover { background: rgba(229, 193, 187, 0.35); padding-left: 0.7rem; }
+.stop-link .num {
+  width: 1.6rem; height: 1.6rem;
+  border-radius: 50%;
+  border: 1.4px solid var(--maroon);
+  background: var(--rose);
+  color: var(--maroon);
+  font-family: var(--display);
+  font-size: 0.82rem;
+  display: grid;
+  place-items: center;
+}
+.stop-link[aria-current="true"] { border-left-color: var(--maroon); background: rgba(229, 193, 187, 0.3); }
+.stop-link[aria-current="true"] .num { background: var(--maroon); color: var(--blush); }
+.map-frame {
+  position: relative;
+  min-width: 0;
+  background: #f6efdf;
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.chip-scroll { max-width: 100%; }
+.chip-plate { position: relative; width: 100%; }
+.chip-svg { display: block; width: 100%; height: auto; }
+.stops { position: absolute; inset: 0; }
+.stop {
+  position: absolute;
+  left: var(--x); top: var(--y);
+  z-index: 2;
+  translate: -50% -50%;
+  display: grid;
+  justify-items: center;
+  gap: 0.3rem;
+  width: 2rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.35;
+}
+.stop-pin {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1.6px solid var(--maroon);
+  background: var(--rose);
+  color: var(--maroon);
+  font-weight: 600;
+  box-shadow: 0 2px 6px -2px rgba(44, 36, 32, 0.45);
+  display: grid;
+  place-items: center;
+  font-family: var(--display);
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  transition: transform 0.2s var(--ease-out), background 0.2s ease, color 0.2s ease;
+}
+.stop:hover .stop-pin, .stop:focus-visible .stop-pin { transform: translateY(-3px) scale(1.14); background: var(--blush); }
+.stop[aria-current="true"] .stop-pin { box-shadow: 0 0 0 5px rgba(75, 27, 36, 0.18), 0 2px 6px -2px rgba(44, 36, 32, 0.45); }
+.stop[aria-current="true"] .stop-pin { background: var(--maroon); color: var(--blush); border-color: var(--maroon); }
+@media (prefers-reduced-motion: no-preference) {
+  /* a slow ring pulse says "tap me", and stops for good once a stop is used */
+  @keyframes stop-pulse {
+    0%, 60%, 100% { box-shadow: 0 0 0 0 rgba(75, 27, 36, 0.45), 0 2px 6px -2px rgba(44, 36, 32, 0.45); }
+    30% { box-shadow: 0 0 0 8px rgba(75, 27, 36, 0), 0 2px 6px -2px rgba(44, 36, 32, 0.45); }
+  }
+  .stops:not(.is-seen) .stop:not([aria-current="true"]) .stop-pin { animation: stop-pulse 2.6s ease-out infinite; }
+  .stops:not(.is-seen) .stop:nth-child(2) .stop-pin { animation-delay: 0.18s; }
+  .stops:not(.is-seen) .stop:nth-child(3) .stop-pin { animation-delay: 0.36s; }
+  .stops:not(.is-seen) .stop:nth-child(4) .stop-pin { animation-delay: 0.54s; }
+  .stops:not(.is-seen) .stop:nth-child(5) .stop-pin { animation-delay: 0.72s; }
+  .stops:not(.is-seen) .stop:nth-child(6) .stop-pin { animation-delay: 0.9s; }
+  .stops:not(.is-seen) .stop:nth-child(7) .stop-pin { animation-delay: 1.08s; }
+  .stops:not(.is-seen) .stop:hover .stop-pin { animation-play-state: paused; }
+}
+.stop[aria-current="true"] { font-weight: 600; }
+.stop-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+.field-note {
+  position: relative;
+  min-width: 0;
+  background: var(--paper-light);
+  border-radius: 4px;
+  padding: 2rem 1.6rem 1.4rem;
+  box-shadow: 0 14px 26px -18px rgba(44, 36, 32, 0.6);
+  rotate: -0.6deg;
+}
+.field-note .tape {
+  position: absolute;
+  top: -12px; left: 50%;
+  translate: -50% 0;
+  width: 96px; height: 24px;
+  background: rgba(236, 215, 162, 0.75);
+  box-shadow: 0 1px 2px rgba(44, 36, 32, 0.2);
+  rotate: -2deg;
+}
+.field-note .eyebrow { color: var(--maroon); }
+.field-note h3 { font-family: var(--display); font-weight: 400; font-size: 1.5rem; line-height: 1.15; margin: 0.4rem 0 0.2rem; }
+.note-place { font-family: var(--script); font-size: 1.3rem; color: var(--olive); margin: 0 0 0.8rem; }
+.field-note p { font-size: 0.94rem; }
+.field-note ul { margin: 0.8rem 0 0; padding-left: 1.1rem; display: grid; gap: 0.35rem; font-size: 0.9rem; color: var(--muted); }
+.note-nav { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.4rem; }
+.note-dots { display: flex; gap: 0.4rem; }
+.note-dots span { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--ink); }
+.note-dots span.on { background: var(--maroon); border-color: var(--maroon); }
+
+.chip-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.8rem; margin-top: 0.7rem; }
+.chip-zoom { padding: 0.4rem 0.9rem; font-size: 0.64rem; }
+.chip-hint {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+}
+@media (max-width: 1000px) {
+  .thesis-layout { grid-template-columns: 1fr; }
+  .stop-links { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+}
+@media (max-width: 860px) {
+  .map-frame { padding: 0.6rem; }
+  .stop-pin { width: 22px; height: 22px; font-size: 0.78rem; }
+}
+
+.chip-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(44, 36, 32, 0.6);
+  display: grid;
+  place-items: center;
+  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s;
+}
+.chip-overlay.open { opacity: 1; visibility: visible; }
+.chip-overlay-inner {
+  position: relative;
+  background: #f6efdf;
+  border-radius: 6px;
+  padding: 1rem;
+  width: min(1700px, 100%);
+  max-height: 92vh;
+  overflow: auto;
+}
+.chip-overlay-inner svg { display: block; width: 100%; min-width: 900px; height: auto; }
+.chip-overlay .icon-btn { position: absolute; top: 0.8rem; right: 0.8rem; background: var(--paper-light); z-index: 2; }
+
+/* ---------------- Line-art diagrams ---------------- */
+.diagram-scroll { overflow-x: auto; }
+.diagram { display: block; width: 100%; min-width: 720px; height: auto; color: var(--ink); }
+.diagram text { font-family: var(--mono); font-size: 13px; fill: var(--ink); letter-spacing: 0.04em; }
+.diagram-wide { min-width: 900px; }
+.diagram .sub { font-size: 11.5px; fill: var(--muted); letter-spacing: 0.02em; }
+.diagram .label-serif { font-family: var(--display); font-size: 17px; letter-spacing: 0; }
+.diagram .node-fill { fill: var(--paper); }
+.diagram .node-accent { fill: var(--butter); }
+
+/* draw-in: paths use pathLength="1", so a dash of 1 is the whole stroke */
+html.js-draw .draw > :is(path, circle, rect):not(.blob, .trail) { stroke-dasharray: 1; stroke-dashoffset: 1; }
+html.js-draw .draw.is-drawn > :is(path, circle, rect):not(.blob, .trail) { animation: draw-in 1.6s var(--ease-out) var(--d, 0s) forwards; }
+@keyframes draw-in { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+html.js-draw .skill:nth-child(2) .skill-art { --d: 0.12s; }
+html.js-draw .skill:nth-child(3) .skill-art { --d: 0.24s; }
+html.js-draw .skill:nth-child(4) .skill-art { --d: 0.36s; }
+html.js-draw .skill:nth-child(5) .skill-art { --d: 0.48s; }
+html.js-draw .draw .pop { opacity: 0; transition: opacity 0.6s ease 0.8s; }
+html.js-draw .draw.is-drawn .pop { opacity: 1; }
+
+.exp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 1.6rem; margin-top: 2rem; }
+.exp-card { border-top: 1px solid var(--ink); padding-top: 0.9rem; }
+.exp-card .eyebrow { color: var(--maroon); }
+.exp-card h3 { font-family: var(--display); font-weight: 400; font-size: 1.3rem; margin: 0.35rem 0 0.2rem; }
+.exp-card .org { font-size: 0.88rem; color: var(--muted); margin: 0 0 0.5rem; }
+.exp-card p { margin: 0; font-size: 0.92rem; }
+
+/* ---------------- About (Hello!) ---------------- */
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: center;
+  padding-block: 2.5rem;
+}
+.about-copy h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 5vw, 3.6rem);
+  color: var(--olive);
+  margin: 0 0 1rem;
+  letter-spacing: 0.02em;
+}
+.about-copy .lead {
+  font-family: var(--display);
+  text-transform: uppercase;
+  font-size: 1rem;
+  line-height: 1.55;
+  letter-spacing: 0.04em;
+  max-width: 44ch;
+  margin: 0 0 1rem;
+}
+.about-copy p { max-width: 58ch; }
+.about-arch-wrap { position: relative; width: min(100%, 360px); justify-self: center; cursor: help; outline: none; }
+.about-arch-wrap .arch { position: relative; width: 100%; aspect-ratio: 1 / 1.25; background: var(--olive); }
+.about-arch-wrap .badge { right: -12%; top: -8%; width: 38%; }
+.about-arch-wrap figcaption {
+  position: relative;
+  margin-top: 0.8rem;
+  text-align: center;
+  font-family: var(--script);
+  font-size: 1.5rem;
+}
+.hand-circle { position: absolute; left: 50%; top: 50%; width: 120%; height: 150%; translate: -50% -50%; overflow: visible; pointer-events: none; }
+.hand-circle ellipse {
+  fill: none;
+  stroke: var(--maroon);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.7s ease;
+}
+.about-arch-wrap:hover .hand-circle ellipse,
+.about-arch-wrap:focus-visible .hand-circle ellipse { stroke-dashoffset: 0; }
+.caption-word { position: relative; display: inline-block; }
+@media (max-width: 760px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .about-arch-wrap { width: min(78%, 300px); }
+  .about-arch-wrap .badge { right: -10%; }
+}
+
+/* ---------------- Kind words ---------------- */
+.quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+.quote { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 1rem; align-items: start; }
+.quote .face {
+  width: 84px; height: 84px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: var(--paper-light);
+  display: grid; place-items: center;
+}
+.quote .face svg { width: 70%; height: 70%; color: var(--ink); }
+.quote blockquote { margin: 0; font-size: 0.95rem; }
+.quote blockquote strong { font-weight: 600; }
+.quote cite { display: block; margin-top: 0.5rem; font-style: normal; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------------- Contact + footer ---------------- */
+.contact-band {
+  margin-top: clamp(3.5rem, 8vw, 6rem);
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.contact-band .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.6rem; }
+.contact-band h2 { font-family: var(--display); font-weight: 400; font-size: clamp(1.4rem, 2.6vw, 1.9rem); margin: 0; text-transform: uppercase; }
+.contact-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+.email-chip {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-light);
+  user-select: all;
+}
+
+.site-footer { background: var(--maroon); color: var(--blush); }
+.site-footer .wrap { display: grid; grid-template-columns: auto 1fr; gap: 2rem; padding-block: 2.6rem; align-items: start; }
+.footer-mark { font-family: var(--display); font-size: 3.4rem; line-height: 1; }
+.footer-cols { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 2.5rem; }
+.footer-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.footer-cols a { text-decoration: none; }
+.footer-cols a:hover { text-decoration: underline; }
+.footer-small { grid-column: 1 / -1; font-size: 0.78rem; opacity: 0.75; margin: 0; }
+
+/* ---------------- Modal ---------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(44, 36, 32, 0.55);
+  display: grid;
+  place-items: center;
+  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s;
+}
+.modal-overlay.open { opacity: 1; visibility: visible; }
+.modal {
+  position: relative;
+  width: min(900px, 100%);
+  max-height: 88vh;
+  overflow: auto;
+  background: var(--paper-light);
+  border-radius: 6px;
+  padding: 2.4rem clamp(1.2rem, 4vw, 2.6rem) 2rem;
+  transform: translateY(20px);
+  transition: transform 0.35s var(--ease-out);
+}
+.modal-overlay.open .modal { transform: none; }
+.modal .binder-clip { top: 10px; }
+.modal-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
+.modal-nav { display: flex; align-items: center; gap: 0.7rem; font-family: var(--mono); font-size: 0.72rem; color: var(--maroon); }
+.icon-btn {
+  width: 32px; height: 32px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+.icon-btn:hover:not(:disabled) { background: var(--ink); color: var(--paper-light); }
+.icon-btn:disabled { opacity: 0.3; cursor: default; }
+.modal-body { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 2rem; }
+.modal h3 { font-family: var(--display); font-weight: 400; font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.1; margin: 0.3rem 0 0.8rem; }
+.modal-arch { width: min(100%, 260px); aspect-ratio: 1 / 1.2; border-radius: 999px 999px 4px 4px; background: var(--paper-deep); display: grid; place-items: center; margin-top: 1.4rem; }
+.modal-arch svg { width: 45%; color: var(--ink); }
+.modal-arch { overflow: hidden; }
+.modal-arch img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.modal aside h4 { font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--maroon); margin: 0 0 0.3rem; }
+.modal aside section + section { margin-top: 1.2rem; }
+.modal aside p, .modal aside ul { margin: 0; font-size: 0.92rem; }
+.modal aside ul { padding-left: 1.1rem; }
+.modal-process { margin-top: 1.4rem; }
+.modal-process h4 { font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--maroon); margin: 0 0 0.4rem; }
+.modal-process ol { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.5rem; font-size: 0.92rem; }
+.modal-process p { margin: 0; font-size: 0.92rem; }
+.tool-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.tool-pills span { font-family: var(--mono); font-size: 0.68rem; border: 1px solid var(--line); border-radius: 999px; padding: 0.2rem 0.6rem; }
+@media (max-width: 700px) { .modal-body { grid-template-columns: 1fr; } }
+
+/* ---------------- Scroll reveal (same values as the old site) ---------------- */
+html.js-reveal .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.8s var(--ease-out);
+}
+html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
+
+/* ---------------- Landing intro (same sequence + timings as the old site) ---------------- */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes intro-rise { from { opacity: 0; translate: 0 22px; } }
+  @keyframes intro-slide-left { from { opacity: 0; translate: 14px 0; } }
+  @keyframes intro-photo-drop {
+    from { opacity: 0; translate: 0 -40px; rotate: -6deg; }
+    70%  { opacity: 1; rotate: 1.5deg; }
+  }
+  @keyframes intro-clip-snap {
+    from { opacity: 0; scale: 1.6; }
+    60%  { opacity: 1; scale: 0.9; }
+  }
+  @keyframes intro-underline { from { border-bottom-color: transparent; } }
+  @keyframes intro-fade { from { opacity: 0; } }
+  @keyframes line-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+  .hero-copy .eyebrow { animation: intro-rise 0.7s 0.05s var(--ease-out) backwards, intro-underline 0.6s 0.5s ease backwards; }
+  .hero-copy h1       { animation: intro-rise 0.8s 0.15s var(--ease-out) backwards; }
+  .hero-copy h1 em    { animation: intro-rise 0.8s 0.4s var(--ease-out) backwards; }
+  .hero-hello         { animation: intro-rise 0.8s 0.1s var(--ease-out) backwards; }
+  .hero-sub           { animation: intro-rise 0.8s 0.25s var(--ease-out) backwards; }
+  .hero-bio           { animation: intro-rise 0.8s 0.3s var(--ease-out) backwards; }
+  .hero-actions       { animation: intro-rise 0.8s 0.45s var(--ease-out) backwards; }
+  .hero-copy .btn-line{ animation: intro-rise 0.8s 0.45s var(--ease-out) backwards; }
+  .hero-note          { animation: intro-rise 0.9s 1.2s ease backwards; }
+
+  .hero .arch-main    { animation: intro-photo-drop 1s 0.25s cubic-bezier(0.3, 0.8, 0.3, 1) backwards; }
+  .hero .arch-small   { animation: intro-photo-drop 1s 0.45s cubic-bezier(0.3, 0.8, 0.3, 1) backwards; }
+  .hero .arch-echo, .hero .circle-echo { animation: intro-fade 1s 0.9s ease backwards; }
+  .hero .arch-script  { animation: intro-rise 0.9s 1.3s ease backwards; }
+  .hero .badge        { animation: intro-clip-snap 0.45s 1.05s ease-out backwards; }
+  .hero-lineart > path { stroke-dasharray: 1; animation: line-draw 2.4s 0.2s var(--ease-out) backwards; }
+
+  .discipline-strip li { animation: intro-slide-left 0.6s var(--ease-out) backwards; }
+  .discipline-strip li:nth-child(1) { animation-delay: 0.45s; }
+  .discipline-strip li:nth-child(2) { animation-delay: 0.52s; }
+  .discipline-strip li:nth-child(3) { animation-delay: 0.59s; }
+  .discipline-strip li:nth-child(4) { animation-delay: 0.66s; }
+  .discipline-strip li:nth-child(5) { animation-delay: 0.73s; }
+  .discipline-strip li:nth-child(6) { animation-delay: 0.8s; }
+}
+</style>
+
+<script>
+  // Same fallback pattern as the old site: drop real photos into images/ with these
+  // names and they replace the line-art placeholders automatically.
+  window.PLACEHOLDER = function (label, bg) {
+    var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 400'>" +
+      "<rect width='300' height='400' fill='" + (bg || "#cfc3ae") + "'/>" +
+      "<g fill='none' stroke='#2c2420' stroke-width='2' stroke-linecap='round'>" +
+      "<ellipse cx='150' cy='170' rx='44' ry='54'/>" +
+      "<path d='M108 160c6-40 70-58 90-12M60 400c0-70 40-110 90-110s90 40 90 110'/>" +
+      "<path d='M150 290v30M128 300c10 10 34 10 44 0'/></g>" +
+      "<text x='150' y='370' font-family='monospace' font-size='15' letter-spacing='3' text-anchor='middle' fill='#2c2420'>" + label + "</text></svg>";
+    return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+  };
+  // If a project photo is missing, quietly fall back to that project's line-art icon.
+  window.handleProjectImgError = function (img, icon) {
+    img.onerror = null;
+    img.outerHTML = '<svg aria-hidden="true"><use href="#' + icon + '"/></svg>';
+  };
+  window.handleImgError = function (img, label, bg) {
+    img.onerror = null;
+    img.src = window.PLACEHOLDER(label, bg);
+  };
+</script>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="ornament" viewBox="0 0 1000 22" preserveAspectRatio="none">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M40 8H960M40 14H960" vector-effect="non-scaling-stroke"/>
+      </g>
+    </symbol>
+    <symbol id="knot" viewBox="0 0 60 22">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M2 11h14l8-7 8 7-8 7-8-7M32 11h26"/><path d="M24 7l4 4-4 4-4-4z"/>
+      </g>
+    </symbol>
+    <symbol id="ico-sprout" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M50 88V46M50 58C34 58 26 44 28 30c15 0 24 11 22 28M50 50c13 0 23-11 21-24-13 0-22 9-21 24M34 88h32"/></g></symbol>
+    <symbol id="ico-sun" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="50" cy="50" r="12"/><circle cx="50" cy="50" r="24"/><path d="M50 14v-6M50 92v-6M14 50H8M92 50h-6M24.5 24.5l-4-4M79.5 79.5l-4-4M24.5 75.5l-4 4M79.5 20.5l-4 4"/></g></symbol>
+    <symbol id="ico-spiral" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M50 50a4 4 0 0 1 8 0 8 8 0 0 1-16 0 12 12 0 0 1 24 0 16 16 0 0 1-32 0 20 20 0 0 1 40 0 24 24 0 0 1-48 0 28 28 0 0 1 56 0"/></g></symbol>
+    <symbol id="ico-arches" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M28 82V48a22 22 0 0 1 44 0v34M38 82V50a12 12 0 0 1 24 0v32M18 82h64M50 18v-6"/></g></symbol>
+    <symbol id="face" viewBox="0 0 60 60"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><ellipse cx="30" cy="27" rx="12" ry="15"/><path d="M18 25c0-14 24-18 26-2M24 27h.01M36 27h.01M27 34c2 1.5 4 1.5 6 0M12 58c2-10 9-14 18-14s16 4 18 14"/></g></symbol>
+  </defs>
+</svg>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Samantha Omer, home">
+      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+        <path d="M20 3 35 12v16L20 37 5 28V12z"/><path d="M20 3v34M5 12l30 16M35 12 5 28"/><path d="M12 20a8 8 0 0 1 16 0"/>
+      </svg>
+      <span class="brand-name">Samantha<br>Omer</span>
+    </a>
+    <nav class="main-nav" aria-label="Main">
+      <a href="#top">Home</a>
+      <a href="#thesis">Thesis</a>
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-panel">
+        <svg class="hero-lineart" viewBox="0 0 1100 560" preserveAspectRatio="xMidYMid slice" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+          <!-- sun + rays -->
+          <path pathLength="1" d="M60 120a50 50 0 0 1 100 0"/>
+          <path pathLength="1" d="M110 54v-18M70 70 58 58M150 70l12-12M44 104l-16-5M176 104l16-5"/>
+          <!-- flowing ribbons -->
+          <path pathLength="1" d="M-20 520C160 430 260 520 420 470S700 330 820 380 1000 470 1120 400"/>
+          <path pathLength="1" d="M-20 540C170 460 270 545 430 495S710 360 830 405 1010 495 1120 430"/>
+          <path pathLength="1" d="M-20 560C180 490 280 570 440 520S720 390 840 430 1020 520 1120 460"/>
+          <!-- arch colonnade -->
+          <path pathLength="1" d="M560 470V300a70 70 0 0 1 140 0v170M580 470V302a50 50 0 0 1 100 0v168"/>
+          <path pathLength="1" d="M1010 420V190a60 60 0 0 1 120 0"/>
+          <path pathLength="1" d="M1030 420V196a40 40 0 0 1 80 0"/>
+          <!-- sprigs -->
+          <path pathLength="1" d="M470 560V430M470 470c-18-4-28-18-26-34 16 2 26 16 26 34M470 452c16-4 26-18 24-32-15 2-24 14-24 32"/>
+          <path pathLength="1" d="M960 560V470M960 500c-14-3-22-14-20-27 12 1 20 12 20 27"/>
+          <!-- stars -->
+          <path pathLength="1" d="M330 70v16M322 78h16M520 40v10M515 45h10M1050 70v14M1043 77h14"/>
+        </svg>
+
+        <div class="hero-copy">
+          <span class="eyebrow">R&amp;D Engineer / Researcher / Microfabricator</span>
+          <p class="hero-hello">Hello! I'm</p>
+          <h1>Samantha <em>Omer.</em></h1>
+          <p class="hero-sub">Engineering at the microscale.</p>
+          <p class="hero-bio">I design, fabricate and validate microscale devices in San Diego, from photomask to cleanroom prototype, with a focus on microfluidics, MEMS and electroporation for therapeutic delivery.</p>
+          <p class="hero-bio hero-bio-more">I studied Biotechnology at Cal Poly Pomona and Bioengineering at San Diego State, where my thesis at NanoFAB.SDSU used a continuous-flow microfluidic chip to deliver genes into living cells. I love the whole loop, from mask design to cell assays, and teaching it to the next group of researchers.</p>
+          <div class="hero-actions">
+            <a href="#work" class="btn-line solid">Explore my work →</a>
+            <a href="#contact" class="btn-line">Get in touch</a>
+          </div>
+          <p class="hero-note">design · fabricate · test · repeat</p>
+        </div>
+
+        <div class="arch-stage">
+          <div class="arch-echo" aria-hidden="true"></div>
+          <div class="circle-echo" aria-hidden="true"></div>
+          <div class="arch arch-main">
+            <img src="images/headshot.jpg" alt="Headshot of Samantha Omer" onerror="handleImgError(this, 'YOUR HEADSHOT', '#d9cdb6')">
+          </div>
+          <div class="arch arch-small icon-slot" aria-hidden="true">
+            <svg class="chip-icon" viewBox="-6 -6 227 124" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+              <g stroke-width="6">
+                <circle cx="14" cy="19" r="9"/>
+                <circle cx="14" cy="56" r="9"/>
+                <circle cx="14" cy="93" r="9"/>
+                <circle cx="100" cy="13" r="9"/>
+                <circle cx="202" cy="56" r="9"/>
+              </g>
+              <path d="M21 26 46 53M21 86 46 59M24 56H49"/>
+              <path d="M49 56h61"/>
+              <path d="M100 25v31"/>
+              <rect x="56" y="35" width="24" height="11" rx="5.5"/>
+              <rect x="56" y="66" width="24" height="11" rx="5.5"/>
+              <path d="M110 56V44a7 7 0 0 1 14 0v24a7 7 0 0 0 14 0V44a7 7 0 0 1 14 0v24a7 7 0 0 0 14 0V44a7 7 0 0 1 14 0v24a7 7 0 0 0 14 0V56h12"/>
+            </svg>
+          </div>
+          <p class="arch-script caption-word" aria-hidden="true">hello there
+            <svg class="hand-circle" viewBox="0 0 100 40" preserveAspectRatio="none"><ellipse cx="50" cy="20" rx="47" ry="17" pathLength="1"/></svg>
+          </p>
+          <div class="badge" aria-hidden="true">
+            <svg viewBox="0 0 100 100">
+              <defs><path id="badge-ring" d="M50 50m-40 0a40 40 0 1 1 80 0a40 40 0 1 1-80 0"/></defs>
+              <circle cx="50" cy="50" r="49" fill="var(--paper-light)"/>
+              <g class="spin"><text><textPath href="#badge-ring">samantha omer · 2026 ·</textPath></text></g>
+              <path d="M50 42v16M42 50h16" stroke="var(--ink)" stroke-width="1"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <ul class="discipline-strip" aria-label="Areas of focus">
+        <li>MICROFLUIDICS</li><li>MEMS</li><li>CLEANROOM</li><li>ELECTROPORATION</li><li>BIOENGINEERING</li><li>MENTORING</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section folders-section" id="index">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">The index</span>
+        <h2 class="section-heading">Open a folder</h2>
+        <span class="folder-hint">Pick a tab to jump in</span>
+      </div>
+
+      <nav class="folder-stack" id="folder-stack" aria-label="Portfolio sections">
+        <a class="folder" href="#top" style="--c: var(--stone); --x: 4%"><span class="folder-tab">About me <span class="arrow">→</span></span></a>
+        <a class="folder" href="#skills" style="--c: var(--sage); --x: 24%"><span class="folder-tab">Skills <span class="arrow">→</span></span></a>
+        <a class="folder" href="#experience" style="--c: var(--rose); --x: 44%"><span class="folder-tab">Experience <span class="arrow">→</span></span></a>
+        <a class="folder" href="#thesis" style="--c: var(--maroon); --fc: var(--blush); --x: 14%"><span class="folder-tab">Thesis <span class="arrow">→</span></span></a>
+        <a class="folder" href="#work" style="--c: var(--mist); --x: 34%"><span class="folder-tab">Selected work <span class="arrow">→</span></span></a>
+        <a class="folder" href="#contact" style="--c: var(--butter); --x: 6%">
+          <span class="folder-foot"><span>06</span><span>San Diego, CA</span><span>About me →</span></span>
+        </a>
+
+        <figure class="deco polaroid" aria-hidden="true">
+          <span class="binder-clip"></span>
+          <img src="images/snapshot.jpg" alt="" onerror="handleImgError(this, 'SNAPSHOT', '#e3d6c2')">
+          <figcaption>in the cleanroom</figcaption>
+        </figure>
+        <svg class="deco butterfly" viewBox="0 0 100 80" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
+          <path d="M50 22v40M50 26C36 4 8 6 10 24c2 14 24 18 40 10M50 26C64 4 92 6 90 24c-2 14-24 18-40 10M50 38C34 40 18 52 26 64c8 10 20 0 24-14M50 38c16 2 32 14 24 26-8 10-20 0-24-14M46 16l-6-10M54 16l6-10"/>
+        </svg>
+        <svg class="deco sprig" viewBox="0 0 60 100" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
+          <path d="M30 98V20M30 70c-14-2-22-14-20-26 12 1 20 12 20 26M30 50c14-2 22-14 20-26-12 1-20 12-20 26M30 30c-8-2-12-10-10-18 8 1 12 8 10 18"/>
+        </svg>
+      </nav>
+    </div>
+  </section>
+
+  <section class="section" id="skills">
+    <div class="wrap skills-wrap">
+      <div class="objective section-head">
+        <h2 class="center-heading">Objective</h2>
+        <p class="spaced-serif">Ambitious, hardworking engineer who designs, fabricates and validates complex microscale devices, with a track record of building prototypes, optimizing processes and supporting regulated lab environments.</p>
+      </div>
+      <h2 class="center-heading skills-heading">Skills</h2>
+      <ul class="skill-row">
+        <li class="skill" data-tone="rose">
+          <div class="skill-head">
+            <svg class="skill-art draw" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path class="blob" d="M52 8c18 2 34 16 38 34s-4 38-22 46-40 6-52-8S2 44 10 28 34 6 52 8z" fill="#e5c1bb" stroke="none"/>
+              <circle pathLength="1" cx="46" cy="48" r="28"/><path pathLength="1" d="M36 76h20"/><path pathLength="1" d="M30 38h32M30 48h32M30 58h32M36 30v36M46 28v40M56 30v36"/>
+            </svg>
+            <h3 class="skill-label">Device<br>&amp; Systems</h3>
+          </div>
+          <ul class="skill-tags"><li>Photolithography</li><li>Soft lithography</li><li>MEMS</li><li>Microfluidics</li><li>Metal deposition</li><li>Pyrolysis</li><li>3D printing</li><li>Device prototyping</li><li>Process development</li><li>Device characterization</li></ul>
+        </li>
+        <li class="skill" data-tone="butter">
+          <div class="skill-head">
+            <svg class="skill-art draw" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path class="blob" d="M56 10c16 6 32 20 30 40s-18 36-38 38-38-12-40-30 6-34 20-42 14-12 28-6z" fill="#ecd7a2" stroke="none"/>
+              <path pathLength="1" d="M38 16h20M42 16v20L24 72c-2 5 1 8 6 8h36c5 0 8-3 6-8L54 36V16"/><path pathLength="1" d="M30 60h36"/><circle pathLength="1" cx="44" cy="68" r="3"/><circle pathLength="1" cx="56" cy="64" r="2"/><circle pathLength="1" cx="66" cy="22" r="4"/><circle pathLength="1" cx="74" cy="12" r="2.5"/>
+            </svg>
+            <h3 class="skill-label">Biological<br>&amp; Electrochemical</h3>
+          </div>
+          <ul class="skill-tags"><li>Mammalian cell culture</li><li>Electroporation</li><li>ELISA</li><li>Gel electrophoresis</li><li>Western blotting</li><li>DNA extraction</li><li>Optical microscopy</li><li>Fluorescent microscopy</li><li>Cyclic voltammetry</li><li>Electrochemical impedance spectroscopy</li></ul>
+        </li>
+        <li class="skill" data-tone="rose">
+          <div class="skill-head">
+            <svg class="skill-art draw" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path class="blob" d="M46 6c20-2 40 10 44 30s-6 42-26 50-42 0-52-16S6 36 16 22 30 8 46 6z" fill="#e5c1bb" stroke="none"/>
+              <circle pathLength="1" cx="32" cy="44" r="9"/><path pathLength="1" d="M14 80c0-12 8-20 18-20s18 8 18 20"/><circle pathLength="1" cx="60" cy="50" r="7"/><path pathLength="1" d="M48 80c2-9 6-14 12-14s12 5 14 14"/><path pathLength="1" d="M54 14h28v18H66l-6 6v-6h-6z"/>
+            </svg>
+            <h3 class="skill-label">Professional<br>Skills</h3>
+          </div>
+          <ul class="skill-tags"><li>Technical communication</li><li>Attention to detail</li><li>Cross-functional collaboration</li><li>Problem solving</li><li>Leadership and mentoring</li></ul>
+        </li>
+        <li class="skill" data-tone="sage">
+          <div class="skill-head">
+            <svg class="skill-art draw" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path class="blob" d="M46 6c20-2 40 10 44 30s-6 42-26 50-42 0-52-16S6 36 16 22 30 8 46 6z" fill="#c6cda8" stroke="none"/>
+              <rect pathLength="1" x="14" y="22" width="60" height="42" rx="4"/><path pathLength="1" d="M34 72h20M44 64v8"/><path pathLength="1" d="M24 54c8-14 14-20 20-12s12 2 20-12"/><path pathLength="1" d="M60 46 82 18l5 4-22 28-7 2z"/>
+            </svg>
+            <h3 class="skill-label">CAD<br>&amp; Simulations</h3>
+          </div>
+          <ul class="skill-tags"><li>AutoCAD</li><li>COMSOL</li><li>Coventorware</li></ul>
+        </li>
+        <li class="skill" data-tone="mist">
+          <div class="skill-head">
+            <svg class="skill-art draw" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path class="blob" d="M52 8c18 2 34 16 38 34s-4 38-22 46-40 6-52-8S2 44 10 28 34 6 52 8z" fill="#c9d5d2" stroke="none"/>
+              <rect pathLength="1" x="22" y="18" width="48" height="62" rx="4"/><path pathLength="1" d="M36 18v-4h20v4"/><path pathLength="1" d="M30 36l4 4 8-8M30 52l4 4 8-8M30 68l4 4 8-8"/><path pathLength="1" d="M48 36h14M48 52h14M48 68h14"/>
+            </svg>
+            <h3 class="skill-label">Regulatory<br>&amp; Quality</h3>
+          </div>
+          <ul class="skill-tags"><li>cGMP familiarity</li><li>Equipment qualification</li><li>SOP development</li><li>Cleanroom monitoring</li></ul>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="experience">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow section-eyebrow">Experience</span>
+        <h2 class="section-heading">Journey map</h2>
+      </div>
+      <div class="diagram-scroll">
+        <svg class="diagram diagram-wide draw" viewBox="0 0 1200 270" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" role="img" aria-label="Timeline: the Cal Poly Pomona degree and the HBT Labs internship run side by side from 2018 to 2022, then NanoFAB.SDSU and the M.S. thesis run side by side from 2023 to 2025, then Grapheton and the Hu Lab at SDSU">
+          <path pathLength="1" d="M20 130h100"/>
+          <path pathLength="1" d="M120 130c50 0 60-70 110-70h80c50 0 60 70 110 70"/>
+          <path pathLength="1" d="M120 130c50 0 60 70 110 70h80c50 0 60-70 110-70"/>
+          <path pathLength="1" d="M420 130h140"/>
+          <path pathLength="1" d="M560 130c50 0 60-70 110-70h80c50 0 60 70 110 70"/>
+          <path pathLength="1" d="M560 130c50 0 60 70 110 70h80c50 0 60-70 110-70"/>
+          <path pathLength="1" d="M860 130h320"/>
+          <g class="pop">
+            <g class="node-fill" stroke="currentColor">
+              <circle cx="270" cy="60" r="6"/>
+              <circle cx="270" cy="200" r="6"/>
+              <circle cx="710" cy="60" r="6"/>
+              <circle cx="710" cy="200" r="6"/>
+              <circle cx="960" cy="130" r="6"/>
+              <circle cx="1150" cy="130" r="6"/>
+            </g>
+            <text x="270" y="30" text-anchor="middle">2018–2022 · CAL POLY POMONA</text>
+            <text class="sub" x="270" y="48" text-anchor="middle">B.S. Biotechnology, Chemistry Minor</text>
+            <text x="270" y="232" text-anchor="middle">2021–2022 · HBT LABS</text>
+            <text class="sub" x="270" y="250" text-anchor="middle">Validation Intern</text>
+            <text x="710" y="30" text-anchor="middle">2023–2025 · NANOFAB.SDSU</text>
+            <text class="sub" x="710" y="48" text-anchor="middle">Graduate Researcher</text>
+            <text x="710" y="232" text-anchor="middle">2023–2025 · M.S. BIOENGINEERING</text>
+            <text class="sub" x="710" y="250" text-anchor="middle">Thesis: The Electroporation Chip</text>
+            <text x="960" y="106" text-anchor="middle">2025 · GRAPHETON</text>
+            <text x="1165" y="162" text-anchor="end">2026 · HU LAB, SDSU</text>
+          </g>
+        </svg>
+      </div>
+      <div class="exp-grid">
+        <article class="exp-card"><span class="eyebrow">Oct 2026 – Present</span><h3>Research Associate I</h3><p class="org">Hu Lab, Chemistry &amp; Biochemistry, SDSU</p><p>Fixed pattern loss on chromium-coated wafers by tuning photoresist adhesion, development and wet etching, then documented a standard fiducial-wafer procedure.</p></article>
+        <article class="exp-card"><span class="eyebrow">May 2025 – Present</span><h3>R&amp;D Engineer</h3><p class="org">Grapheton · San Diego</p><p>Builds microfluidic and MEMS prototypes, designs photomasks, runs COMSOL FEA, and established a graphene-like carbon coating process with 90% yield.</p></article>
+        <article class="exp-card"><span class="eyebrow">Summer 2026</span><h3>Microfabrication Trainer</h3><p class="org">NanoFAB.SDSU internship program</p><p>Taught cleanroom safety, two full photolithography workflows and mask design in Coventorware to interns in a two-week program.</p></article>
+        <article class="exp-card"><span class="eyebrow">Jan 2023 – May 2025</span><h3>Graduate Researcher</h3><p class="org">NanoFAB.SDSU</p><p>Led microfluidic and MEMS devices from concept to testing, mentored researchers, and improved PDMS-substrate adhesion by 75%.</p></article>
+        <article class="exp-card"><span class="eyebrow">Aug 2021 – May 2022</span><h3>Validation Intern</h3><p class="org">HBT Labs · Brea, CA</p><p>Supported equipment qualification and cleanroom pressure monitoring in a cGMP pharmaceutical environment.</p></article>
+        <article class="exp-card"><span class="eyebrow">2022 – 2025</span><h3>Education</h3><p class="org">SDSU · Cal Poly Pomona</p><p>M.S. Bioengineering, Biomaterials specialization (2025). B.S. Biotechnology with a Chemistry minor (2022).</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section thesis-section" id="thesis">
+    <div class="wrap">
+      <div class="thesis-layout">
+        <div class="thesis-main">
+        <div class="section-head">
+          <span class="eyebrow section-eyebrow">Thesis · M.S. Bioengineering, SDSU 2025</span>
+          <h2 class="section-heading">The chip, stop by stop</h2>
+          <p>Her M.S. thesis device, drawn as the chip itself. Follow the flow from left to right, or tap any numbered stop, on the chip or in the list, and the note beside it explains what happens at that point in the channel. "View full size" opens the drawing large enough to read every label.</p>
+        </div>
+        <div class="map-frame">
+          <div class="chip-scroll">
+            <div class="chip-plate">
+<svg class="chip-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1900 1240" role="img" aria-label="Schematic of the continuous microfluidic electroporation chip, flow channel D2">
+
+<text x="80" y="102" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="27" letter-spacing="2.2" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="start">CONTINUOUS MICROFLUIDIC ELECTROPORATION CHIP</text>
+<text x="80" y="126" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="11.5" letter-spacing="2.0" font-weight="500" fill="#2b2620" fill-opacity="0.8" text-anchor="start">FLOW CHANNEL D2 · mRNA DELIVERY FOR GENE EXPRESSION MODIFICATION · SCHEMATIC, NOT TO SCALE</text>
+<rect x="60" y="155" width="1780" height="640" rx="22" fill="none" stroke="#2b2620" stroke-width="1.2" stroke-dasharray="2 6"/>
+<circle cx="94" cy="189" r="8" fill="none" stroke="#2b2620" stroke-width="1.1"/>
+<path d="M80,189 h28 M94,175 v28" fill="none" stroke="#2b2620" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="1806" cy="189" r="8" fill="none" stroke="#2b2620" stroke-width="1.1"/>
+<path d="M1792,189 h28 M1806,175 v28" fill="none" stroke="#2b2620" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="94" cy="761" r="8" fill="none" stroke="#2b2620" stroke-width="1.1"/>
+<path d="M80,761 h28 M94,747 v28" fill="none" stroke="#2b2620" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="1806" cy="761" r="8" fill="none" stroke="#2b2620" stroke-width="1.1"/>
+<path d="M1792,761 h28 M1806,747 v28" fill="none" stroke="#2b2620" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" />
+<text x="1806" y="145" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="1.4" font-weight="500" fill="#2b2620" fill-opacity="0.65" text-anchor="end">PDMS CHANNEL ON GLASS · ALIGNMENT MARKS</text>
+<circle cx="130" cy="440" r="26" fill="#f6efdf" stroke="#2b2620" stroke-width="2.4"/>
+<circle cx="130" cy="440" r="14.0" fill="none" stroke="#2b2620" stroke-width="1.5"/>
+<circle cx="130" cy="440" r="2.6" fill="#2b2620"/>
+<path d="M156,440 H200" fill="none" stroke="#2b2620" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+<text x="130" y="508" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="12.5" letter-spacing="1.9" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="middle">INLET 1</text>
+<text x="130" y="525" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">CELL SUSPENSION</text>
+<text x="130" y="540" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">OVCAR8, ø 20 µm</text>
+<text x="130" y="555" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">0.05 mL/min</text>
+<path d="M200,440 v-38 a8,8 0 0 1 16,0 v76 a8,8 0 0 0 16,0 v-38 v-38 a8,8 0 0 1 16,0 v76 a8,8 0 0 0 16,0 v-38 v-38 a8,8 0 0 1 16,0 v76 a8,8 0 0 0 16,0 v-38 v-38 a8,8 0 0 1 16,0 v76 a8,8 0 0 0 16,0 v-38 v-38 a8,8 0 0 1 16,0 v76 a8,8 0 0 0 16,0 v-38 v-38 a8,8 0 0 1 16,0 v76 a8,8 0 0 0 16,0 v-38 v-38 a8,8 0 0 1 16,0 v76 a8,8 0 0 0 16,0 v-38 v-38 a8,8 0 0 1 16,0 v76 a8,8 0 0 0 16,0 v-38 " fill="none" stroke="#2b2620" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M456,440 H530" fill="none" stroke="#2b2620" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+<text x="228" y="340" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="12.5" letter-spacing="1.9" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="middle">SERPENTINE · CELL ROTATION</text>
+<text x="228" y="357" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">cells bounce off the sharp curves and tumble, so fresh</text>
+<text x="228" y="372" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">membrane poles keep turning to face the field</text>
+<path d="M228,380 V400" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3"/>
+<circle cx="250" cy="250" r="26" fill="#f6efdf" stroke="#2b2620" stroke-width="2.4"/>
+<circle cx="250" cy="250" r="14.0" fill="none" stroke="#2b2620" stroke-width="1.5"/>
+<circle cx="250" cy="250" r="2.6" fill="#2b2620"/>
+<path d="M276,250 H340" fill="none" stroke="#2b2620" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M340,250 L530,440" fill="none" stroke="#2b2620" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M490.8,472.1 L500,470 L497.9,479.2" fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="250" cy="630" r="26" fill="#f6efdf" stroke="#2b2620" stroke-width="2.4"/>
+<circle cx="250" cy="630" r="14.0" fill="none" stroke="#2b2620" stroke-width="1.5"/>
+<circle cx="250" cy="630" r="2.6" fill="#2b2620"/>
+<path d="M276,630 H340" fill="none" stroke="#2b2620" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M340,630 L530,440" fill="none" stroke="#2b2620" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M497.9,400.8 L500,410 L490.8,407.9" fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<text x="250" y="188" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="12.5" letter-spacing="1.9" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="middle">INLET 2 · PBS SHEATH</text>
+<text x="250" y="205" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">1 mL/min</text>
+<text x="250" y="688" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="12.5" letter-spacing="1.9" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="middle">INLET 3 · PBS SHEATH</text>
+<text x="250" y="705" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">1 mL/min</text>
+<circle cx="530" cy="440" r="15" fill="none" stroke="#2b2620" stroke-width="1.3" stroke-dasharray="3 3"/>
+<text x="380" y="745" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="12.5" letter-spacing="1.9" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="middle">THREE-WAY INTERSECTION · ±45°</text>
+<text x="380" y="762" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">the sheath streams squeeze the cell stream onto the centre line, so every</text>
+<text x="380" y="777" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">cell sits the same distance from each electrode and sees the same field</text>
+<path d="M470,730 L524,462" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3"/>
+<path d="M556,420 L624,431 H816 L884,420" fill="none" stroke="#2b2620" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M556,460 L624,449 H816 L884,460" fill="none" stroke="#2b2620" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M530,440 H556" fill="none" stroke="#2b2620" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M884,440 H1160" fill="none" stroke="#2b2620" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="648" y="379" width="144" height="52" rx="2" fill="#f6efdf" stroke="#2b2620" stroke-width="2.3"/>
+<path d="M665.0,383 L658.8,427" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M676.0,383 L669.8,427" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M687.0,383 L680.8,427" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M698.0,383 L691.8,427" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M709.0,383 L702.8,427" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M720.0,383 L713.8,427" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M731.0,383 L724.8,427" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M742.0,383 L735.8,427" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M753.0,383 L746.8,427" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M764.0,383 L757.8,427" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M775.0,383 L768.8,427" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M786.0,383 L779.8,427" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="648" y="449" width="144" height="52" rx="2" fill="#f6efdf" stroke="#2b2620" stroke-width="2.3"/>
+<path d="M665.0,453 L658.8,497" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M676.0,453 L669.8,497" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M687.0,453 L680.8,497" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M698.0,453 L691.8,497" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M709.0,453 L702.8,497" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M720.0,453 L713.8,497" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M731.0,453 L724.8,497" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M742.0,453 L735.8,497" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M753.0,453 L746.8,497" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M764.0,453 L757.8,497" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M775.0,453 L768.8,497" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M786.0,453 L779.8,497" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M666,429 V451" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M685,429 V451" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M704,429 V451" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M723,429 V451" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M742,429 V451" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M761,429 V451" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M780,429 V451" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M824,431 H846 M824,449 H846" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M835,431 V449" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" />
+<text x="900" y="408" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="1.0" font-weight="600" fill="#2b2620" fill-opacity="0.85" text-anchor="start">100 µm GAP</text>
+<path d="M762,379 V290 H906" fill="none" stroke="#2b2620" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="910" y="270" width="40" height="40" rx="3" fill="#f6efdf" stroke="#2b2620" stroke-width="2.2"/>
+<rect x="920.0" y="280.0" width="20" height="20" rx="2" fill="none" stroke="#2b2620" stroke-width="1.3"/>
+<path d="M762,501 V590 H906" fill="none" stroke="#2b2620" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="910" y="570" width="40" height="40" rx="3" fill="#f6efdf" stroke="#2b2620" stroke-width="2.2"/>
+<rect x="920.0" y="580.0" width="20" height="20" rx="2" fill="none" stroke="#2b2620" stroke-width="1.3"/>
+<text x="930" y="248" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="1.2" font-weight="600" fill="#2b2620" fill-opacity="0.85" text-anchor="middle">BUMP PAD</text>
+<text x="930" y="636" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="1.2" font-weight="600" fill="#2b2620" fill-opacity="0.85" text-anchor="middle">BUMP PAD</text>
+<text x="880" y="276" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9" letter-spacing="1.0" font-weight="500" fill="#2b2620" fill-opacity="0.65" text-anchor="end">Cr / Pt TRACE</text>
+<path d="M674,379 V348 H612" fill="none" stroke="#2b2620" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="585" y="337" width="22" height="22" rx="3" fill="#f6efdf" stroke="#2b2620" stroke-width="2.2"/>
+<path d="M674,501 V532 H612" fill="none" stroke="#2b2620" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="585" y="521" width="22" height="22" rx="3" fill="#f6efdf" stroke="#2b2620" stroke-width="2.2"/>
+<text x="576" y="352" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9" letter-spacing="1.0" font-weight="500" fill="#2b2620" fill-opacity="0.7" text-anchor="end">V MONITOR</text>
+<text x="576" y="536" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9" letter-spacing="1.0" font-weight="500" fill="#2b2620" fill-opacity="0.7" text-anchor="end">V MONITOR</text>
+<text x="800" y="700" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="12.5" letter-spacing="1.9" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="middle">EP ZONE · GLASSY CARBON ELECTRODES</text>
+<text x="800" y="717" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">the channel pinches to 100 µm so cells pass between the electrodes, not over them;</text>
+<text x="800" y="732" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">a 100 Hz square wave of 0–6.25 V across the 100 µm gap gives 625 V/cm, opening</text>
+<text x="800" y="747" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">transient pores in each membrane without the heating that kills cells in a cuvette</text>
+<path d="M740,684 V509" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3"/>
+<circle cx="1100" cy="230" r="26" fill="#f6efdf" stroke="#2b2620" stroke-width="2.4"/>
+<circle cx="1100" cy="230" r="14.0" fill="none" stroke="#2b2620" stroke-width="1.5"/>
+<circle cx="1100" cy="230" r="2.6" fill="#2b2620"/>
+<path d="M1100,256 V440" fill="none" stroke="#2b2620" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M1105.0,404.0 L1100,412 L1095.0,404.0" fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="1100" cy="440" r="4" fill="#2b2620"/>
+<text x="1100" y="186" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="11" letter-spacing="1.6" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="middle">INLET 4 · mRNA / PLASMID CARGO · 0.05 mL/min</text>
+<text x="1134" y="300" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="11" letter-spacing="1.9" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="start">JOINS AT 90°, DOWNSTREAM OF THE FIELD</text>
+<text x="1134" y="317" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="start">cargo is added only after the EP zone, so the field</text>
+<text x="1134" y="332" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="start">never degrades it, and the right angle keeps it from</text>
+<text x="1134" y="347" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="start">leaking back toward the electrodes</text>
+<path d="M1160,440 v-48 a8,8 0 0 1 16,0 v96 a8,8 0 0 0 16,0 v-48 v-48 a8,8 0 0 1 16,0 v96 a8,8 0 0 0 16,0 v-48 v-48 a8,8 0 0 1 16,0 v96 a8,8 0 0 0 16,0 v-48 v-48 a8,8 0 0 1 16,0 v96 a8,8 0 0 0 16,0 v-48 v-48 a8,8 0 0 1 16,0 v96 a8,8 0 0 0 16,0 v-48 v-48 a8,8 0 0 1 16,0 v96 a8,8 0 0 0 16,0 v-48 v-48 a8,8 0 0 1 16,0 v96 a8,8 0 0 0 16,0 v-48 v-48 a8,8 0 0 1 16,0 v96 a8,8 0 0 0 16,0 v-48 v-48 a8,8 0 0 1 16,0 v96 a8,8 0 0 0 16,0 v-48 v-48 a8,8 0 0 1 16,0 v96 a8,8 0 0 0 16,0 v-48 " fill="none" stroke="#2b2620" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M1480,440 H1700" fill="none" stroke="#2b2620" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+<text x="1330" y="640" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="12.5" letter-spacing="1.9" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="middle">MIXING REGION · DEAN VORTICES</text>
+<text x="1330" y="657" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">flow this small is laminar, so the two streams would otherwise run side by side without</text>
+<text x="1330" y="672" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">ever touching; the tight loops throw in secondary vortices that fold them together,</text>
+<text x="1330" y="687" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">pressing cargo against the open pores before the membranes reseal</text>
+<path d="M1330,624 V500" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3"/>
+<circle cx="1730" cy="440" r="26" fill="#f6efdf" stroke="#2b2620" stroke-width="2.4"/>
+<circle cx="1730" cy="440" r="14.0" fill="none" stroke="#2b2620" stroke-width="1.5"/>
+<circle cx="1730" cy="440" r="2.6" fill="#2b2620"/>
+<text x="1730" y="508" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="12.5" letter-spacing="1.9" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="middle">SHARED OUTLET</text>
+<text x="1730" y="525" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">collected, spun down</text>
+<text x="1730" y="540" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">and cultured; uptake</text>
+<text x="1730" y="555" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="middle">read by fluorescence</text>
+<path d="M1684.0,435.0 L1692,440 L1684.0,445.0" fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M232.0,397.0 L240,402 L232.0,407.0" fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M1022.0,435.0 L1030,440 L1022.0,445.0" fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="60" y="845" width="740" height="310" rx="10" fill="none" stroke="#2b2620" stroke-width="1.4"/>
+<path d="M60,873 H800" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" />
+<text x="76" y="864" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="11" letter-spacing="1.8" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="start">DETAIL A — WHAT HAPPENS IN THE EP ZONE</text>
+<text x="430.0" y="893" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="1.2" font-weight="600" fill="#2b2620" fill-opacity="0.85" text-anchor="middle">GLASSY CARBON ELECTRODE · 3 × 1 mm × 100 µm TALL</text>
+<rect x="250" y="903" width="360" height="44" rx="2" fill="#f6efdf" stroke="#2b2620" stroke-width="2.3"/>
+<path d="M267.0,907 L262.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M278.0,907 L273.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M289.0,907 L284.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M300.0,907 L295.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M311.0,907 L306.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M322.0,907 L317.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M333.0,907 L328.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M344.0,907 L339.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M355.0,907 L350.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M366.0,907 L361.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M377.0,907 L372.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M388.0,907 L383.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M399.0,907 L394.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M410.0,907 L405.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M421.0,907 L416.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M432.0,907 L427.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M443.0,907 L438.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M454.0,907 L449.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M465.0,907 L460.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M476.0,907 L471.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M487.0,907 L482.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M498.0,907 L493.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M509.0,907 L504.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M520.0,907 L515.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M531.0,907 L526.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M542.0,907 L537.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M553.0,907 L548.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M564.0,907 L559.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M575.0,907 L570.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M586.0,907 L581.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M597.0,907 L592.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M608.0,907 L603.0,943" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="250" y="999" width="360" height="44" rx="2" fill="#f6efdf" stroke="#2b2620" stroke-width="2.3"/>
+<path d="M267.0,1003 L262.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M278.0,1003 L273.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M289.0,1003 L284.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M300.0,1003 L295.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M311.0,1003 L306.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M322.0,1003 L317.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M333.0,1003 L328.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M344.0,1003 L339.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M355.0,1003 L350.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M366.0,1003 L361.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M377.0,1003 L372.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M388.0,1003 L383.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M399.0,1003 L394.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M410.0,1003 L405.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M421.0,1003 L416.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M432.0,1003 L427.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M443.0,1003 L438.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M454.0,1003 L449.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M465.0,1003 L460.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M476.0,1003 L471.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M487.0,1003 L482.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M498.0,1003 L493.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M509.0,1003 L504.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M520.0,1003 L515.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M531.0,1003 L526.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M542.0,1003 L537.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M553.0,1003 L548.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M564.0,1003 L559.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M575.0,1003 L570.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M586.0,1003 L581.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M597.0,1003 L592.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M608.0,1003 L603.0,1039" fill="none" stroke="#2b2620" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M90,947 H770" fill="none" stroke="#2b2620" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M90,999 H770" fill="none" stroke="#2b2620" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M262,949 V997" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M286,949 V997" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M289.1,982.0 L286,987 L282.9,982.0" fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M310,949 V997" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M334,949 V997" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M358,949 V997" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M382,949 V997" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M385.1,982.0 L382,987 L378.9,982.0" fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M406,949 V997" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M454,949 V997" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M478,949 V997" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M481.1,982.0 L478,987 L474.9,982.0" fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M502,949 V997" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M526,949 V997" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M550,949 V997" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M574,949 V997" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<path d="M577.1,982.0 L574,987 L570.9,982.0" fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M598,949 V997" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2"/>
+<circle cx="178" cy="973" r="14" fill="#f6efdf" stroke="#2b2620" stroke-width="1.8"/>
+<circle cx="430" cy="973" r="14" fill="#f6efdf" stroke="#2b2620" stroke-width="1.8"/>
+<circle cx="425" cy="960" r="2.2" fill="#f6efdf" stroke="#2b2620" stroke-width="1.1"/>
+<circle cx="430" cy="960" r="2.2" fill="#f6efdf" stroke="#2b2620" stroke-width="1.1"/>
+<circle cx="435" cy="960" r="2.2" fill="#f6efdf" stroke="#2b2620" stroke-width="1.1"/>
+<circle cx="425" cy="986" r="2.2" fill="#f6efdf" stroke="#2b2620" stroke-width="1.1"/>
+<circle cx="430" cy="986" r="2.2" fill="#f6efdf" stroke="#2b2620" stroke-width="1.1"/>
+<circle cx="435" cy="986" r="2.2" fill="#f6efdf" stroke="#2b2620" stroke-width="1.1"/>
+<circle cx="700" cy="973" r="14" fill="#f6efdf" stroke="#2b2620" stroke-width="1.8"/>
+<circle cx="696" cy="969" r="1.9" fill="#2b2620"/>
+<circle cx="704" cy="974" r="1.9" fill="#2b2620"/>
+<circle cx="699" cy="978" r="1.9" fill="#2b2620"/>
+<circle cx="705" cy="968" r="1.9" fill="#2b2620"/>
+<text x="178" y="1065" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="1.0" font-weight="500" fill="#2b2620" fill-opacity="0.8" text-anchor="middle">INTACT MEMBRANE</text>
+<text x="430" y="1065" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="1.0" font-weight="500" fill="#2b2620" fill-opacity="0.8" text-anchor="middle">PORES OPEN AT THE POLES FACING THE ELECTRODES</text>
+<text x="708" y="1065" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="1.0" font-weight="500" fill="#2b2620" fill-opacity="0.8" text-anchor="middle">RESEALS, CARGO TRAPPED INSIDE</text>
+<path d="M84,1083 H776" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M104,1127 h16 v-30 h20 v30 h16 v-30 h20 v30 h16" fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M96,1127 h128" fill="none" stroke="#2b2620" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 3"/>
+<text x="266" y="1095" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="10" letter-spacing="1.2" font-weight="600" fill="#2b2620" fill-opacity="1.0" text-anchor="start">SQUARE WAVE · 100 Hz · 0–6.25 V · 625 V/cm</text>
+<text x="266" y="1111" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.8" text-anchor="start">square pulses suit mammalian cells; such a low voltage works only</text>
+<text x="266" y="1127" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.8" text-anchor="start">because the gap is small — field strength is volts divided by distance</text>
+<rect x="826" y="845" width="560" height="310" rx="10" fill="none" stroke="#2b2620" stroke-width="1.4"/>
+<path d="M826,873 H1386" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" />
+<text x="842" y="864" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="11" letter-spacing="1.8" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="start">DETAIL B — HOW THE TWO STREAMS MERGE</text>
+<path d="M876.0,913.0 L881.8,913.0 L887.5,913.0 L893.2,913.0 L899.0,913.0 L904.8,913.0 L910.5,913.0 L916.2,913.0 L922.0,913.0 L927.8,913.0 L933.5,913.0 L939.2,913.0 L945.0,913.0 L950.8,913.0 L956.5,913.0 L962.2,913.0 L968.0,913.0 L973.8,913.0 L979.5,913.0 L985.2,913.0 L991.0,913.0 L996.8,913.0 L1002.5,913.0 L1008.2,913.0 L1014.0,913.0 L1019.8,913.0 L1025.5,913.0 L1031.2,913.0 L1037.0,913.0 L1042.8,913.0 L1048.5,913.0 L1054.2,913.0 L1060.0,913.0 L1065.8,913.0 L1071.5,913.0 L1077.2,913.0 L1083.0,913.0 L1088.8,913.0 L1094.5,913.0 L1100.2,913.0 L1106.0,913.0 L1106.4,913.0 L1109.0,913.1 L1112.0,913.3 L1114.9,913.7 L1117.9,914.2 L1120.8,914.9 L1123.6,915.8 L1126.4,916.8 L1129.2,917.9 L1131.9,919.2 L1134.5,920.6 L1137.0,922.2 L1139.5,923.9 L1141.9,925.7 L1144.1,927.6 L1146.3,929.7 L1148.4,931.9 L1150.3,934.1 L1152.1,936.5 L1153.8,939.0 L1155.4,941.5 L1156.8,944.1 L1158.1,946.8 L1159.2,949.6 L1160.2,952.4 L1161.1,955.2 L1161.8,958.1 L1162.3,961.1 L1162.7,964.0 L1162.9,967.0 L1163.0,970.0 L1162.9,973.0 L1162.7,976.0 L1162.3,978.9 L1161.8,981.9 L1161.1,984.8 L1160.2,987.6 L1159.2,990.4 L1158.1,993.2 L1156.8,995.9 L1155.4,998.5 L1153.8,1001.0 L1152.1,1003.5 L1150.3,1005.9 L1148.4,1008.1 L1146.3,1010.3 L1144.1,1012.4 L1141.9,1014.3 L1139.5,1016.1 L1137.0,1017.8 L1134.5,1019.4 L1131.9,1020.8 L1129.2,1022.1 L1126.4,1023.2 L1123.6,1024.2 L1120.8,1025.1 L1117.9,1025.8 L1114.9,1026.3 L1112.0,1026.7 L1109.0,1026.9 L1106.4,1027.0 L1106.0,1027.0 L1103.2,1027.0 L1100.5,1027.0 L1097.8,1027.0 L1095.0,1027.0 L1092.2,1027.0 L1089.5,1027.0 L1086.8,1027.0 L1084.0,1027.0 L1081.2,1027.0 L1078.5,1027.0 L1075.8,1027.0 L1073.0,1027.0 L1070.2,1027.0 L1067.5,1027.0 L1064.8,1027.0 L1062.0,1027.0 L1059.2,1027.0 L1056.5,1027.0 L1053.8,1027.0 L1051.0,1027.0 L1048.2,1027.0 L1045.5,1027.0 L1042.8,1027.0 L1040.0,1027.0 L1037.2,1027.0 L1034.5,1027.0 L1031.8,1027.0 L1029.0,1027.0 L1026.2,1027.0 L1023.5,1027.0 L1020.8,1027.0 L1018.0,1027.0 L1015.2,1027.0 L1012.5,1027.0 L1009.8,1027.0 L1007.0,1027.0 L1004.2,1027.0 L1001.5,1027.0 L998.8,1027.0 L996.0,1027.0 L996.4,1027.0 L994.8,1027.0 L993.6,1027.1 L992.4,1027.3 L991.2,1027.5 L990.0,1027.8 L988.9,1028.1 L987.8,1028.5 L986.6,1029.0 L985.6,1029.5 L984.5,1030.1 L983.5,1030.7 L982.5,1031.4 L981.5,1032.1 L980.6,1032.9 L979.7,1033.7 L978.9,1034.6 L978.1,1035.5 L977.4,1036.5 L976.7,1037.5 L976.1,1038.5 L975.5,1039.6 L975.0,1040.6 L974.5,1041.8 L974.1,1042.9 L973.8,1044.0 L973.5,1045.2 L973.3,1046.4 L973.1,1047.6 L973.0,1048.8 L973.0,1050.0 L973.0,1051.2 L973.1,1052.4 L973.3,1053.6 L973.5,1054.8 L973.8,1056.0 L974.1,1057.1 L974.5,1058.2 L975.0,1059.4 L975.5,1060.4 L976.1,1061.5 L976.7,1062.5 L977.4,1063.5 L978.1,1064.5 L978.9,1065.4 L979.7,1066.3 L980.6,1067.1 L981.5,1067.9 L982.5,1068.6 L983.5,1069.3 L984.5,1069.9 L985.6,1070.5 L986.6,1071.0 L987.8,1071.5 L988.9,1071.9 L990.0,1072.2 L991.2,1072.5 L992.4,1072.7 L993.6,1072.9 L994.8,1073.0 L996.4,1073.0 L996.0,1073.0 L1003.8,1073.0 L1011.5,1073.0 L1019.2,1073.0 L1027.0,1073.0 L1034.8,1073.0 L1042.5,1073.0 L1050.2,1073.0 L1058.0,1073.0 L1065.8,1073.0 L1073.5,1073.0 L1081.2,1073.0 L1089.0,1073.0 L1096.8,1073.0 L1104.5,1073.0 L1112.2,1073.0 L1120.0,1073.0 L1127.8,1073.0 L1135.5,1073.0 L1143.2,1073.0 L1151.0,1073.0 L1158.8,1073.0 L1166.5,1073.0 L1174.2,1073.0 L1182.0,1073.0 L1189.8,1073.0 L1197.5,1073.0 L1205.2,1073.0 L1213.0,1073.0 L1220.8,1073.0 L1228.5,1073.0 L1236.2,1073.0 L1244.0,1073.0 L1251.8,1073.0 L1259.5,1073.0 L1267.2,1073.0 L1275.0,1073.0 L1282.8,1073.0 L1290.5,1073.0 L1298.2,1073.0 L1306.0,1073.0" fill="none" stroke="#2b2620" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M876.0,947.0 L881.8,947.0 L887.5,947.0 L893.2,947.0 L899.0,947.0 L904.8,947.0 L910.5,947.0 L916.2,947.0 L922.0,947.0 L927.8,947.0 L933.5,947.0 L939.2,947.0 L945.0,947.0 L950.8,947.0 L956.5,947.0 L962.2,947.0 L968.0,947.0 L973.8,947.0 L979.5,947.0 L985.2,947.0 L991.0,947.0 L996.8,947.0 L1002.5,947.0 L1008.2,947.0 L1014.0,947.0 L1019.8,947.0 L1025.5,947.0 L1031.2,947.0 L1037.0,947.0 L1042.8,947.0 L1048.5,947.0 L1054.2,947.0 L1060.0,947.0 L1065.8,947.0 L1071.5,947.0 L1077.2,947.0 L1083.0,947.0 L1088.8,947.0 L1094.5,947.0 L1100.2,947.0 L1106.0,947.0 L1105.6,947.0 L1107.2,947.0 L1108.4,947.1 L1109.6,947.3 L1110.8,947.5 L1112.0,947.8 L1113.1,948.1 L1114.2,948.5 L1115.4,949.0 L1116.4,949.5 L1117.5,950.1 L1118.5,950.7 L1119.5,951.4 L1120.5,952.1 L1121.4,952.9 L1122.3,953.7 L1123.1,954.6 L1123.9,955.5 L1124.6,956.5 L1125.3,957.5 L1125.9,958.5 L1126.5,959.6 L1127.0,960.6 L1127.5,961.8 L1127.9,962.9 L1128.2,964.0 L1128.5,965.2 L1128.7,966.4 L1128.9,967.6 L1129.0,968.8 L1129.0,970.0 L1129.0,971.2 L1128.9,972.4 L1128.7,973.6 L1128.5,974.8 L1128.2,976.0 L1127.9,977.1 L1127.5,978.2 L1127.0,979.4 L1126.5,980.4 L1125.9,981.5 L1125.3,982.5 L1124.6,983.5 L1123.9,984.5 L1123.1,985.4 L1122.3,986.3 L1121.4,987.1 L1120.5,987.9 L1119.5,988.6 L1118.5,989.3 L1117.5,989.9 L1116.4,990.5 L1115.4,991.0 L1114.2,991.5 L1113.1,991.9 L1112.0,992.2 L1110.8,992.5 L1109.6,992.7 L1108.4,992.9 L1107.2,993.0 L1105.6,993.0 L1106.0,993.0 L1103.2,993.0 L1100.5,993.0 L1097.8,993.0 L1095.0,993.0 L1092.2,993.0 L1089.5,993.0 L1086.8,993.0 L1084.0,993.0 L1081.2,993.0 L1078.5,993.0 L1075.8,993.0 L1073.0,993.0 L1070.2,993.0 L1067.5,993.0 L1064.8,993.0 L1062.0,993.0 L1059.2,993.0 L1056.5,993.0 L1053.8,993.0 L1051.0,993.0 L1048.2,993.0 L1045.5,993.0 L1042.8,993.0 L1040.0,993.0 L1037.2,993.0 L1034.5,993.0 L1031.8,993.0 L1029.0,993.0 L1026.2,993.0 L1023.5,993.0 L1020.8,993.0 L1018.0,993.0 L1015.2,993.0 L1012.5,993.0 L1009.8,993.0 L1007.0,993.0 L1004.2,993.0 L1001.5,993.0 L998.8,993.0 L996.0,993.0 L995.6,993.0 L993.0,993.1 L990.0,993.3 L987.1,993.7 L984.1,994.2 L981.2,994.9 L978.4,995.8 L975.6,996.8 L972.8,997.9 L970.1,999.2 L967.5,1000.6 L965.0,1002.2 L962.5,1003.9 L960.1,1005.7 L957.9,1007.6 L955.7,1009.7 L953.6,1011.9 L951.7,1014.1 L949.9,1016.5 L948.2,1019.0 L946.6,1021.5 L945.2,1024.1 L943.9,1026.8 L942.8,1029.6 L941.8,1032.4 L940.9,1035.2 L940.2,1038.1 L939.7,1041.1 L939.3,1044.0 L939.1,1047.0 L939.0,1050.0 L939.1,1053.0 L939.3,1056.0 L939.7,1058.9 L940.2,1061.9 L940.9,1064.8 L941.8,1067.6 L942.8,1070.4 L943.9,1073.2 L945.2,1075.9 L946.6,1078.5 L948.2,1081.0 L949.9,1083.5 L951.7,1085.9 L953.6,1088.1 L955.7,1090.3 L957.9,1092.4 L960.1,1094.3 L962.5,1096.1 L965.0,1097.8 L967.5,1099.4 L970.1,1100.8 L972.8,1102.1 L975.6,1103.2 L978.4,1104.2 L981.2,1105.1 L984.1,1105.8 L987.1,1106.3 L990.0,1106.7 L993.0,1106.9 L995.6,1107.0 L996.0,1107.0 L1003.8,1107.0 L1011.5,1107.0 L1019.2,1107.0 L1027.0,1107.0 L1034.8,1107.0 L1042.5,1107.0 L1050.2,1107.0 L1058.0,1107.0 L1065.8,1107.0 L1073.5,1107.0 L1081.2,1107.0 L1089.0,1107.0 L1096.8,1107.0 L1104.5,1107.0 L1112.2,1107.0 L1120.0,1107.0 L1127.8,1107.0 L1135.5,1107.0 L1143.2,1107.0 L1151.0,1107.0 L1158.8,1107.0 L1166.5,1107.0 L1174.2,1107.0 L1182.0,1107.0 L1189.8,1107.0 L1197.5,1107.0 L1205.2,1107.0 L1213.0,1107.0 L1220.8,1107.0 L1228.5,1107.0 L1236.2,1107.0 L1244.0,1107.0 L1251.8,1107.0 L1259.5,1107.0 L1267.2,1107.0 L1275.0,1107.0 L1282.8,1107.0 L1290.5,1107.0 L1298.2,1107.0 L1306.0,1107.0" fill="none" stroke="#2b2620" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M876.0,922.5 L881.8,922.5 L887.5,922.5 L893.2,922.5 L899.0,922.5 L904.8,922.5 L910.5,922.5 L916.2,922.5 L922.0,922.5 L927.8,922.6 L933.5,922.6 L939.2,922.6 L945.0,922.6 L950.8,922.6 L956.5,922.6 L962.2,922.6 L968.0,922.7 L973.8,922.7 L979.5,922.7 L985.2,922.7 L991.0,922.7 L996.8,922.8 L1002.5,922.8 L1008.2,922.8 L1014.0,922.9 L1019.8,922.9 L1025.5,922.9 L1031.2,922.9 L1037.0,923.0 L1042.8,923.0 L1048.5,923.1 L1054.2,923.1 L1060.0,923.1 L1065.8,923.2 L1071.5,923.2 L1077.2,923.2 L1083.0,923.3 L1088.8,923.3 L1094.5,923.4 L1100.2,923.4 L1106.0,923.5 L1106.2,923.5 L1108.4,923.6 L1110.8,923.9 L1113.2,924.2 L1115.6,924.7 L1118.0,925.4 L1120.3,926.1 L1122.5,927.0 L1124.7,927.9 L1126.9,929.0 L1129.0,930.2 L1131.0,931.5 L1132.9,932.9 L1134.8,934.4 L1136.6,936.0 L1138.3,937.7 L1139.9,939.5 L1141.4,941.4 L1142.8,943.3 L1144.1,945.3 L1145.2,947.3 L1146.3,949.5 L1147.3,951.6 L1148.1,953.8 L1148.8,956.1 L1149.4,958.4 L1149.9,960.7 L1150.3,963.0 L1150.5,965.3 L1150.6,967.7 L1150.6,970.0 L1150.4,972.3 L1150.2,974.6 L1149.8,976.9 L1149.3,979.2 L1148.7,981.4 L1147.9,983.6 L1147.1,985.8 L1146.1,987.9 L1145.1,989.9 L1143.9,991.9 L1142.6,993.8 L1141.3,995.6 L1139.8,997.4 L1138.3,999.1 L1136.7,1000.7 L1135.0,1002.2 L1133.2,1003.6 L1131.3,1004.9 L1129.4,1006.1 L1127.5,1007.2 L1125.4,1008.2 L1123.4,1009.0 L1121.3,1009.8 L1119.2,1010.5 L1117.0,1011.0 L1114.8,1011.4 L1112.6,1011.8 L1110.4,1012.0 L1108.2,1012.0 L1106.1,1012.0 L1106.0,1011.9 L1103.2,1011.8 L1100.5,1011.7 L1097.8,1011.6 L1095.0,1011.5 L1092.2,1011.4 L1089.5,1011.3 L1086.8,1011.2 L1084.0,1011.2 L1081.2,1011.1 L1078.5,1011.0 L1075.8,1010.9 L1073.0,1010.8 L1070.2,1010.7 L1067.5,1010.6 L1064.8,1010.5 L1062.0,1010.4 L1059.2,1010.3 L1056.5,1010.2 L1053.8,1010.1 L1051.0,1010.0 L1048.2,1009.9 L1045.5,1009.8 L1042.8,1009.7 L1040.0,1009.6 L1037.2,1009.5 L1034.5,1009.4 L1031.8,1009.3 L1029.0,1009.2 L1026.2,1009.1 L1023.5,1009.0 L1020.8,1008.9 L1018.0,1008.8 L1015.2,1008.8 L1012.5,1008.7 L1009.8,1008.6 L1007.0,1008.5 L1004.2,1008.4 L1001.5,1008.3 L998.8,1008.2 L996.0,1008.1 L995.9,1008.0 L993.8,1008.0 L991.6,1008.0 L989.4,1008.2 L987.2,1008.6 L985.0,1009.0 L982.8,1009.5 L980.7,1010.2 L978.6,1011.0 L976.6,1011.8 L974.5,1012.8 L972.6,1013.9 L970.7,1015.1 L968.8,1016.4 L967.0,1017.8 L965.3,1019.3 L963.7,1020.9 L962.2,1022.6 L960.7,1024.4 L959.4,1026.2 L958.1,1028.1 L956.9,1030.1 L955.9,1032.1 L954.9,1034.2 L954.1,1036.4 L953.3,1038.6 L952.7,1040.8 L952.2,1043.1 L951.8,1045.4 L951.6,1047.7 L951.4,1050.0 L951.4,1052.3 L951.5,1054.7 L951.7,1057.0 L952.1,1059.3 L952.6,1061.6 L953.2,1063.9 L953.9,1066.2 L954.7,1068.4 L955.7,1070.5 L956.8,1072.7 L957.9,1074.7 L959.2,1076.7 L960.6,1078.6 L962.1,1080.5 L963.7,1082.3 L965.4,1084.0 L967.2,1085.6 L969.1,1087.1 L971.0,1088.5 L973.0,1089.8 L975.1,1091.0 L977.3,1092.1 L979.5,1093.0 L981.7,1093.9 L984.0,1094.6 L986.4,1095.3 L988.8,1095.8 L991.2,1096.1 L993.6,1096.4 L995.8,1096.5 L996.0,1096.5 L1003.8,1096.6 L1011.5,1096.6 L1019.2,1096.7 L1027.0,1096.7 L1034.8,1096.8 L1042.5,1096.8 L1050.2,1096.8 L1058.0,1096.9 L1065.8,1096.9 L1073.5,1096.9 L1081.2,1097.0 L1089.0,1097.0 L1096.8,1097.1 L1104.5,1097.1 L1112.2,1097.1 L1120.0,1097.1 L1127.8,1097.2 L1135.5,1097.2 L1143.2,1097.2 L1151.0,1097.3 L1158.8,1097.3 L1166.5,1097.3 L1174.2,1097.3 L1182.0,1097.3 L1189.8,1097.4 L1197.5,1097.4 L1205.2,1097.4 L1213.0,1097.4 L1220.8,1097.4 L1228.5,1097.4 L1236.2,1097.4 L1244.0,1097.5 L1251.8,1097.5 L1259.5,1097.5 L1267.2,1097.5 L1275.0,1097.5 L1282.8,1097.5 L1290.5,1097.5 L1298.2,1097.5 L1306.0,1097.5" fill="none" stroke="#2b2620" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M876.0,937.5 L881.8,937.5 L887.5,937.5 L893.2,937.5 L899.0,937.5 L904.8,937.5 L910.5,937.5 L916.2,937.5 L922.0,937.5 L927.8,937.4 L933.5,937.4 L939.2,937.4 L945.0,937.4 L950.8,937.4 L956.5,937.4 L962.2,937.4 L968.0,937.3 L973.8,937.3 L979.5,937.3 L985.2,937.3 L991.0,937.3 L996.8,937.2 L1002.5,937.2 L1008.2,937.2 L1014.0,937.1 L1019.8,937.1 L1025.5,937.1 L1031.2,937.1 L1037.0,937.0 L1042.8,937.0 L1048.5,936.9 L1054.2,936.9 L1060.0,936.9 L1065.8,936.8 L1071.5,936.8 L1077.2,936.8 L1083.0,936.7 L1088.8,936.7 L1094.5,936.6 L1100.2,936.6 L1106.0,936.5 L1105.8,936.5 L1107.8,936.5 L1109.5,936.6 L1111.3,936.7 L1113.0,937.0 L1114.7,937.4 L1116.5,937.8 L1118.1,938.4 L1119.8,939.0 L1121.4,939.7 L1123.0,940.5 L1124.6,941.4 L1126.1,942.3 L1127.5,943.4 L1129.0,944.5 L1130.3,945.7 L1131.6,947.0 L1132.8,948.3 L1134.0,949.7 L1135.0,951.1 L1136.0,952.7 L1137.0,954.2 L1137.8,955.8 L1138.6,957.5 L1139.3,959.2 L1139.9,960.9 L1140.4,962.7 L1140.8,964.5 L1141.1,966.3 L1141.3,968.2 L1141.4,970.0 L1141.4,971.9 L1141.4,973.7 L1141.2,975.6 L1141.0,977.4 L1140.6,979.3 L1140.1,981.1 L1139.6,982.9 L1138.9,984.7 L1138.2,986.4 L1137.4,988.1 L1136.4,989.8 L1135.4,991.4 L1134.3,993.0 L1133.2,994.5 L1131.9,995.9 L1130.6,997.3 L1129.2,998.6 L1127.7,999.9 L1126.1,1001.0 L1124.5,1002.1 L1122.9,1003.1 L1121.2,1004.0 L1119.4,1004.9 L1117.6,1005.6 L1115.7,1006.3 L1113.8,1006.8 L1111.9,1007.3 L1110.0,1007.6 L1108.0,1007.9 L1105.9,1008.0 L1106.0,1008.1 L1103.2,1008.2 L1100.5,1008.3 L1097.8,1008.4 L1095.0,1008.5 L1092.2,1008.6 L1089.5,1008.7 L1086.8,1008.8 L1084.0,1008.8 L1081.2,1008.9 L1078.5,1009.0 L1075.8,1009.1 L1073.0,1009.2 L1070.2,1009.3 L1067.5,1009.4 L1064.8,1009.5 L1062.0,1009.6 L1059.2,1009.7 L1056.5,1009.8 L1053.8,1009.9 L1051.0,1010.0 L1048.2,1010.1 L1045.5,1010.2 L1042.8,1010.3 L1040.0,1010.4 L1037.2,1010.5 L1034.5,1010.6 L1031.8,1010.7 L1029.0,1010.8 L1026.2,1010.9 L1023.5,1011.0 L1020.8,1011.1 L1018.0,1011.2 L1015.2,1011.2 L1012.5,1011.3 L1009.8,1011.4 L1007.0,1011.5 L1004.2,1011.6 L1001.5,1011.7 L998.8,1011.8 L996.0,1011.9 L996.1,1012.0 L994.0,1012.1 L992.0,1012.4 L990.1,1012.7 L988.2,1013.2 L986.3,1013.7 L984.4,1014.4 L982.6,1015.1 L980.8,1016.0 L979.1,1016.9 L977.5,1017.9 L975.9,1019.0 L974.3,1020.1 L972.8,1021.4 L971.4,1022.7 L970.1,1024.1 L968.8,1025.5 L967.7,1027.0 L966.6,1028.6 L965.6,1030.2 L964.6,1031.9 L963.8,1033.6 L963.1,1035.3 L962.4,1037.1 L961.9,1038.9 L961.4,1040.7 L961.0,1042.6 L960.8,1044.4 L960.6,1046.3 L960.6,1048.1 L960.6,1050.0 L960.7,1051.8 L960.9,1053.7 L961.2,1055.5 L961.6,1057.3 L962.1,1059.1 L962.7,1060.8 L963.4,1062.5 L964.2,1064.2 L965.0,1065.8 L966.0,1067.3 L967.0,1068.9 L968.0,1070.3 L969.2,1071.7 L970.4,1073.0 L971.7,1074.3 L973.0,1075.5 L974.5,1076.6 L975.9,1077.7 L977.4,1078.6 L979.0,1079.5 L980.6,1080.3 L982.2,1081.0 L983.9,1081.6 L985.5,1082.2 L987.3,1082.6 L989.0,1083.0 L990.7,1083.3 L992.5,1083.4 L994.2,1083.5 L996.2,1083.5 L996.0,1083.5 L1003.8,1083.4 L1011.5,1083.4 L1019.2,1083.3 L1027.0,1083.3 L1034.8,1083.2 L1042.5,1083.2 L1050.2,1083.2 L1058.0,1083.1 L1065.8,1083.1 L1073.5,1083.1 L1081.2,1083.0 L1089.0,1083.0 L1096.8,1082.9 L1104.5,1082.9 L1112.2,1082.9 L1120.0,1082.9 L1127.8,1082.8 L1135.5,1082.8 L1143.2,1082.8 L1151.0,1082.7 L1158.8,1082.7 L1166.5,1082.7 L1174.2,1082.7 L1182.0,1082.7 L1189.8,1082.6 L1197.5,1082.6 L1205.2,1082.6 L1213.0,1082.6 L1220.8,1082.6 L1228.5,1082.6 L1236.2,1082.6 L1244.0,1082.5 L1251.8,1082.5 L1259.5,1082.5 L1267.2,1082.5 L1275.0,1082.5 L1282.8,1082.5 L1290.5,1082.5 L1298.2,1082.5 L1306.0,1082.5" fill="none" stroke="#2b2620" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 5"/>
+<path d="M1275.0,1085.7 L1282,1090 L1275.0,1094.3" fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="1256" cy="960" r="36" fill="none" stroke="#2b2620" stroke-width="1.2" stroke-dasharray="3 3"/>
+<path d="M1250,938 a22,22 0 1 1 -12,30" fill="none" stroke="#2b2620" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M1243.5,963.6 L1238,968 L1236.6,961.1" fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M1262,982 a22,22 0 1 1 12,-30" fill="none" stroke="#2b2620" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M1268.5,956.4 L1274,952 L1275.4,958.9" fill="none" stroke="#2b2620" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+<text x="1256" y="1018" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="1.0" font-weight="500" fill="#2b2620" fill-opacity="0.8" text-anchor="middle">COUNTER-ROTATING</text>
+<text x="1256" y="1032" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="1.0" font-weight="500" fill="#2b2620" fill-opacity="0.8" text-anchor="middle">DEAN VORTICES</text>
+<path d="M866,1133 h22" fill="none" stroke="#2b2620" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+<text x="896" y="1137" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="start">cell stream</text>
+<path d="M990,1133 h22" fill="none" stroke="#2b2620" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 4"/>
+<text x="1020" y="1137" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="0.9" font-weight="500" fill="#2b2620" fill-opacity="0.82" text-anchor="start">cargo stream — the two fold across the channel</text>
+<rect x="1412" y="845" width="428" height="310" rx="10" fill="none" stroke="#2b2620" stroke-width="1.4"/>
+<path d="M1412,873 H1840" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" />
+<text x="1428" y="864" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="11" letter-spacing="1.8" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="start">LAYERS · NUMBERS</text>
+<rect x="1434" y="890" width="15" height="15" rx="2" fill="none" stroke="#2b2620" stroke-width="1.2"/>
+<text x="1441.5" y="902" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9" letter-spacing="0" font-weight="600" fill="#2b2620" fill-opacity="1.0" text-anchor="middle">5</text>
+<text x="1460" y="902" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="500" fill="#2b2620" fill-opacity="0.85" text-anchor="start">PDMS flow channel, bonded to glass</text>
+<rect x="1434" y="913" width="15" height="15" rx="2" fill="none" stroke="#2b2620" stroke-width="1.2"/>
+<text x="1441.5" y="925" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9" letter-spacing="0" font-weight="600" fill="#2b2620" fill-opacity="1.0" text-anchor="middle">4</text>
+<text x="1460" y="925" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="500" fill="#2b2620" fill-opacity="0.85" text-anchor="start">insulation, open at electrodes + pads</text>
+<rect x="1434" y="936" width="15" height="15" rx="2" fill="none" stroke="#2b2620" stroke-width="1.2"/>
+<text x="1441.5" y="948" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9" letter-spacing="0" font-weight="600" fill="#2b2620" fill-opacity="1.0" text-anchor="middle">3</text>
+<text x="1460" y="948" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="500" fill="#2b2620" fill-opacity="0.85" text-anchor="start">Cr adhesion / Pt conduction traces</text>
+<rect x="1434" y="959" width="15" height="15" rx="2" fill="none" stroke="#2b2620" stroke-width="1.2"/>
+<text x="1441.5" y="971" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9" letter-spacing="0" font-weight="600" fill="#2b2620" fill-opacity="1.0" text-anchor="middle">2</text>
+<text x="1460" y="971" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="500" fill="#2b2620" fill-opacity="0.85" text-anchor="start">glassy carbon electrodes (pyrolysed)</text>
+<rect x="1434" y="982" width="15" height="15" rx="2" fill="none" stroke="#2b2620" stroke-width="1.2"/>
+<text x="1441.5" y="994" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9" letter-spacing="0" font-weight="600" fill="#2b2620" fill-opacity="1.0" text-anchor="middle">1</text>
+<text x="1460" y="994" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="500" fill="#2b2620" fill-opacity="0.85" text-anchor="start">glass substrate</text>
+<path d="M1434,1019 H1818" fill="none" stroke="#2b2620" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" />
+<text x="1434" y="1041" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="500" fill="#2b2620" fill-opacity="0.85" text-anchor="start">electrode gap</text>
+<text x="1818" y="1041" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="end">100 µm</text>
+<text x="1434" y="1061" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="500" fill="#2b2620" fill-opacity="0.85" text-anchor="start">channel at EP zone</text>
+<text x="1818" y="1061" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="end">100 µm</text>
+<text x="1434" y="1081" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="500" fill="#2b2620" fill-opacity="0.85" text-anchor="start">cell diameter</text>
+<text x="1818" y="1081" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="end">~20 µm</text>
+<text x="1434" y="1101" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="500" fill="#2b2620" fill-opacity="0.85" text-anchor="start">field strength</text>
+<text x="1818" y="1101" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="end">625 V/cm</text>
+<text x="1434" y="1121" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="500" fill="#2b2620" fill-opacity="0.85" text-anchor="start">pulse</text>
+<text x="1818" y="1121" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="end">100 Hz square, 0–6.25 V</text>
+<text x="1434" y="1141" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="500" fill="#2b2620" fill-opacity="0.85" text-anchor="start">sheath : cell flow</text>
+<text x="1818" y="1141" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.8" letter-spacing="0.8" font-weight="700" fill="#2b2620" fill-opacity="1.0" text-anchor="end">1 : 0.05 mL/min</text>
+<text x="60" y="1214" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="1.3" font-weight="500" fill="#2b2620" fill-opacity="0.65" text-anchor="start">AFTER S. R. OMER · “CONTINUOUS MICROFLUIDIC ELECTROPORATION…” · MS THESIS, SAN DIEGO STATE UNIVERSITY, 2025</text>
+<text x="1840" y="1214" font-family="'Barlow Condensed','Roboto Condensed','Arial Narrow',sans-serif" font-size="9.5" letter-spacing="1.3" font-weight="500" fill="#2b2620" fill-opacity="0.65" text-anchor="end">FLOW LEFT → RIGHT</text>
+</svg>
+              <div class="stops" id="map-stops"></div>
+            </div>
+          </div>
+          <div class="chip-foot">
+            <p class="chip-hint">Tap a stop, on the chip or in the list, to read it</p>
+            <button class="btn-line chip-zoom" type="button" id="chip-zoom">View full size</button>
+          </div>
+        </div>
+        </div>
+
+        <div class="note-column">
+        <nav class="stop-links" id="stop-links" aria-label="Stops on the chip"></nav>
+        <article class="field-note" id="field-note" aria-live="polite">
+          <span class="tape" aria-hidden="true"></span>
+          <span class="eyebrow" id="note-count"></span>
+          <h3 id="note-title"></h3>
+          <p class="note-place" id="note-place"></p>
+          <p id="note-text"></p>
+          <ul id="note-list"></ul>
+          <div class="note-nav">
+            <button class="icon-btn" type="button" id="note-prev" aria-label="Previous stop">←</button>
+            <div class="note-dots" id="note-dots" aria-hidden="true"></div>
+            <button class="icon-btn" type="button" id="note-next" aria-label="Next stop">→</button>
+          </div>
+        </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="work">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow section-eyebrow">Selected work</span>
+        <h2 class="section-heading">The Studio</h2>
+        <p>More work from the cleanroom and the lab, beyond the thesis. Click a project to open its case study.</p>
+      </div>
+      <div class="filter-bar" id="filter-bar" role="tablist" aria-label="Filter projects"></div>
+      <div class="card-grid" id="work-grid"></div>
+    </div>
+  </section>
+
+  <section class="contact-band" id="contact">
+    <div class="wrap">
+      <h2>Let's make something</h2>
+      <div class="contact-actions">
+        <span class="email-chip" id="email-text">Samanthaomer3@gmail.com</span>
+        <button class="btn-line" type="button" id="copy-email">Copy email</button>
+        <a class="btn-line solid" href="#contact">Résumé (PDF)</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span class="footer-mark" aria-hidden="true">S.</span>
+    <div class="footer-cols">
+      <ul><li><a href="#top">Home</a></li><li><a href="#thesis">Thesis</a></li><li><a href="#work">Work</a></li><li><a href="#experience">Experience</a></li></ul>
+      <ul><li><a href="#contact">LinkedIn</a></li><li><a href="#contact">ResearchGate</a></li><li><a href="#contact">Contact</a></li></ul>
+    </div>
+    <p class="footer-small">© <span id="year">2026</span> Samantha Omer</p>
+  </div>
+</footer>
+
+<div class="chip-overlay" id="chip-overlay" aria-hidden="true">
+  <div class="chip-overlay-inner" role="dialog" aria-modal="true" aria-label="Electroporation chip schematic, full size">
+    <button class="icon-btn" type="button" id="chip-overlay-close" aria-label="Close">×</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <span class="binder-clip" aria-hidden="true"></span>
+    <div class="modal-top">
+      <button class="btn-line" id="modal-back" type="button">← All projects</button>
+      <div class="modal-nav">
+        <button class="icon-btn" id="modal-prev" type="button" aria-label="Previous project">←</button>
+        <span id="modal-count"></span>
+        <button class="icon-btn" id="modal-next" type="button" aria-label="Next project">→</button>
+        <button class="icon-btn" id="modal-close" type="button" aria-label="Close">×</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div>
+        <span class="eyebrow" id="modal-tag"></span>
+        <h3 id="modal-title"></h3>
+        <p id="modal-summary"></p>
+        <div class="modal-process" id="modal-process-wrap" hidden>
+          <h4>How it works</h4>
+          <ol id="modal-process"></ol>
+        </div>
+        <div class="modal-process" id="modal-next-wrap" hidden>
+          <h4>What's next</h4>
+          <p id="modal-next-text"></p>
+        </div>
+        <div class="modal-arch"><svg id="modal-icon"><use href="#ico-sprout"/></svg></div>
+      </div>
+      <aside>
+        <section><h4>The problem</h4><p id="modal-problem"></p></section>
+        <section><h4>My role</h4><p id="modal-role"></p></section>
+        <section><h4>Key results</h4><ul id="modal-results"></ul></section>
+        <section><h4>Tools used</h4><div class="tool-pills" id="modal-tools"></div></section>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---------------- Placeholder project data ----------------
+  const PROJECTS = [
+    { title: "Graphene-like Carbon Coating", tag: "Projects", icon: "ico-sun",
+      summary: "A repeatable process for growing a graphene-like carbon coating on substrates other than silicon, developed at Grapheton.",
+      problem: "The coating needed to work on non-silicon substrates and come out the same way run after run.",
+      role: "R&D Engineer: developed the synthesis process, designed the test setups and characterized the devices.",
+      results: ["Repeatable synthesis with 90% yield", "Characterized and validated new devices for a high-profile customer"],
+      tools: ["Pyrolysis", "AutoCAD", "Coventorware", "COMSOL"] },
+    { title: "Standard PDMS Soft Lithography", tag: "Process", icon: "ico-arches",
+      summary: "A standardized PDMS soft-lithography procedure for the NanoFAB.SDSU lab, plus a microfluidic testing method using syringe pumps and optical microscopy.",
+      problem: "PDMS devices varied from batch to batch and often peeled away from their substrates.",
+      role: "Graduate Researcher: wrote and validated the procedure and trained other researchers to use it.",
+      results: ["Improved PDMS-substrate adhesion by 75%", "More consistent batches", "New testing procedure that eliminated downtime"],
+      tools: ["Soft lithography", "Syringe pumps", "Optical microscopy"] },
+    { title: "Lactate Sensing with Carbon Microelectrodes", tag: "Publication", icon: "ico-sprout",
+      summary: "Indirect detection of lactate through voltammetry using glassy carbon microelectrodes.",
+      problem: "Measuring lactate electrochemically with microscale carbon electrodes.",
+      role: "Co-author on the manuscript.",
+      results: ["Manuscript submitted to the Journal of Micromechanics and Microengineering (pending approval)"],
+      tools: ["Cyclic voltammetry", "EIS", "Glassy carbon"] }
+  ];
+
+  const grid = document.getElementById("work-grid");
+  PROJECTS.forEach((p, i) => {
+    const card = document.createElement("article");
+    card.className = "card";
+    card.tabIndex = 0;
+    card.dataset.tag = p.tag;
+    card.dataset.index = i;
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-label", "Open " + p.title);
+    const well = p.photo
+      ? '<div class="card-well"><img src="' + p.photo + '" alt="" onerror="handleProjectImgError(this, \'' + p.icon + '\')"></div>'
+      : '<div class="card-well"><svg aria-hidden="true"><use href="#' + p.icon + '"/></svg></div>';
+    card.innerHTML = well +
+      "<h3>" + p.title + "</h3><p>" + (p.blurb || p.summary) + '</p><span class="more">Discover more ›</span>';
+    grid.appendChild(card);
+  });
+
+  // ---------------- Filter bar ----------------
+  const filterBar = document.getElementById("filter-bar");
+  ["All", ...new Set(PROJECTS.map(p => p.tag))].forEach((name, i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "filter-btn" + (i === 0 ? " active" : "");
+    b.textContent = name;
+    b.setAttribute("role", "tab");
+    b.addEventListener("click", () => {
+      filterBar.querySelectorAll(".filter-btn").forEach(x => x.classList.toggle("active", x === b));
+      grid.querySelectorAll(".card").forEach(c => { c.hidden = name !== "All" && c.dataset.tag !== name; });
+    });
+    filterBar.appendChild(b);
+  });
+
+  // ---------------- Modal ----------------
+  const overlay = document.getElementById("modal-overlay");
+  let current = 0, lastFocus = null;
+  function fill(i) {
+    const p = PROJECTS[i];
+    current = i;
+    document.getElementById("modal-tag").textContent = p.tag;
+    document.getElementById("modal-title").textContent = p.title;
+    document.getElementById("modal-summary").textContent = p.summary;
+    document.getElementById("modal-problem").textContent = p.problem;
+    document.getElementById("modal-role").textContent = p.role;
+    document.getElementById("modal-results").innerHTML = p.results.map(r => "<li>" + r + "</li>").join("");
+    document.getElementById("modal-tools").innerHTML = p.tools.map(t => "<span>" + t + "</span>").join("");
+    const procWrap = document.getElementById("modal-process-wrap");
+    procWrap.hidden = !p.process;
+    document.getElementById("modal-process").innerHTML = (p.process || []).map(x => "<li>" + x + "</li>").join("");
+    const nextWrap = document.getElementById("modal-next-wrap");
+    nextWrap.hidden = !p.next;
+    document.getElementById("modal-next-text").textContent = p.next || "";
+    const arch = document.querySelector(".modal-arch");
+    if (p.photo) {
+      arch.innerHTML = '<img src="' + p.photo + '" alt="" onerror="handleProjectImgError(this, \'' + p.icon + '\')">';
+    } else {
+      arch.innerHTML = '<svg id="modal-icon"><use href="#' + p.icon + '"/></svg>';
+    }
+    document.getElementById("modal-count").textContent = (i + 1) + " / " + PROJECTS.length;
+    document.getElementById("modal-prev").disabled = i === 0;
+    document.getElementById("modal-next").disabled = i === PROJECTS.length - 1;
+    overlay.querySelector(".modal").scrollTop = 0;
+  }
+  function openModal(i) {
+    lastFocus = document.activeElement;
+    fill(i);
+    overlay.classList.add("open");
+    overlay.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    document.getElementById("modal-close").focus();
+  }
+  function closeModal() {
+    overlay.classList.remove("open");
+    overlay.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    if (lastFocus) lastFocus.focus();
+  }
+  grid.addEventListener("click", e => { const c = e.target.closest(".card"); if (c) openModal(+c.dataset.index); });
+  grid.addEventListener("keydown", e => {
+    const c = e.target.closest(".card");
+    if (c && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openModal(+c.dataset.index); }
+  });
+  document.getElementById("modal-close").addEventListener("click", closeModal);
+  document.getElementById("modal-back").addEventListener("click", closeModal);
+  document.getElementById("modal-prev").addEventListener("click", () => current > 0 && fill(current - 1));
+  document.getElementById("modal-next").addEventListener("click", () => current < PROJECTS.length - 1 && fill(current + 1));
+  overlay.addEventListener("click", e => { if (e.target === overlay) closeModal(); });
+  document.addEventListener("keydown", e => {
+    if (!overlay.classList.contains("open")) return;
+    if (e.key === "Escape") closeModal();
+    if (e.key === "ArrowRight" && current < PROJECTS.length - 1) fill(current + 1);
+    if (e.key === "ArrowLeft" && current > 0) fill(current - 1);
+  });
+
+  // ---------------- Thesis map ----------------
+  const STOPS = [
+    { n: "1", name: "Inlet 1 · Cell suspension", x: "3.9%", y: "35.5%", title: "Cells go in",
+      text: "OVCAR8 cells, about 20 µm across, enter at 0.05 mL/min. Keeping the cell stream slow and thin is what makes it possible to treat cells one at a time instead of a whole batch at once.",
+      list: ["Cell suspension at 0.05 mL/min", "Cells roughly 20 µm in diameter"] },
+    { n: "2", name: "Serpentine · Cell rotation", x: "17.4%", y: "42.7%", title: "The cells tumble",
+      text: "The sharp curves bounce the cells and set them rotating, so a fresh part of each membrane keeps turning to face the field instead of the same spot taking every pulse.",
+      list: ["Curve angles compared in COMSOL for mixing efficiency", "Rotation spreads the pores around the membrane"] },
+    { n: "3", name: "Three-way intersection · ±45°", x: "30.3%", y: "31.5%", title: "Sheathed and centred",
+      text: "Two PBS sheath streams come in at ±45°, one above and one below, and squeeze the cell stream onto the centre line. Every cell then sits the same distance from each electrode and sees the same field.",
+      list: ["Sheath to cell flow of 1 : 0.05 mL/min", "Laminar flow holds the three streams in place"] },
+    { n: "4", name: "EP zone · Glassy carbon electrodes", x: "39.7%", y: "45.2%", title: "The field opens pores",
+      text: "The channel pinches to 100 µm so cells pass between the electrodes rather than over them. A 100 Hz square wave of 0 to 6.25 V across that gap gives 625 V/cm, which opens transient pores without the heating that kills cells in a cuvette.",
+      list: ["Glassy carbon electrodes, 3 × 1 mm × 100 µm tall, made by pyrolysis", "A cuvette needs 170 to 300 V for the same effect", "Pores open at the poles facing the electrodes, then reseal"] },
+    { n: "5", name: "Inlet 4 · Cargo joins at 90°", x: "54.7%", y: "24.2%", title: "mRNA joins late",
+      text: "The mRNA or plasmid cargo enters at 0.05 mL/min, at a right angle and only after the electroporation zone. Adding it downstream keeps the field from degrading it, and the right angle stops it leaking back toward the electrodes.",
+      list: ["Cargo added after the field, not before", "90° entry prevents backflow"] },
+    { n: "6", name: "Mixing region · Dean vortices", x: "67.4%", y: "43.5%", title: "Folding the streams together",
+      text: "At this scale flow is laminar, so the cell and cargo streams would otherwise run side by side without ever touching. The tight loops throw counter-rotating vortices that fold them into each other, pressing cargo against the open pores before the membranes reseal.",
+      list: ["Dean vortices from the tight loops", "Mixing happens in the short window while pores are open"] },
+    { n: "7", name: "Shared outlet · Results", x: "91.1%", y: "30.6%", title: "What came back",
+      text: "Cells were collected, spun down and cultured, and uptake was read by fluorescence. Cells that went through the chip expressed GFP and then kept growing and formed colonies, which showed the pores had resealed and the cells were still healthy.",
+      list: ["GFP expression confirmed by fluorescence microscopy", "Control cells, mixed but not electroporated, stayed dark", "Leakage at the cell inlet limited recovery, so transfection rate is not quantified yet", "Next: fix PDMS-to-wafer adhesion, then test more cell lines and Yamanaka-factor mRNA"] }
+  ];
+
+  const stopsEl = document.getElementById("map-stops");
+  const linksEl = document.getElementById("stop-links");
+  const dotsEl = document.getElementById("note-dots");
+  let stop = 0;
+
+  STOPS.forEach((st, i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "stop";
+    b.style.setProperty("--x", st.x);
+    b.style.setProperty("--y", st.y);
+    b.innerHTML = '<span class="stop-pin">' + st.n + '</span><span class="stop-name">' + st.name + "</span>";
+    b.setAttribute("aria-label", "Stop " + st.n + ": " + st.name);
+    b.addEventListener("click", () => { stopsEl.classList.add("is-seen"); showStop(i); });
+    stopsEl.appendChild(b);
+
+    const l = document.createElement("button");
+    l.type = "button";
+    l.className = "stop-link";
+    l.innerHTML = '<span class="num">' + st.n + "</span><span>" + st.name + "</span>";
+    l.addEventListener("click", () => { stopsEl.classList.add("is-seen"); showStop(i); });
+    linksEl.appendChild(l);
+    const d = document.createElement("span");
+    dotsEl.appendChild(d);
+  });
+
+  function showStop(i) {
+    stop = i;
+    const st = STOPS[i];
+    document.getElementById("note-count").textContent = "Stop " + st.n + " of " + STOPS.length;
+    document.getElementById("note-title").textContent = st.title;
+    document.getElementById("note-place").textContent = st.name;
+    document.getElementById("note-text").textContent = st.text;
+    document.getElementById("note-list").innerHTML = st.list.map(x => "<li>" + x + "</li>").join("");
+    stopsEl.querySelectorAll(".stop").forEach((b, j) => b.setAttribute("aria-current", j === i ? "true" : "false"));
+    dotsEl.querySelectorAll("span").forEach((d, j) => d.classList.toggle("on", j === i));
+    linksEl.querySelectorAll(".stop-link").forEach((l, j) => l.setAttribute("aria-current", j === i ? "true" : "false"));
+    document.getElementById("note-prev").disabled = i === 0;
+    document.getElementById("note-next").disabled = i === STOPS.length - 1;
+  }
+  document.getElementById("note-prev").addEventListener("click", () => stop > 0 && showStop(stop - 1));
+  document.getElementById("note-next").addEventListener("click", () => stop < STOPS.length - 1 && showStop(stop + 1));
+  showStop(0);
+
+  // ---------------- Full-size schematic ----------------
+  const chipOverlay = document.getElementById("chip-overlay");
+  const chipInner = chipOverlay.querySelector(".chip-overlay-inner");
+  const zoomBtn = document.getElementById("chip-zoom");
+  let chipCloned = false;
+  function openChip() {
+    if (!chipCloned) {
+      chipInner.appendChild(document.querySelector(".chip-svg").cloneNode(true));
+      chipCloned = true;
+    }
+    chipOverlay.classList.add("open");
+    chipOverlay.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    document.getElementById("chip-overlay-close").focus();
+  }
+  function closeChip() {
+    chipOverlay.classList.remove("open");
+    chipOverlay.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    zoomBtn.focus();
+  }
+  zoomBtn.addEventListener("click", openChip);
+  document.getElementById("chip-overlay-close").addEventListener("click", closeChip);
+  chipOverlay.addEventListener("click", e => { if (e.target === chipOverlay) closeChip(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && chipOverlay.classList.contains("open")) closeChip();
+  });
+
+  // ---------------- Folder nudge stops once a folder is used ----------------
+  const stack = document.getElementById("folder-stack");
+  stack.addEventListener("click", () => {
+    stack.classList.add("is-seen");
+    stack.closest(".folders-section").classList.add("is-seen");
+  });
+
+  // ---------------- Copy email ----------------
+  document.getElementById("copy-email").addEventListener("click", e => {
+    const btn = e.currentTarget;
+    const text = document.getElementById("email-text").textContent;
+    const done = () => { btn.textContent = "Copied"; setTimeout(() => { btn.textContent = "Copy email"; }, 1600); };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(done, () => window.getSelection().selectAllChildren(document.getElementById("email-text")));
+    }
+  });
+
+  // ---------------- Scroll reveal (ported from the old main.js) ----------------
+  const REVEAL_SELECTOR = [
+    ".section-head", ".map-frame", ".field-note", ".center-heading.skills-heading", ".skill-label", ".skill-tags", ".filter-bar", ".card", ".folder", ".exp-card", ".quote",
+    ".contact-band .wrap"
+  ].join(",");
+
+  if (!prefersReducedMotion && "IntersectionObserver" in window) {
+    document.documentElement.classList.add("js-reveal", "js-draw");
+
+    const revealObserver = new IntersectionObserver(entries => {
+      // Stagger whatever enters together (a row of cards, the folder stack) so it cascades.
+      entries.filter(e => e.isIntersecting).forEach((entry, i) => {
+        const el = entry.target;
+        revealObserver.unobserve(el);
+        el.style.transitionDelay = `${Math.min(i, 5) * 80}ms`;
+        el.classList.add("is-revealed");
+        // Hand the element back to its own styles (hover lifts) once it has arrived.
+        setTimeout(() => {
+          el.classList.remove("reveal", "is-revealed");
+          el.style.transitionDelay = "";
+        }, 900 + Math.min(i, 5) * 80);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+
+    document.querySelectorAll(REVEAL_SELECTOR).forEach(el => {
+      el.classList.add("reveal");
+      revealObserver.observe(el);
+    });
+
+    // Line-art diagrams draw themselves when they scroll into view.
+    const drawObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-drawn");
+        drawObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.3 });
+    document.querySelectorAll(".draw").forEach(el => drawObserver.observe(el));
+  }
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+})();
+</script>
+
+</body>
+</html>
