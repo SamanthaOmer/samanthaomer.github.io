@@ -757,8 +757,8 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 .bench-photo:hover, .bench-photo:focus-visible { rotate: 0deg; translate: 0 -4px; box-shadow: 0 20px 30px -18px rgba(44, 36, 32, 0.7); outline: none; }
 .bench-photo:focus-visible { box-shadow: 0 0 0 2px var(--maroon), 0 20px 30px -18px rgba(44, 36, 32, 0.7); }
 .bench-photo .tape { position: absolute; top: -11px; left: 50%; translate: -50% 0; width: 84px; height: 22px; background: rgba(236, 215, 162, 0.75); box-shadow: 0 1px 2px rgba(44, 36, 32, 0.2); rotate: var(--tr, -2deg); z-index: 1; }
-.bench-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--paper-deep); filter: sepia(0.12) saturate(0.9); transition: filter 0.3s ease; }
-.bench-photo:hover img { filter: none; }
+.bench-photo img, .bench-photo video { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--paper-deep); filter: sepia(0.12) saturate(0.9); transition: filter 0.3s ease; }
+.bench-photo:hover img, .bench-photo:hover video { filter: none; }
 .bench-photo figcaption { padding: 0.65rem 0.2rem 0.9rem; }
 .bench-photo .bench-script { display: block; font-family: var(--script); font-size: 1.45rem; line-height: 1.1; color: var(--maroon); }
 .bench-photo .bench-fig { display: block; margin-top: 0.3rem; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); line-height: 1.5; }
@@ -777,7 +777,7 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 .photo-overlay { position: fixed; inset: 0; z-index: 60; background: rgba(44, 36, 32, 0.6); display: grid; place-items: center; padding: 16px; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s; }
 .photo-overlay.open { opacity: 1; visibility: visible; }
 .photo-overlay figure { position: relative; margin: 0; padding: 14px 14px 0; background: var(--paper-light); border-radius: 4px; max-width: min(960px, 100%); max-height: 92vh; display: flex; flex-direction: column; box-shadow: 0 24px 50px -20px rgba(0,0,0,0.5); }
-.photo-overlay img { display: block; max-width: 100%; max-height: calc(92vh - 110px); object-fit: contain; margin: 0 auto; }
+.photo-overlay img, .photo-overlay video { display: block; max-width: 100%; max-height: calc(92vh - 110px); object-fit: contain; margin: 0 auto; }
 .photo-overlay figcaption { padding: 0.7rem 0.2rem 1rem; }
 .photo-overlay .bench-script { display: block; font-family: var(--script); font-size: 1.6rem; color: var(--maroon); line-height: 1.1; }
 .photo-overlay .bench-fig { display: block; margin-top: 0.3rem; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
@@ -1664,8 +1664,8 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Soft lithography">
             <span class="tape" aria-hidden="true"></span>
-            <img src="images/thesis/pdms-in-hand.jpg" alt="Gloved hands holding a clear PDMS block with microfluidic channels" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">Soft lithography</span><span class="bench-fig">Fabrication · A cast PDMS flow channel, held in gloved hands</span></figcaption>
+            <video poster="images/thesis/pdms-peel-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Gloved hands peeling a cast PDMS flow channel off its master wafer"><source src="images/thesis/pdms-peel.webm" type="video/webm"><source src="images/thesis/pdms-peel.mp4" type="video/mp4"></video>
+            <figcaption><span class="bench-script">Soft lithography</span><span class="bench-fig">Fabrication · Peeling the cast PDMS flow channel off its master wafer</span></figcaption>
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: The finished chip">
             <span class="tape" aria-hidden="true"></span>
@@ -1747,6 +1747,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
   <figure role="dialog" aria-modal="true" aria-label="Photo, full size">
     <button class="icon-btn" type="button" id="photo-overlay-close" aria-label="Close">×</button>
     <img id="photo-overlay-img" alt="">
+    <video id="photo-overlay-video" muted loop playsinline hidden></video>
     <figcaption id="photo-overlay-cap"></figcaption>
   </figure>
 </div>
@@ -2027,9 +2028,20 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
   let photoReturn = null;
   function openPhoto(li) {
     const img = li.querySelector("img");
+    const vid = li.querySelector("video");
+    const bigImg = document.getElementById("photo-overlay-img");
+    const bigVid = document.getElementById("photo-overlay-video");
     photoReturn = li;
-    document.getElementById("photo-overlay-img").src = img.currentSrc || img.src;
-    document.getElementById("photo-overlay-img").alt = img.alt;
+    bigImg.hidden = !!vid;
+    bigVid.hidden = !vid;
+    if (vid) {
+      bigVid.src = vid.currentSrc || (vid.querySelector("source") || {}).src || "";
+      bigVid.setAttribute("aria-label", vid.getAttribute("aria-label") || "");
+      if (!prefersReducedMotion) bigVid.play().catch(() => {});
+    } else {
+      bigImg.src = img.currentSrc || img.src;
+      bigImg.alt = img.alt;
+    }
     document.getElementById("photo-overlay-cap").innerHTML = li.querySelector("figcaption").innerHTML;
     photoOverlay.classList.add("open");
     photoOverlay.setAttribute("aria-hidden", "false");
@@ -2037,10 +2049,14 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
     document.getElementById("photo-overlay-close").focus();
   }
   function closePhoto() {
+    document.getElementById("photo-overlay-video").pause();
     photoOverlay.classList.remove("open");
     photoOverlay.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
     if (photoReturn) photoReturn.focus();
+  }
+  if (benchGrid && prefersReducedMotion) {
+    benchGrid.querySelectorAll("video").forEach(v => { v.removeAttribute("autoplay"); v.pause(); v.controls = true; });
   }
   if (benchGrid) {
     // While the built-in editor is on, clicks and keys go to editing instead.
@@ -2652,6 +2668,8 @@ html.ed-panel-open .ed-bar .ed-hint { display: none; }
     const chipInner = root.querySelector(".chip-overlay-inner");
     if (chipInner) chipInner.querySelectorAll(":scope > svg").forEach(n => n.remove());
     root.querySelectorAll("#photo-overlay-img").forEach(n => { n.removeAttribute("src"); n.setAttribute("alt", ""); });
+    root.querySelectorAll("#photo-overlay-video").forEach(n => { n.removeAttribute("src"); n.removeAttribute("aria-label"); n.setAttribute("hidden", ""); });
+    root.querySelectorAll("#photo-overlay-img").forEach(n => n.removeAttribute("hidden"));
     root.querySelectorAll("#photo-overlay-cap").forEach(n => { n.innerHTML = ""; });
     const arch = root.querySelector(".modal-arch");
     if (arch) arch.innerHTML = '<svg id="modal-icon"><use href="#ico-sprout"/></svg>';
