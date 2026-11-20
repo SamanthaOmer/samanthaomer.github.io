@@ -744,45 +744,53 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 .bench-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.4rem 1.5rem; margin-bottom: 2.2rem; }
 .bench-head h3 { font-family: var(--display); font-weight: 400; font-size: clamp(1.5rem, 2.6vw, 2rem); margin: 0.3rem 0 0; }
 .bench-head p { margin: 0; max-width: 46ch; color: var(--muted); font-size: 0.95rem; }
-.bench-grid { --cols: 3; --gap-x: clamp(1.2rem, 2.4vw, 2.2rem); list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(1.8rem, 3vw, 2.8rem) var(--gap-x); }
-.bench-grid > .bench-photo { flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap-x)) / var(--cols)); }
+.bench-grid {
+  list-style: none; margin: 0; padding: 18px 6px 22px;
+  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: clamp(0.8rem, 1.6vw, 1.4rem);
+}
 .bench-photo {
-  position: relative; margin: 0; padding: 10px 10px 0;
+  position: relative; margin: 0; padding: 7px 7px 0;
   background: var(--paper-light);
-  box-shadow: 0 14px 26px -18px rgba(44, 36, 32, 0.6);
+  box-shadow: 0 12px 22px -16px rgba(44, 36, 32, 0.6);
   rotate: var(--r, 0deg);
   transition: rotate 0.3s ease, translate 0.3s ease, box-shadow 0.3s ease;
   cursor: zoom-in;
 }
-.bench-photo:hover, .bench-photo:focus-visible { rotate: 0deg; translate: 0 -4px; box-shadow: 0 20px 30px -18px rgba(44, 36, 32, 0.7); outline: none; }
-.bench-photo:focus-visible { box-shadow: 0 0 0 2px var(--maroon), 0 20px 30px -18px rgba(44, 36, 32, 0.7); }
-.bench-photo .tape { position: absolute; top: -11px; left: 50%; translate: -50% 0; width: 84px; height: 22px; background: rgba(236, 215, 162, 0.75); box-shadow: 0 1px 2px rgba(44, 36, 32, 0.2); rotate: var(--tr, -2deg); z-index: 1; }
-.bench-photo img, .bench-photo video { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--paper-deep); filter: sepia(0.12) saturate(0.9); transition: filter 0.3s ease; }
+.bench-photo:hover, .bench-photo:focus-visible { rotate: 0deg; translate: 0 -6px; box-shadow: 0 18px 28px -16px rgba(44, 36, 32, 0.7); outline: none; z-index: 2; }
+.bench-photo:focus-visible { box-shadow: 0 0 0 2px var(--maroon), 0 18px 28px -16px rgba(44, 36, 32, 0.7); }
+.bench-photo .tape { position: absolute; top: -9px; left: 50%; translate: -50% 0; width: 52px; height: 16px; background: rgba(236, 215, 162, 0.75); box-shadow: 0 1px 2px rgba(44, 36, 32, 0.2); rotate: var(--tr, -2deg); z-index: 1; }
+.bench-photo img, .bench-photo video { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background: var(--paper-deep); filter: sepia(0.12) saturate(0.9); transition: filter 0.3s ease; }
+.bench-photo.bench-photo--fit img { object-fit: contain; background: var(--paper-light); }
 .bench-photo:hover img, .bench-photo:hover video { filter: none; }
-.bench-photo figcaption { padding: 0.65rem 0.2rem 0.9rem; }
-.bench-photo .bench-script { display: block; font-family: var(--script); font-size: 1.45rem; line-height: 1.1; color: var(--maroon); }
-.bench-photo .bench-fig { display: block; margin-top: 0.3rem; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); line-height: 1.5; }
-.bench-photo:nth-child(1) { --r: -1.4deg; }
-.bench-photo:nth-child(2) { --r: 1deg; --tr: 3deg; }
-.bench-photo:nth-child(3) { --r: -0.6deg; }
-.bench-photo:nth-child(4) { --r: 1.3deg; --tr: 2deg; }
-.bench-photo:nth-child(5) { --r: -1deg; --tr: -4deg; }
-.bench-photo:nth-child(6) { --r: 0.7deg; }
-.bench-photo:nth-child(7) { --r: 1.1deg; --tr: -3deg; }
-.bench-photo:nth-child(8) { --r: -1.2deg; --tr: 2deg; }
-.bench-photo:nth-child(9) { --r: 0.5deg; }
-@media (max-width: 900px) { .bench-grid { --cols: 2; } }
-@media (max-width: 520px) { .bench-grid { --cols: 1; --gap-x: 0px; row-gap: 2.2rem; } .bench-photo { margin-inline: 6px; } }
+.bench-photo figcaption { padding: 0.45rem 0.1rem 0.6rem; text-align: center; }
+.bench-photo .bench-script { display: block; font-family: var(--script); font-size: 1.12rem; line-height: 1.1; color: var(--maroon); }
+.bench-photo .bench-stage { display: block; margin-top: 0.2rem; font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.bench-photo .bench-fig { display: none; }
+.bench-photo:nth-child(odd) { --r: -1.6deg; --tr: -3deg; }
+.bench-photo:nth-child(even) { --r: 1.4deg; --tr: 3deg; }
+.bench-photo:nth-child(3n) { --r: -0.5deg; }
+/* Smaller screens: keep one row and let it scroll sideways */
+@media (max-width: 1000px) {
+  .bench-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 6px; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+  .bench-grid > .bench-photo { flex: 0 0 clamp(150px, 38vw, 200px); scroll-snap-align: start; }
+}
 
 .photo-overlay { position: fixed; inset: 0; z-index: 60; background: rgba(44, 36, 32, 0.6); display: grid; place-items: center; padding: 16px; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s; }
 .photo-overlay.open { opacity: 1; visibility: visible; }
+.photo-overlay img[hidden], .photo-overlay video[hidden] { display: none; }
 .photo-overlay figure { position: relative; margin: 0; padding: 14px 14px 0; background: var(--paper-light); border-radius: 4px; max-width: min(960px, 100%); max-height: 92vh; display: flex; flex-direction: column; box-shadow: 0 24px 50px -20px rgba(0,0,0,0.5); }
 .photo-overlay img, .photo-overlay video { display: block; max-width: 100%; max-height: calc(92vh - 110px); object-fit: contain; margin: 0 auto; }
 .photo-overlay figcaption { padding: 0.7rem 0.2rem 1rem; }
 .photo-overlay .bench-script { display: block; font-family: var(--script); font-size: 1.6rem; color: var(--maroon); line-height: 1.1; }
 .photo-overlay .bench-fig { display: block; margin-top: 0.3rem; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-.photo-overlay .icon-btn { position: absolute; top: -14px; right: -14px; background: var(--paper-light); z-index: 2; }
-@media (max-width: 520px) { .photo-overlay .icon-btn { top: 6px; right: 6px; } }
+.photo-overlay #photo-overlay-close { position: absolute; top: -14px; right: -14px; background: var(--paper-light); z-index: 2; }
+.photo-overlay .bench-stage { display: block; margin-bottom: 0.2rem; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--olive); }
+.photo-nav { position: absolute; top: 50%; translate: 0 -50%; background: var(--paper-light); z-index: 2; }
+.photo-nav.prev { left: -22px; }
+.photo-nav.next { right: -22px; }
+.photo-nav:disabled { opacity: 0.35; cursor: default; }
+.photo-count { position: absolute; bottom: 1rem; right: 1rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; color: var(--muted); }
+@media (max-width: 720px) { .photo-overlay #photo-overlay-close { top: 6px; right: 6px; } .photo-nav.prev { left: 6px; } .photo-nav.next { right: 6px; } }
 
 /* ---------------- Line-art diagrams ---------------- */
 .diagram-scroll { overflow-x: auto; }
@@ -1654,48 +1662,43 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
             <span class="eyebrow">From the bench</span>
             <h3>The real chip, in photos</h3>
           </div>
-          <p>From cleanroom to cell culture: fabrication, flow tests and results from the thesis. Tap a photo to see it larger.</p>
+          <p>From wafer to working chip to glowing cells. Click any photo for a closer look.</p>
         </div>
         <ul class="bench-grid" id="bench-grid">
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Layer by layer">
             <span class="tape" aria-hidden="true"></span>
             <img src="images/thesis/metal-wafer.jpg" alt="Silicon wafer with metal traces and square bump pads" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">Layer by layer</span><span class="bench-fig">Fabrication · The wafer after the metal layer: Cr/Pt traces and bump pads</span></figcaption>
+            <figcaption><span class="bench-script">Layer by layer</span><span class="bench-stage">Fabrication</span><span class="bench-fig">The wafer after the metal layer: Cr/Pt traces and bump pads</span></figcaption>
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Soft lithography">
             <span class="tape" aria-hidden="true"></span>
             <video poster="images/thesis/pdms-peel-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Gloved hands peeling a cast PDMS flow channel off its master wafer"><source src="images/thesis/pdms-peel.webm" type="video/webm"><source src="images/thesis/pdms-peel.mp4" type="video/mp4"></video>
-            <figcaption><span class="bench-script">Soft lithography</span><span class="bench-fig">Fabrication · Peeling the cast PDMS flow channel off its master wafer</span></figcaption>
+            <figcaption><span class="bench-script">Soft lithography</span><span class="bench-stage">Fabrication</span><span class="bench-fig">Peeling the cast PDMS flow channel off its master wafer</span></figcaption>
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: The finished chip">
             <span class="tape" aria-hidden="true"></span>
             <img src="images/thesis/finished-chip.jpg" alt="Finished microfluidic chip with serpentine channel, electrodes and inlet ports" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">The finished chip</span><span class="bench-fig">Fabrication · PDMS channel bonded over the electrodes, inlets punched</span></figcaption>
+            <figcaption><span class="bench-script">The finished chip</span><span class="bench-stage">Fabrication</span><span class="bench-fig">PDMS channel bonded over the electrodes, inlets punched</span></figcaption>
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Wired up">
             <span class="tape" aria-hidden="true"></span>
             <img src="images/thesis/wired-jig.jpg" alt="Microfluidic chip in a pink 3D-printed jig with oscilloscope probes clipped on" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">Wired up</span><span class="bench-fig">Electrical test · The chip clamped in its jig with probes attached</span></figcaption>
+            <figcaption><span class="bench-script">Wired up</span><span class="bench-stage">Testing</span><span class="bench-fig">The chip clamped in its jig with probes attached</span></figcaption>
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Three streams, one lane">
             <span class="tape" aria-hidden="true"></span>
             <img src="images/thesis/flow-intersection.jpg" alt="Microscope view of orange and yellow streams meeting at a channel junction" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">Three streams, one lane</span><span class="bench-fig">Flow test · Sheath flow squeezing the centre stream at the three-way intersection</span></figcaption>
+            <figcaption><span class="bench-script">Three streams, one lane</span><span class="bench-stage">Testing</span><span class="bench-fig">Sheath flow squeezing the centre stream at the three-way intersection</span></figcaption>
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: The loop does the mixing">
             <span class="tape" aria-hidden="true"></span>
             <img src="images/thesis/mixing-loop.jpg" alt="Microscope view of one loop of the mixing channel, with orange, yellow and green dyed streams blending as they turn" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">The loop does the mixing</span><span class="bench-fig">Flow test · Each tight turn sets up swirling vortices that fold the dyed streams into one another</span></figcaption>
+            <figcaption><span class="bench-script">The loop does the mixing</span><span class="bench-stage">Testing</span><span class="bench-fig">Each tight turn sets up swirling vortices that fold the dyed streams into one another</span></figcaption>
           </li>
-          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: It glows!">
+          <li class="bench-photo bench-photo--fit" tabindex="0" role="button" aria-label="Enlarge photo: It glows!">
             <span class="tape" aria-hidden="true"></span>
             <img src="images/thesis/gfp-compare.jpg" alt="The same cells side by side under normal light and under 470 nm light, with four cells circled that glow green" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">It glows!</span><span class="bench-fig">Cell test · The same cells under normal light (left) and 470 nm light (right): the circled ones glow with GFP</span></figcaption>
-          </li>
-          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Still growing">
-            <span class="tape" aria-hidden="true"></span>
-            <img src="images/thesis/colonies.jpg" alt="Microscope view of small cell colonies on a green-tinted background" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">Still growing</span><span class="bench-fig">Cell test · OVCAR8 colonies ten days after going through the chip</span></figcaption>
+            <figcaption><span class="bench-script">It glows!</span><span class="bench-stage">Result</span><span class="bench-fig">The same cells under normal light (left) and 470 nm light (right): the circled ones glow with GFP</span></figcaption>
           </li>
         </ul>
       </div>
@@ -1746,9 +1749,12 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
 <div class="photo-overlay" id="photo-overlay" aria-hidden="true">
   <figure role="dialog" aria-modal="true" aria-label="Photo, full size">
     <button class="icon-btn" type="button" id="photo-overlay-close" aria-label="Close">×</button>
+    <button class="icon-btn photo-nav prev" type="button" id="photo-prev" aria-label="Previous photo">←</button>
+    <button class="icon-btn photo-nav next" type="button" id="photo-next" aria-label="Next photo">→</button>
     <img id="photo-overlay-img" alt="">
     <video id="photo-overlay-video" muted loop playsinline hidden></video>
     <figcaption id="photo-overlay-cap"></figcaption>
+    <span class="photo-count" id="photo-count"></span>
   </figure>
 </div>
 
@@ -2026,7 +2032,26 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
   const photoOverlay = document.getElementById("photo-overlay");
   const benchGrid = document.getElementById("bench-grid");
   let photoReturn = null;
+  const benchItems = () => benchGrid ? [...benchGrid.querySelectorAll(".bench-photo")] : [];
+  function showPhoto(li) {
+    const items = benchItems(), i = items.indexOf(li);
+    document.getElementById("photo-prev").disabled = i <= 0;
+    document.getElementById("photo-next").disabled = i >= items.length - 1;
+    document.getElementById("photo-count").textContent = (i + 1) + " / " + items.length;
+    fillPhoto(li);
+  }
+  function stepPhoto(d) {
+    const items = benchItems(), i = items.indexOf(photoReturn) + d;
+    if (i >= 0 && i < items.length) { document.getElementById("photo-overlay-video").pause(); showPhoto(items[i]); }
+  }
   function openPhoto(li) {
+    showPhoto(li);
+    photoOverlay.classList.add("open");
+    photoOverlay.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    document.getElementById("photo-overlay-close").focus();
+  }
+  function fillPhoto(li) {
     const img = li.querySelector("img");
     const vid = li.querySelector("video");
     const bigImg = document.getElementById("photo-overlay-img");
@@ -2043,10 +2068,6 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
       bigImg.alt = img.alt;
     }
     document.getElementById("photo-overlay-cap").innerHTML = li.querySelector("figcaption").innerHTML;
-    photoOverlay.classList.add("open");
-    photoOverlay.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-    document.getElementById("photo-overlay-close").focus();
   }
   function closePhoto() {
     document.getElementById("photo-overlay-video").pause();
@@ -2070,7 +2091,14 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
   }
   document.getElementById("photo-overlay-close").addEventListener("click", closePhoto);
   photoOverlay.addEventListener("click", e => { if (e.target === photoOverlay) closePhoto(); });
-  document.addEventListener("keydown", e => { if (e.key === "Escape" && photoOverlay.classList.contains("open")) closePhoto(); });
+  document.getElementById("photo-prev").addEventListener("click", () => stepPhoto(-1));
+  document.getElementById("photo-next").addEventListener("click", () => stepPhoto(1));
+  document.addEventListener("keydown", e => {
+    if (!photoOverlay.classList.contains("open")) return;
+    if (e.key === "Escape") closePhoto();
+    if (e.key === "ArrowRight") stepPhoto(1);
+    if (e.key === "ArrowLeft") stepPhoto(-1);
+  });
 
   // ---------------- Folder nudge stops once a folder is used ----------------
   const stack = document.getElementById("folder-stack");
@@ -2671,6 +2699,8 @@ html.ed-panel-open .ed-bar .ed-hint { display: none; }
     root.querySelectorAll("#photo-overlay-video").forEach(n => { n.removeAttribute("src"); n.removeAttribute("aria-label"); n.setAttribute("hidden", ""); });
     root.querySelectorAll("#photo-overlay-img").forEach(n => n.removeAttribute("hidden"));
     root.querySelectorAll("#photo-overlay-cap").forEach(n => { n.innerHTML = ""; });
+    root.querySelectorAll("#photo-count").forEach(n => { n.textContent = ""; });
+    root.querySelectorAll("#photo-prev, #photo-next").forEach(n => n.removeAttribute("disabled"));
     const arch = root.querySelector(".modal-arch");
     if (arch) arch.innerHTML = '<svg id="modal-icon"><use href="#ico-sprout"/></svg>';
     root.querySelectorAll("[aria-current]").forEach(n => n.removeAttribute("aria-current"));
