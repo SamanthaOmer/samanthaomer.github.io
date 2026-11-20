@@ -739,6 +739,47 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 .chip-overlay-inner svg { display: block; width: 100%; min-width: 900px; height: auto; }
 .chip-overlay .icon-btn { position: absolute; top: 0.8rem; right: 0.8rem; background: var(--paper-light); z-index: 2; }
 
+/* ---------------- Thesis photos: "from the bench" ---------------- */
+.bench { margin-top: clamp(3rem, 6vw, 4.5rem); }
+.bench-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.4rem 1.5rem; margin-bottom: 2.2rem; }
+.bench-head h3 { font-family: var(--display); font-weight: 400; font-size: clamp(1.5rem, 2.6vw, 2rem); margin: 0.3rem 0 0; }
+.bench-head p { margin: 0; max-width: 46ch; color: var(--muted); font-size: 0.95rem; }
+.bench-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.8rem, 3vw, 2.8rem) clamp(1.2rem, 2.4vw, 2.2rem); }
+.bench-photo {
+  position: relative; margin: 0; padding: 10px 10px 0;
+  background: var(--paper-light);
+  box-shadow: 0 14px 26px -18px rgba(44, 36, 32, 0.6);
+  rotate: var(--r, 0deg);
+  transition: rotate 0.3s ease, translate 0.3s ease, box-shadow 0.3s ease;
+  cursor: zoom-in;
+}
+.bench-photo:hover, .bench-photo:focus-visible { rotate: 0deg; translate: 0 -4px; box-shadow: 0 20px 30px -18px rgba(44, 36, 32, 0.7); outline: none; }
+.bench-photo:focus-visible { box-shadow: 0 0 0 2px var(--maroon), 0 20px 30px -18px rgba(44, 36, 32, 0.7); }
+.bench-photo .tape { position: absolute; top: -11px; left: 50%; translate: -50% 0; width: 84px; height: 22px; background: rgba(236, 215, 162, 0.75); box-shadow: 0 1px 2px rgba(44, 36, 32, 0.2); rotate: var(--tr, -2deg); z-index: 1; }
+.bench-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--paper-deep); filter: sepia(0.12) saturate(0.9); transition: filter 0.3s ease; }
+.bench-photo:hover img { filter: none; }
+.bench-photo figcaption { padding: 0.65rem 0.2rem 0.9rem; }
+.bench-photo .bench-script { display: block; font-family: var(--script); font-size: 1.45rem; line-height: 1.1; color: var(--maroon); }
+.bench-photo .bench-fig { display: block; margin-top: 0.3rem; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); line-height: 1.5; }
+.bench-photo:nth-child(1) { --r: -1.4deg; }
+.bench-photo:nth-child(2) { --r: 1deg; --tr: 3deg; }
+.bench-photo:nth-child(3) { --r: -0.6deg; }
+.bench-photo:nth-child(4) { --r: 1.3deg; --tr: 2deg; }
+.bench-photo:nth-child(5) { --r: -1deg; --tr: -4deg; }
+.bench-photo:nth-child(6) { --r: 0.7deg; }
+@media (max-width: 900px) { .bench-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .bench-grid { grid-template-columns: 1fr; gap: 2.2rem; } .bench-photo { margin-inline: 6px; } }
+
+.photo-overlay { position: fixed; inset: 0; z-index: 60; background: rgba(44, 36, 32, 0.6); display: grid; place-items: center; padding: 16px; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s; }
+.photo-overlay.open { opacity: 1; visibility: visible; }
+.photo-overlay figure { position: relative; margin: 0; padding: 14px 14px 0; background: var(--paper-light); border-radius: 4px; max-width: min(960px, 100%); max-height: 92vh; display: flex; flex-direction: column; box-shadow: 0 24px 50px -20px rgba(0,0,0,0.5); }
+.photo-overlay img { display: block; max-width: 100%; max-height: calc(92vh - 110px); object-fit: contain; margin: 0 auto; }
+.photo-overlay figcaption { padding: 0.7rem 0.2rem 1rem; }
+.photo-overlay .bench-script { display: block; font-family: var(--script); font-size: 1.6rem; color: var(--maroon); line-height: 1.1; }
+.photo-overlay .bench-fig { display: block; margin-top: 0.3rem; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.photo-overlay .icon-btn { position: absolute; top: -14px; right: -14px; background: var(--paper-light); z-index: 2; }
+@media (max-width: 520px) { .photo-overlay .icon-btn { top: 6px; right: 6px; } }
+
 /* ---------------- Line-art diagrams ---------------- */
 .diagram-scroll { overflow-x: auto; }
 .diagram { display: block; width: 100%; min-width: 720px; height: auto; color: var(--ink); }
@@ -1603,6 +1644,47 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
         </article>
         </div>
       </div>
+      <div class="bench">
+        <div class="bench-head">
+          <div>
+            <span class="eyebrow">From the bench</span>
+            <h3>The real chip, in photos</h3>
+          </div>
+          <p>Fabrication, flow tests and cell results from the thesis. Tap a photo to see it larger.</p>
+        </div>
+        <ul class="bench-grid" id="bench-grid">
+          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: The chip, plumbed in">
+            <span class="tape" aria-hidden="true"></span>
+            <img src="images/thesis/chip-jig.jpg" alt="Microfluidic chip clamped in a pink 3D-printed jig with tubing attached" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <figcaption><span class="bench-script">The chip, plumbed in</span><span class="bench-fig">Fig. 44 · The flow chip clamped in its jig, tubing in, ready for cell tests</span></figcaption>
+          </li>
+          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Where it starts">
+            <span class="tape" aria-hidden="true"></span>
+            <img src="images/thesis/wafer.jpg" alt="Silicon wafer with two serpentine channel patterns, held under yellow cleanroom light" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <figcaption><span class="bench-script">Where it starts</span><span class="bench-fig">Fig. 50 · Flow-channel master wafer under the cleanroom’s yellow light</span></figcaption>
+          </li>
+          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Three streams, one lane">
+            <span class="tape" aria-hidden="true"></span>
+            <img src="images/thesis/flow-intersection.jpg" alt="Microscope view of three coloured streams meeting at a channel junction" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <figcaption><span class="bench-script">Three streams, one lane</span><span class="bench-fig">Fig. 56 · Sheath flow squeezing the centre stream at the three-way intersection</span></figcaption>
+          </li>
+          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Folding it together">
+            <span class="tape" aria-hidden="true"></span>
+            <img src="images/thesis/mixing-loop.jpg" alt="Microscope view of coloured streams flowing around a loop in the channel" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <figcaption><span class="bench-script">Folding it together</span><span class="bench-fig">Fig. 58 · Coloured streams turning through one loop of the mixing region</span></figcaption>
+          </li>
+          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: It glows!">
+            <span class="tape" aria-hidden="true"></span>
+            <img src="images/thesis/gfp-cell.jpg" alt="Bright green fluorescent cell on a dark background" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <figcaption><span class="bench-script">It glows!</span><span class="bench-fig">Fig. 65 · GFP expression under 470 nm light, three days after electroporation</span></figcaption>
+          </li>
+          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Still growing">
+            <span class="tape" aria-hidden="true"></span>
+            <img src="images/thesis/colonies.jpg" alt="Microscope view of small cell colonies on a green-tinted background" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <figcaption><span class="bench-script">Still growing</span><span class="bench-fig">Fig. 68 · OVCAR8 colonies ten days after going through the chip</span></figcaption>
+          </li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -1645,6 +1727,14 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
   <div class="chip-overlay-inner" role="dialog" aria-modal="true" aria-label="Electroporation chip schematic, full size">
     <button class="icon-btn" type="button" id="chip-overlay-close" aria-label="Close">×</button>
   </div>
+</div>
+
+<div class="photo-overlay" id="photo-overlay" aria-hidden="true">
+  <figure role="dialog" aria-modal="true" aria-label="Photo, full size">
+    <button class="icon-btn" type="button" id="photo-overlay-close" aria-label="Close">×</button>
+    <img id="photo-overlay-img" alt="">
+    <figcaption id="photo-overlay-cap"></figcaption>
+  </figure>
 </div>
 
 <div class="modal-overlay" id="modal-overlay" aria-hidden="true">
@@ -1917,6 +2007,41 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
     if (e.key === "Escape" && chipOverlay.classList.contains("open")) closeChip();
   });
 
+  // ---------------- Thesis photos: tap to enlarge ----------------
+  const photoOverlay = document.getElementById("photo-overlay");
+  const benchGrid = document.getElementById("bench-grid");
+  let photoReturn = null;
+  function openPhoto(li) {
+    const img = li.querySelector("img");
+    photoReturn = li;
+    document.getElementById("photo-overlay-img").src = img.currentSrc || img.src;
+    document.getElementById("photo-overlay-img").alt = img.alt;
+    document.getElementById("photo-overlay-cap").innerHTML = li.querySelector("figcaption").innerHTML;
+    photoOverlay.classList.add("open");
+    photoOverlay.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    document.getElementById("photo-overlay-close").focus();
+  }
+  function closePhoto() {
+    photoOverlay.classList.remove("open");
+    photoOverlay.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    if (photoReturn) photoReturn.focus();
+  }
+  if (benchGrid) {
+    // While the built-in editor is on, clicks and keys go to editing instead.
+    const editingNow = () => document.documentElement.classList.contains("site-editing");
+    benchGrid.addEventListener("click", e => { const li = e.target.closest(".bench-photo"); if (li && !editingNow()) openPhoto(li); });
+    benchGrid.addEventListener("keydown", e => {
+      if (editingNow() || e.target.isContentEditable) return;
+      const li = e.target.closest(".bench-photo");
+      if (li && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openPhoto(li); }
+    });
+  }
+  document.getElementById("photo-overlay-close").addEventListener("click", closePhoto);
+  photoOverlay.addEventListener("click", e => { if (e.target === photoOverlay) closePhoto(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && photoOverlay.classList.contains("open")) closePhoto(); });
+
   // ---------------- Folder nudge stops once a folder is used ----------------
   const stack = document.getElementById("folder-stack");
   stack.addEventListener("click", () => {
@@ -1936,7 +2061,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
 
   // ---------------- Scroll reveal (ported from the old main.js) ----------------
   const REVEAL_SELECTOR = [
-    ".section-head", ".map-frame", ".field-note", ".center-heading.skills-heading", ".skill-label", ".skill-tags", ".filter-bar", ".card", ".folder", ".exp-card", ".quote",
+    ".section-head", ".map-frame", ".field-note", ".center-heading.skills-heading", ".skill-label", ".skill-tags", ".filter-bar", ".card", ".folder", ".exp-card", ".quote", ".bench-photo",
     ".contact-band .wrap"
   ].join(",");
 
@@ -2512,6 +2637,8 @@ html.ed-panel-open .ed-bar .ed-hint { display: none; }
     root.querySelectorAll("#modal-overlay, #chip-overlay").forEach(n => n.setAttribute("aria-hidden", "true"));
     const chipInner = root.querySelector(".chip-overlay-inner");
     if (chipInner) chipInner.querySelectorAll(":scope > svg").forEach(n => n.remove());
+    root.querySelectorAll("#photo-overlay-img").forEach(n => { n.removeAttribute("src"); n.setAttribute("alt", ""); });
+    root.querySelectorAll("#photo-overlay-cap").forEach(n => { n.innerHTML = ""; });
     const arch = root.querySelector(".modal-arch");
     if (arch) arch.innerHTML = '<svg id="modal-icon"><use href="#ico-sprout"/></svg>';
     root.querySelectorAll("[aria-current]").forEach(n => n.removeAttribute("aria-current"));
