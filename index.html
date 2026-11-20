@@ -1715,7 +1715,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
         <ul class="bench-grid" id="bench-grid">
           <li class="bench-photo bench-photo--fit bench-photo--diagram" tabindex="0" role="button" aria-label="Enlarge photo: The blueprint">
             <span class="tape" aria-hidden="true"></span>
-            <img src="images/thesis/channel-design.png" alt="Diagram of the flow channel: a cell inlet with a serpentine, a three-way intersection with two angled sheath inlets, the electroporation zone, a mRNA inlet joining at 90 degrees, a second serpentine for mixing, and the outlet" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <img src="images/thesis/channel-design.png" data-full="images/thesis/channel-design-evolution.png" alt="Diagram of the flow channel: a cell inlet with a serpentine, a three-way intersection with two angled sheath inlets, the electroporation zone, a mRNA inlet joining at 90 degrees, a second serpentine for mixing, and the outlet" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
             <figcaption><span class="bench-script">The blueprint</span><span class="bench-stage">Design</span><span class="bench-fig">The flow channel and how it evolved, D0 → D2.2</span><span class="bench-note"><span class="bench-note-lead">Cells enter on the left and tumble through a serpentine so fresh membrane keeps facing the field. Two sheath inlets at ±45° pin the cell stream to the centre line, the same distance from each electrode. The mRNA joins after the electroporation zone, so the field never touches it, and a second serpentine mixes it in before the outlet.</span><span class="bench-steps"><span><b>D0</b>A simple 1 mm channel to the EP zone, with the three-inlet intersection and a 45° cargo inlet.</span><span><b>D1</b>Sinusoidal serpentines for cell rotation and mixing, a wider EP zone so the 100 µm electrodes sit flush, and a funnel after the mRNA inlet.</span><span><b>D2</b>Testing showed clogging and channels that were too wide. Sharper curves (FEA showed better mixing), no funnel, the mRNA inlet turned from 45° to 90° to stop leakage, and the EP zone narrowed from 1000 µm to 100 µm, then 50 µm.</span><span><b>D2.1–2.2</b>A retaining wall and a straightened, shortened segment to stop the mold lifting off the wafer.</span></span></span></figcaption>
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Layer by layer">
@@ -2134,7 +2134,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
       bigVid.setAttribute("aria-label", vid.getAttribute("aria-label") || "");
       if (!prefersReducedMotion) bigVid.play().catch(() => {});
     } else {
-      bigImg.src = img.currentSrc || img.src;
+      bigImg.src = img.getAttribute("data-full") || img.currentSrc || img.src;
       bigImg.alt = img.alt;
     }
     document.getElementById("photo-overlay-cap").innerHTML = li.querySelector("figcaption").innerHTML;
