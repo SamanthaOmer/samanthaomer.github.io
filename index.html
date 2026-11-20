@@ -995,6 +995,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
   };
   window.handleImgError = function (img, label, bg) {
     img.onerror = null;
+    img.setAttribute("data-missing-src", img.getAttribute("src"));
     img.src = window.PLACEHOLDER(label, bg);
   };
 </script>
@@ -1710,6 +1711,10 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
   ];
 
   const grid = document.getElementById("work-grid");
+  const filterBar = document.getElementById("filter-bar");
+  function renderProjects() {
+  grid.innerHTML = "";
+  filterBar.innerHTML = "";
   PROJECTS.forEach((p, i) => {
     const card = document.createElement("article");
     card.className = "card";
@@ -1727,7 +1732,6 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
   });
 
   // ---------------- Filter bar ----------------
-  const filterBar = document.getElementById("filter-bar");
   ["All", ...new Set(PROJECTS.map(p => p.tag))].forEach((name, i) => {
     const b = document.createElement("button");
     b.type = "button";
@@ -1740,6 +1744,8 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
     });
     filterBar.appendChild(b);
   });
+  }
+  renderProjects();
 
   // ---------------- Modal ----------------
   const overlay = document.getElementById("modal-overlay");
@@ -1832,6 +1838,8 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
   const dotsEl = document.getElementById("note-dots");
   let stop = 0;
 
+  function renderStops() {
+  stopsEl.innerHTML = ""; linksEl.innerHTML = ""; dotsEl.innerHTML = "";
   STOPS.forEach((st, i) => {
     const b = document.createElement("button");
     b.type = "button";
@@ -1852,6 +1860,8 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
     const d = document.createElement("span");
     dotsEl.appendChild(d);
   });
+  if (STOPS.length) showStop(Math.min(stop, STOPS.length - 1));
+  }
 
   function showStop(i) {
     stop = i;
@@ -1869,7 +1879,9 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
   }
   document.getElementById("note-prev").addEventListener("click", () => stop > 0 && showStop(stop - 1));
   document.getElementById("note-next").addEventListener("click", () => stop < STOPS.length - 1 && showStop(stop + 1));
-  showStop(0);
+  renderStops();
+  // Hook for the built-in editor (bottom of the file).
+  window.SITE_DATA = { PROJECTS, STOPS, renderProjects, renderStops };
 
   // ---------------- Full-size schematic ----------------
   const chipOverlay = document.getElementById("chip-overlay");
@@ -1956,7 +1968,603 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
     document.querySelectorAll(".draw").forEach(el => drawObserver.observe(el));
   }
 
-  document.getElementById("year").textContent = new Date().getFullYear();
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+})();
+</script>
+
+<!-- ================= Built-in editor =================
+     Opens automatically when you double-click index.html on your computer.
+     On the live site it stays hidden: add ?edit to the address, or press Ctrl+Shift+E (Cmd+Shift+E on Mac).
+     Nothing in this block changes how the site looks to visitors. -->
+<style id="site-editor-style">
+.ed-ui, .ed-ui * { box-sizing: border-box; font-family: "Figtree", system-ui, sans-serif; }
+.ed-bar {
+  position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 10000;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center;
+  max-width: calc(100vw - 32px); padding: 6px; border-radius: 999px;
+  background: #2c2420; color: #f7f1e6; box-shadow: 0 10px 30px rgba(44,36,32,.35);
+}
+.ed-bar button, .ed-panel button, .ed-banner button, .ed-link button {
+  font: 500 13px/1 "Figtree", system-ui, sans-serif; cursor: pointer; border-radius: 999px;
+  padding: 9px 14px; border: 1px solid transparent; background: transparent; color: inherit;
+}
+.ed-bar button:hover { background: rgba(247,241,230,.12); }
+.ed-bar button.ed-primary { background: #f7f1e6; color: #2c2420; }
+.ed-bar button.ed-primary:hover { background: #fff; }
+.ed-status { font-size: 12px; opacity: .75; padding: 0 8px; white-space: nowrap; }
+.ed-bar:not(.is-editing) .ed-when-editing { display: none; }
+.ed-bar.is-editing .ed-when-idle { display: none; }
+
+html.site-editing [contenteditable="true"] { cursor: text; border-radius: 3px; transition: outline-color .15s; outline: 1px dashed transparent; outline-offset: 3px; }
+html.site-editing [contenteditable="true"]:hover { outline-color: rgba(122,46,46,.55); }
+html.site-editing [contenteditable="true"]:focus { outline: 2px solid #7a2e2e; background: rgba(247,241,230,.55); }
+html.site-editing main img, html.site-editing .ed-svgtext { cursor: pointer; }
+html.site-editing main img:hover { outline: 3px dashed #7a2e2e; outline-offset: -3px; }
+html.site-editing .ed-svgtext:hover { fill: #7a2e2e; }
+html.site-editing .deco.polaroid { pointer-events: auto; }
+html.site-editing .card, html.site-editing .stop, html.site-editing .stop-link { outline: 1px dashed rgba(122,46,46,.55); outline-offset: 2px; }
+
+.ed-tip {
+  position: fixed; z-index: 10001; pointer-events: none; padding: 5px 9px; border-radius: 6px;
+  background: #2c2420; color: #f7f1e6; font: 500 12px/1.2 "Figtree", system-ui, sans-serif; opacity: 0; transition: opacity .12s;
+}
+.ed-tip.on { opacity: 1; }
+
+.ed-link {
+  position: absolute; z-index: 10001; display: flex; gap: 6px; align-items: center; padding: 6px 6px 6px 12px;
+  background: #f7f1e6; color: #2c2420; border: 1px solid #2c2420; border-radius: 10px; box-shadow: 0 8px 20px rgba(44,36,32,.2);
+  font-size: 12px; max-width: calc(100vw - 24px);
+}
+.ed-link input { width: 260px; max-width: 50vw; font: 13px "IBM Plex Mono", monospace; padding: 6px 8px; border: 1px solid #b9a98f; border-radius: 6px; background: #fff; color: #2c2420; }
+.ed-link button { background: #2c2420; color: #f7f1e6; padding: 7px 11px; }
+
+.ed-panel {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 10002; width: min(460px, 100vw);
+  background: #f7f1e6; color: #2c2420; border-left: 1px solid #2c2420; box-shadow: -10px 0 30px rgba(44,36,32,.2);
+  display: flex; flex-direction: column; transform: translateX(105%); transition: transform .25s ease;
+}
+.ed-panel.open { transform: none; }
+.ed-panel header { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 16px 18px; border-bottom: 1px solid #d8c9ae; }
+.ed-panel header h2 { margin: 0; font: 400 22px "Gloock", serif; }
+.ed-panel .ed-body { overflow: auto; padding: 14px 18px 120px; flex: 1; }
+.ed-panel .ed-help { font-size: 13px; line-height: 1.45; margin: 0 0 12px; opacity: .8; }
+.ed-panel details { border: 1px solid #cdbd9f; border-radius: 12px; background: #fffaf1; margin-bottom: 10px; }
+.ed-panel summary { cursor: pointer; padding: 12px 14px; font-weight: 600; font-size: 14px; list-style: none; display: flex; gap: 8px; align-items: center; }
+.ed-panel summary::before { content: "▸"; transition: transform .15s; }
+.ed-panel details[open] summary::before { transform: rotate(90deg); }
+.ed-panel .ed-fields { padding: 0 14px 14px; display: grid; gap: 10px; }
+.ed-panel label { display: grid; gap: 4px; font-size: 12px; font-weight: 600; letter-spacing: .02em; }
+.ed-panel label small { font-weight: 400; opacity: .7; }
+.ed-panel input, .ed-panel textarea, .ed-panel select {
+  font: 14px/1.4 "Figtree", system-ui, sans-serif; color: #2c2420; background: #fff;
+  border: 1px solid #b9a98f; border-radius: 8px; padding: 8px 10px; width: 100%;
+}
+.ed-panel textarea { resize: vertical; min-height: 64px; }
+.ed-panel .ed-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.ed-panel .ed-row > label { flex: 1; min-width: 120px; }
+.ed-panel .ed-btn { border: 1px solid #2c2420; background: transparent; color: #2c2420; padding: 8px 12px; }
+.ed-panel .ed-btn:hover { background: #2c2420; color: #f7f1e6; }
+.ed-panel .ed-btn.ed-danger { border-color: #9b2c2c; color: #9b2c2c; }
+.ed-panel .ed-btn.ed-danger:hover { background: #9b2c2c; color: #fff; }
+.ed-panel .ed-add { width: 100%; padding: 12px; border: 1px dashed #2c2420; background: transparent; color: #2c2420; border-radius: 12px; }
+.ed-panel .ed-add:hover { background: #2c2420; color: #f7f1e6; }
+.ed-panel .ed-thumb { width: 72px; height: 54px; border-radius: 6px; object-fit: cover; border: 1px solid #b9a98f; background: #ddcbad; }
+.ed-panel .ed-thumb[hidden] { display: none; }
+.ed-panel .ed-close { font-size: 20px; padding: 4px 10px; }
+
+.ed-banner {
+  position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 10003; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;
+  padding: 10px 10px 10px 16px; border-radius: 14px; background: #2c2420; color: #f7f1e6; font-size: 14px; max-width: calc(100vw - 32px);
+  box-shadow: 0 10px 30px rgba(44,36,32,.35);
+}
+.ed-banner button { background: #f7f1e6; color: #2c2420; }
+.ed-banner button.ed-ghost { background: transparent; color: #f7f1e6; border-color: rgba(247,241,230,.4); }
+html.ed-panel-open .ed-bar { left: calc((100vw - min(460px, 100vw)) / 2); }
+html.ed-panel-open .ed-bar .ed-hint { display: none; }
+@media (max-width: 1100px) { .ed-bar .ed-hint { display: none; } }
+@media (max-width: 560px) { .ed-status { display: none; } .ed-bar button { padding: 9px 10px; } }
+</style>
+
+<script id="site-editor">
+(function () {
+  "use strict";
+  const DRAFT_KEY = "site-editor-draft:" + location.pathname;
+  const RESTORED_KEY = "site-editor-restored";
+  const ICONS = ["ico-sun", "ico-arches", "ico-sprout", "ico-spiral"];
+  const GENERATED = "#work-grid, #filter-bar, #map-stops, #stop-links, #note-dots, #note-count, #note-title, #note-place, #note-text, #note-list";
+  const data = window.SITE_DATA;
+
+  let editing = false, dirtySinceDownload = false, saveTimer = null, renderTimer = null;
+
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+    del(k) { try { localStorage.removeItem(k); } catch (e) {} },
+    sget(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
+    sset(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} },
+    sdel(k) { try { sessionStorage.removeItem(k); } catch (e) {} }
+  };
+
+  function el(tag, attrs, kids) {
+    const n = document.createElement(tag);
+    if (attrs) for (const k in attrs) {
+      if (k === "text") n.textContent = attrs[k];
+      else if (k.startsWith("on")) n.addEventListener(k.slice(2), attrs[k]);
+      else n.setAttribute(k, attrs[k]);
+    }
+    (kids || []).forEach(c => c && n.appendChild(typeof c === "string" ? document.createTextNode(c) : c));
+    return n;
+  }
+  const ui = (n) => { n.classList.add("ed-ui"); n.setAttribute("data-editor-ui", ""); return n; };
+
+  // ---------------- Toolbar ----------------
+  const status = el("span", { class: "ed-status", text: "" });
+  const bar = ui(el("div", { class: "ed-bar", role: "toolbar", "aria-label": "Site editor" }, [
+    el("button", { type: "button", class: "ed-primary ed-when-idle", text: "✎ Edit page", onclick: () => setEditing(true) }),
+    el("span", { class: "ed-status ed-hint ed-when-editing", text: "Click any text or photo to change it" }),
+    el("button", { type: "button", class: "ed-when-editing", text: "Projects", onclick: () => openPanel("projects") }),
+    el("button", { type: "button", class: "ed-when-editing", text: "Thesis stops", onclick: () => openPanel("stops") }),
+    status,
+    el("button", { type: "button", class: "ed-primary ed-when-editing", text: "Save a copy", onclick: download }),
+    el("button", { type: "button", class: "ed-when-editing", text: "Done", onclick: () => setEditing(false) })
+  ]));
+  const tip = ui(el("div", { class: "ed-tip" }));
+
+  const showToolbar = location.protocol === "file:" || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) ||
+    /(^|[?&#])edit\b/.test(location.search + location.hash);
+
+  function mountUI() {
+    document.body.appendChild(bar);
+    document.body.appendChild(tip);
+  }
+
+  function setStatus(t) { status.textContent = t; }
+
+  // ---------------- Inline text ----------------
+  function hasOwnText(n) {
+    for (const c of n.childNodes) if (c.nodeType === 3 && c.nodeValue.trim()) return true;
+    return false;
+  }
+  function editableCandidates() {
+    const out = [];
+    document.querySelectorAll("header *, main *, footer *").forEach(n => {
+      if (n.closest("svg, script, style, button, [data-editor-ui], select, textarea, " + GENERATED)) return;
+      if (!hasOwnText(n)) return;
+      if (out.some(o => o.contains(n))) return;
+      out.push(n);
+    });
+    return out;
+  }
+  function svgTexts() {
+    return [...document.querySelectorAll("main svg text, header svg text")].filter(t => t.textContent.trim() && !t.closest("[data-editor-ui]"));
+  }
+
+  function setEditing(on) {
+    editing = on;
+    bar.classList.toggle("is-editing", on);
+    document.documentElement.classList.toggle("site-editing", on);
+    if (on) {
+      editableCandidates().forEach(n => { n.setAttribute("contenteditable", "true"); n.setAttribute("spellcheck", "true"); });
+      svgTexts().forEach(t => t.classList.add("ed-svgtext"));
+      // Make sure nothing is stuck waiting for its scroll-in animation.
+      document.querySelectorAll(".reveal").forEach(n => n.classList.add("is-revealed"));
+      document.querySelectorAll(".draw").forEach(n => n.classList.add("is-drawn"));
+      setStatus(dirtySinceDownload ? "Unsaved changes" : "");
+    } else {
+      document.querySelectorAll("[contenteditable]").forEach(n => { if (!n.closest("[data-editor-ui]")) { n.removeAttribute("contenteditable"); n.removeAttribute("spellcheck"); } });
+      document.querySelectorAll(".ed-svgtext").forEach(t => t.classList.remove("ed-svgtext"));
+      closePanel(); hideLink();
+      if (document.activeElement) document.activeElement.blur();
+    }
+  }
+
+  function changed() {
+    dirtySinceDownload = true;
+    setStatus("Saving draft…");
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      const ok = store.set(DRAFT_KEY, buildHTML());
+      setStatus(ok ? "Draft kept" : "Not saved yet");
+    }, 700);
+  }
+
+  document.addEventListener("input", e => {
+    if (!editing || e.target.closest("[data-editor-ui]")) return;
+    changed();
+  });
+
+  // Paste as plain text so formatting from Word/Docs doesn't sneak in.
+  document.addEventListener("paste", e => {
+    if (!editing || !e.target.closest || !e.target.closest('[contenteditable="true"]')) return;
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData("text/plain");
+    document.execCommand("insertText", false, text);
+  });
+
+  document.addEventListener("keydown", e => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "E" || e.key === "e")) {
+      e.preventDefault();
+      if (!bar.isConnected) mountUI();
+      setEditing(!editing);
+      return;
+    }
+    if ((e.ctrlKey || e.metaKey) && (e.key === "s" || e.key === "S") && editing) { e.preventDefault(); download(); return; }
+    if (!editing) return;
+    const root = e.target.closest && e.target.closest('[contenteditable="true"]');
+    if (!root || root.closest("[data-editor-ui]")) return;
+    if (e.key === "Escape") { root.blur(); return; }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (root.tagName === "LI") {
+        // Enter in a list item adds the next item (handy for skills and bullet lists).
+        const li = el("li"); li.setAttribute("contenteditable", "true"); li.setAttribute("spellcheck", "true");
+        li.className = root.className;
+        root.after(li); li.focus(); changed();
+      } else if (root.tagName === "P" && e.shiftKey) {
+        document.execCommand("insertLineBreak");
+      } else {
+        root.blur();
+      }
+    }
+    if (e.key === "Backspace" && root.tagName === "LI" && !root.textContent.trim()) {
+      e.preventDefault();
+      const prev = root.previousElementSibling;
+      root.remove(); changed();
+      if (prev && prev.isContentEditable) { prev.focus(); placeCaretAtEnd(prev); }
+    }
+  });
+  function placeCaretAtEnd(n) {
+    const r = document.createRange(); r.selectNodeContents(n); r.collapse(false);
+    const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+  }
+
+  // ---------------- Clicks while editing ----------------
+  document.addEventListener("click", e => {
+    if (!editing) return;
+    const t = e.target;
+    if (t.closest("[data-editor-ui]")) return;
+
+    const card = t.closest("#work-grid .card");
+    if (card) { e.preventDefault(); e.stopPropagation(); openPanel("projects", +card.dataset.index); return; }
+    const stopBtn = t.closest("#map-stops .stop, #stop-links .stop-link");
+    if (stopBtn) {
+      e.preventDefault(); e.stopPropagation();
+      const i = [...stopBtn.parentNode.children].indexOf(stopBtn);
+      openPanel("stops", i); return;
+    }
+    const img = t.closest("main img");
+    if (img) { e.preventDefault(); e.stopPropagation(); pickImage(url => { img.src = url; img.removeAttribute("data-missing-src"); changed(); }); return; }
+
+    const svgText = t.closest && t.closest(".ed-svgtext");
+    if (svgText) {
+      e.preventDefault(); e.stopPropagation();
+      const target = svgText.querySelector("textPath") || svgText;
+      const v = window.prompt("Change this text:", target.textContent);
+      if (v !== null && v !== target.textContent) { target.textContent = v; changed(); }
+      return;
+    }
+
+    const a = t.closest("a[href]");
+    if (a && !a.closest("[data-editor-ui]")) { e.preventDefault(); showLink(a); return; }
+    if (!t.closest(".ed-link")) hideLink();
+
+    // Other buttons (copy email, filters, zoom) keep working; nothing else to do.
+  }, true);
+
+  // Hover hints
+  document.addEventListener("mouseover", e => {
+    if (!editing) return;
+    const t = e.target;
+    let msg = "";
+    if (t.closest("[data-editor-ui]")) msg = "";
+    else if (t.closest("#work-grid .card")) msg = "Click to edit this project";
+    else if (t.closest("#map-stops .stop, #stop-links .stop-link")) msg = "Click to edit this stop";
+    else if (t.closest("main img")) msg = "Click to replace photo";
+    else if (t.closest && t.closest(".ed-svgtext")) msg = "Click to change label";
+    else if (t.closest("a[href]")) msg = "Click to edit text or link";
+    tip.textContent = msg;
+    tip.classList.toggle("on", !!msg);
+  });
+  document.addEventListener("mousemove", e => {
+    if (!tip.classList.contains("on")) return;
+    tip.style.left = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8) + "px";
+    tip.style.top = (e.clientY + 18) + "px";
+  });
+
+  // ---------------- Link editor ----------------
+  let linkBox = null;
+  function showLink(a) {
+    hideLink();
+    const input = el("input", { type: "text", value: a.getAttribute("href") || "", "aria-label": "Link address" });
+    const apply = () => { if (input.value !== a.getAttribute("href")) { a.setAttribute("href", input.value.trim()); changed(); } hideLink(); };
+    input.addEventListener("keydown", ev => { if (ev.key === "Enter") { ev.preventDefault(); apply(); } if (ev.key === "Escape") hideLink(); });
+    linkBox = ui(el("div", { class: "ed-link" }, [
+      el("span", { text: "Link to" }), input,
+      el("button", { type: "button", text: "Set", onclick: apply })
+    ]));
+    document.body.appendChild(linkBox);
+    const r = a.getBoundingClientRect();
+    const left = Math.max(12, Math.min(r.left + scrollX, scrollX + innerWidth - linkBox.offsetWidth - 12));
+    linkBox.style.left = left + "px";
+    linkBox.style.top = (r.bottom + scrollY + 8) + "px";
+    // Put the cursor in the link's text too, so you can edit either.
+    const editable = a.querySelector('[contenteditable="true"]') || (a.isContentEditable ? a : null);
+    if (editable) editable.focus();
+  }
+  function hideLink() { if (linkBox) { linkBox.remove(); linkBox = null; } }
+
+  // ---------------- Images ----------------
+  function pickImage(done) {
+    const input = el("input", { type: "file", accept: "image/*" });
+    input.addEventListener("change", () => {
+      const f = input.files && input.files[0];
+      if (f) imageToDataURL(f).then(done, () => alert("Sorry, that image couldn't be read."));
+    });
+    input.click();
+  }
+  // Photos are shrunk and stored inside index.html itself, so the saved file is complete on its own.
+  function imageToDataURL(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = () => {
+        const src = reader.result;
+        if (/svg|gif/.test(file.type) || file.size < 250 * 1024) return resolve(src);
+        const img = new Image();
+        img.onerror = reject;
+        img.onload = () => {
+          const max = 1600, k = Math.min(1, max / Math.max(img.width, img.height));
+          const c = document.createElement("canvas");
+          c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+          const ctx = c.getContext("2d");
+          const png = /png|webp/.test(file.type);
+          if (!png) { ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height); }
+          ctx.drawImage(img, 0, 0, c.width, c.height);
+          resolve(png ? c.toDataURL("image/png") : c.toDataURL("image/jpeg", 0.85));
+        };
+        img.src = src;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // ---------------- Side panel (projects / stops) ----------------
+  const panelTitle = el("h2");
+  const panelBody = el("div", { class: "ed-body" });
+  const panel = ui(el("aside", { class: "ed-panel", "aria-label": "Editor panel" }, [
+    el("header", null, [panelTitle, el("button", { type: "button", class: "ed-close", "aria-label": "Close panel", text: "×", onclick: () => closePanel() })]),
+    panelBody
+  ]));
+  let panelKind = null;
+
+  function openPanel(kind, focusIndex) {
+    hideLink();
+    if (!panel.isConnected) document.body.appendChild(panel);
+    panelKind = kind;
+    (kind === "projects" ? buildProjects : buildStops)(focusIndex);
+    requestAnimationFrame(() => { panel.classList.add("open"); document.documentElement.classList.add("ed-panel-open"); });
+  }
+  function closePanel() { panel.classList.remove("open"); document.documentElement.classList.remove("ed-panel-open"); panelKind = null; }
+
+  function rerender() {
+    clearTimeout(renderTimer);
+    renderTimer = setTimeout(() => {
+      if (panelKind === "projects") data.renderProjects(); else data.renderStops();
+    }, 150);
+    changed();
+  }
+
+  const lines = v => v.split("\n").map(s => s.trim()).filter(Boolean);
+  function field(label, obj, key, opts) {
+    opts = opts || {};
+    const multi = opts.list || opts.long;
+    const val = opts.list ? (obj[key] || []).join("\n") : (obj[key] || "");
+    const input = multi ? el("textarea", { rows: opts.rows || 3 }) : el("input", { type: "text" });
+    input.value = val;
+    if (opts.placeholder) input.placeholder = opts.placeholder;
+    if (opts.datalist) input.setAttribute("list", opts.datalist);
+    input.addEventListener("input", () => {
+      if (opts.list) { const l = lines(input.value); if (l.length || !opts.optional) obj[key] = l; else delete obj[key]; }
+      else if (opts.optional && !input.value.trim()) delete obj[key];
+      else obj[key] = input.value;
+      if (opts.onChange) opts.onChange();
+      rerender();
+    });
+    return el("label", null, [label, opts.hint ? el("small", { text: opts.hint }) : null, input]);
+  }
+  function moveButtons(arr, i, rebuild) {
+    return el("div", { class: "ed-row" }, [
+      el("button", { type: "button", class: "ed-btn", text: "↑ Move up", onclick: () => { if (i > 0) { arr.splice(i - 1, 0, arr.splice(i, 1)[0]); rerender(); rebuild(i - 1); } } }),
+      el("button", { type: "button", class: "ed-btn", text: "↓ Move down", onclick: () => { if (i < arr.length - 1) { arr.splice(i + 1, 0, arr.splice(i, 1)[0]); rerender(); rebuild(i + 1); } } }),
+      el("button", { type: "button", class: "ed-btn ed-danger", text: "Delete", onclick: () => {
+        if (confirm("Delete “" + (arr[i].title || arr[i].name || "this item") + "”?")) { arr.splice(i, 1); rerender(); rebuild(); }
+      } })
+    ]);
+  }
+
+  function buildProjects(openIndex) {
+    const P = data.PROJECTS;
+    panelTitle.textContent = "Projects";
+    panelBody.innerHTML = "";
+    panelBody.appendChild(el("p", { class: "ed-help", text: "These are the cards in The Studio. Changes show on the page as you type. Results, tools and steps take one item per line." }));
+    const tags = el("datalist", { id: "ed-tags" }, ["Projects", "Process", "Publication", ...new Set(P.map(p => p.tag))].filter((v, i, a) => v && a.indexOf(v) === i).map(t => el("option", { value: t })));
+    panelBody.appendChild(tags);
+    P.forEach((p, i) => {
+      const sum = el("summary", { text: p.title || "Untitled project" });
+      const thumb = el("img", { class: "ed-thumb", alt: "" });
+      const syncThumb = () => { thumb.hidden = !p.photo; if (p.photo) thumb.src = p.photo; };
+      syncThumb();
+      const iconSel = el("select", null, ICONS.map(ic => el("option", { value: ic, text: ic.replace("ico-", "") })));
+      iconSel.value = p.icon || ICONS[0];
+      iconSel.addEventListener("change", () => { p.icon = iconSel.value; rerender(); });
+      const d = el("details", null, [sum, el("div", { class: "ed-fields" }, [
+        field("Title", p, "title", { onChange: () => { sum.textContent = p.title || "Untitled project"; } }),
+        el("div", { class: "ed-row" }, [
+          field("Filter tag", p, "tag", { datalist: "ed-tags", hint: "a new word adds a new filter" }),
+          el("label", null, ["Drawing (if no photo)", iconSel])
+        ]),
+        el("label", null, ["Photo", el("div", { class: "ed-row" }, [
+          thumb,
+          el("button", { type: "button", class: "ed-btn", text: p.photo ? "Replace photo" : "Add photo", onclick: ev => {
+            const btn = ev.currentTarget;
+            pickImage(url => { p.photo = url; syncThumb(); btn.textContent = "Replace photo"; rerender(); });
+          } }),
+          el("button", { type: "button", class: "ed-btn ed-danger", text: "Remove", onclick: () => { delete p.photo; syncThumb(); rerender(); } })
+        ])]),
+        field("Summary", p, "summary", { long: true, hint: "top of the case study, and the card unless a short blurb is set" }),
+        field("Short card blurb", p, "blurb", { long: true, optional: true, rows: 2, hint: "optional" }),
+        field("The problem", p, "problem", { long: true }),
+        field("My role", p, "role", { long: true }),
+        field("Key results", p, "results", { list: true, hint: "one per line" }),
+        field("Tools used", p, "tools", { list: true, hint: "one per line" }),
+        field("How it works", p, "process", { list: true, optional: true, hint: "optional steps, one per line" }),
+        field("What's next", p, "next", { long: true, optional: true, rows: 2, hint: "optional" }),
+        moveButtons(P, i, buildProjects)
+      ])]);
+      if (i === openIndex) d.open = true;
+      panelBody.appendChild(d);
+    });
+    panelBody.appendChild(el("button", { type: "button", class: "ed-add", text: "+ Add a project", onclick: () => {
+      P.push({ title: "New project", tag: "Projects", icon: "ico-sun", summary: "One or two sentences about the project.", problem: "", role: "", results: [], tools: [] });
+      rerender(); buildProjects(P.length - 1);
+      panelBody.scrollTop = panelBody.scrollHeight;
+    } }));
+    scrollOpenIntoView();
+  }
+
+  function buildStops(openIndex) {
+    const S = data.STOPS;
+    panelTitle.textContent = "Thesis stops";
+    panelBody.innerHTML = "";
+    panelBody.appendChild(el("p", { class: "ed-help", text: "The numbered pins on the chip map and the field note beside it. Left / top place the pin, as a percentage of the map's width and height." }));
+    S.forEach((st, i) => {
+      const sum = el("summary", { text: st.n + " · " + (st.title || "Untitled stop") });
+      const upd = () => { sum.textContent = st.n + " · " + (st.title || "Untitled stop"); };
+      const d = el("details", null, [sum, el("div", { class: "ed-fields" }, [
+        el("div", { class: "ed-row" }, [
+          field("Number", st, "n", { onChange: upd }),
+          field("Left", st, "x", { placeholder: "50%" }),
+          field("Top", st, "y", { placeholder: "50%" })
+        ]),
+        field("Place name", st, "name", { hint: "label next to the pin" }),
+        field("Heading", st, "title", { onChange: upd }),
+        field("Paragraph", st, "text", { long: true, rows: 4 }),
+        field("Bullet points", st, "list", { list: true, hint: "one per line" }),
+        moveButtons(S, i, buildStops)
+      ])]);
+      if (i === openIndex) d.open = true;
+      panelBody.appendChild(d);
+    });
+    panelBody.appendChild(el("button", { type: "button", class: "ed-add", text: "+ Add a stop", onclick: () => {
+      S.push({ n: String(S.length + 1), name: "New stop", x: "50%", y: "50%", title: "New stop", text: "", list: [] });
+      rerender(); buildStops(S.length - 1);
+    } }));
+    scrollOpenIntoView();
+  }
+  function scrollOpenIntoView() {
+    const d = panelBody.querySelector("details[open]");
+    if (d) setTimeout(() => d.scrollIntoView({ block: "start" }), 280);
+  }
+
+  // ---------------- Building the saved file ----------------
+  const q = s => JSON.stringify(s).replace(/</g, "\\u003c");
+  function lit(o, firstKeys, order) {
+    const val = v => Array.isArray(v) ? "[" + v.map(q).join(", ") + "]" : q(v);
+    const keys = order.filter(k => o[k] !== undefined).concat(Object.keys(o).filter(k => !order.includes(k) && o[k] !== undefined));
+    const head = keys.filter(k => firstKeys.includes(k)).map(k => k + ": " + val(o[k])).join(", ");
+    const rest = keys.filter(k => !firstKeys.includes(k)).map(k => "      " + k + ": " + val(o[k]));
+    return "    { " + [head + (rest.length ? "," : "")].concat(rest.length ? [rest.join(",\n")] : []).join("\n") + " }";
+  }
+  function projectsSource() {
+    return "const PROJECTS = [\n" + data.PROJECTS.map(p => lit(p, ["title", "tag", "icon"],
+      ["title", "tag", "icon", "photo", "summary", "blurb", "problem", "role", "results", "tools", "process", "next"])).join(",\n") + "\n  ];";
+  }
+  function stopsSource() {
+    return "const STOPS = [\n" + data.STOPS.map(s => lit(s, ["n", "name", "x", "y", "title"],
+      ["n", "name", "x", "y", "title", "text", "list"])).join(",\n") + "\n  ];";
+  }
+
+  function buildHTML() {
+    const root = document.documentElement.cloneNode(true);
+    root.querySelectorAll("[data-editor-ui]").forEach(n => n.remove());
+    root.classList.remove("js-reveal", "js-draw", "site-editing", "ed-panel-open");
+    root.querySelectorAll("[contenteditable], [spellcheck]").forEach(n => { n.removeAttribute("contenteditable"); n.removeAttribute("spellcheck"); });
+    ["reveal", "is-revealed", "is-drawn", "is-seen", "ed-svgtext", "open"].forEach(c =>
+      root.querySelectorAll("." + c).forEach(n => n.classList.remove(c)));
+    [root, ...root.querySelectorAll("[class]")].forEach(n => { if (n.getAttribute("class") === "") n.removeAttribute("class"); });
+    root.querySelectorAll("[style]").forEach(n => {
+      n.style.removeProperty("transition-delay");
+      if (n.tagName === "BODY") n.style.removeProperty("overflow");
+      if (!n.getAttribute("style").trim()) n.removeAttribute("style");
+    });
+    root.querySelectorAll("[data-missing-src]").forEach(n => { n.setAttribute("src", n.getAttribute("data-missing-src")); n.removeAttribute("data-missing-src"); });
+    root.querySelectorAll(GENERATED + ", #modal-tag, #modal-title, #modal-summary, #modal-problem, #modal-role, #modal-results, #modal-tools, #modal-process, #modal-next-text, #modal-count")
+      .forEach(n => { n.innerHTML = ""; });
+    root.querySelectorAll("#note-prev, #note-next, #modal-prev, #modal-next").forEach(n => n.removeAttribute("disabled"));
+    root.querySelectorAll("#modal-process-wrap, #modal-next-wrap").forEach(n => n.setAttribute("hidden", ""));
+    root.querySelectorAll("#modal-overlay, #chip-overlay").forEach(n => n.setAttribute("aria-hidden", "true"));
+    const chipInner = root.querySelector(".chip-overlay-inner");
+    if (chipInner) chipInner.querySelectorAll(":scope > svg").forEach(n => n.remove());
+    const arch = root.querySelector(".modal-arch");
+    if (arch) arch.innerHTML = '<svg id="modal-icon"><use href="#ico-sprout"/></svg>';
+    root.querySelectorAll("[aria-current]").forEach(n => n.removeAttribute("aria-current"));
+    const copyBtn = root.querySelector("#copy-email"); if (copyBtn) copyBtn.textContent = "Copy email";
+    root.querySelectorAll("script").forEach(s => {
+      let t = s.textContent;
+      if (t.includes("const PROJECTS = [")) {
+        t = t.replace(/const PROJECTS = \[[\s\S]*?\n  \];/, () => projectsSource())
+             .replace(/const STOPS = \[[\s\S]*?\n  \];/, () => stopsSource());
+        s.textContent = t;
+      }
+    });
+    return "<!doctype html>\n" + root.outerHTML + "\n";
+  }
+
+  function download() {
+    hideLink();
+    if (document.activeElement && document.activeElement.isContentEditable) document.activeElement.blur();
+    const html = buildHTML();
+    store.set(DRAFT_KEY, html);
+    const a = ui(el("a", { href: URL.createObjectURL(new Blob([html], { type: "text/html" })), download: "index.html" }));
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    dirtySinceDownload = false;
+    setStatus("Downloaded ✓");
+  }
+
+  window.addEventListener("beforeunload", e => {
+    if (dirtySinceDownload) { e.preventDefault(); e.returnValue = ""; }
+  });
+
+  // ---------------- Drafts ----------------
+  function offerDraft(draft) {
+    const banner = ui(el("div", { class: "ed-banner", role: "status" }, [
+      el("span", { text: "You have edits from last time that aren't in this file yet." }),
+      el("button", { type: "button", text: "Bring them back", onclick: () => {
+        store.sset(RESTORED_KEY, "1");
+        document.open(); document.write(draft); document.close();
+      } }),
+      el("button", { type: "button", class: "ed-ghost", text: "Throw them away", onclick: () => {
+        if (confirm("Throw away the unsaved edits? This can't be undone.")) { store.del(DRAFT_KEY); banner.remove(); }
+      } })
+    ]));
+    document.body.appendChild(banner);
+  }
+
+  function init() {
+    if (!data) return;
+    const restored = store.sget(RESTORED_KEY);
+    store.sdel(RESTORED_KEY);
+    if (showToolbar || restored) mountUI();
+    if (restored) { setEditing(true); dirtySinceDownload = true; setStatus("Edits restored"); return; }
+    const draft = store.get(DRAFT_KEY);
+    if (draft) {
+      if (draft === buildHTML()) store.del(DRAFT_KEY);
+      else if (showToolbar) offerDraft(draft);
+    }
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();
 </script>
 
