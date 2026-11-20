@@ -1947,7 +1947,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
       role: "Design: created the channel designs, with Clover and Daisy differing in the number of channels, to compare how the sample is delivered to the sensing gate.",
       results: ["Designed to amplify the signal from extremely small samples into readable data", "Aimed at detecting NT-proBNP from reduced sample volumes", "Two full layouts drawn for comparison: Clover (four channels) and Daisy (six)"],
       tools: ["BioFET", "AutoCAD", "COMSOL", "Microfabrication"],
-      process: ["How a BioFET senses: the transistor\u2019s gate is the sensing surface. When NT-proBNP binds to receptors on the gate, the local charge shifts, which changes the current flowing through the device. That electronic amplification turns a very small amount of captured target into a clear, readable signal, so far less sample is needed than a conventional assay.", "Clover and Daisy: two channel designs I made with different numbers of sensing channels \u2014 Clover has four, Daisy has six \u2014 to compare how the small sample is routed across the sensing gate and how the channel count affects delivery to the surface.", "The colour coding, in both layouts: yellow is the metal, green the glassy-carbon electrodes, white the insulation layer and purple the PDMS flow channel. The Daisy design is shown on the card; Clover is in the gallery below."],
+      process: ["How a BioFET senses: the transistor\u2019s gate is the sensing surface. When NT-proBNP binds to receptors on the gate, the local charge shifts, which changes the current flowing through the device. That electronic amplification turns a very small amount of captured target into a clear, readable signal, so far less sample is needed than a conventional assay.", "Clover and Daisy: two channel designs I made with different numbers of sensing channels \u2014 Clover has four, Daisy has six \u2014 to compare how the small sample is routed across the sensing gate and how the channel count affects delivery to the surface.", "The colour coding, in both layouts: yellow is the metal, green the glassy-carbon electrodes, white the insulation layer and purple the PDMS flow channel. Both designs are in the gallery below."],
       next: "Fabricate and test the chip. The designs were finished but never built, so the next step is to make the devices and compare Clover and Daisy head to head. My guess is the six-channel Daisy would deliver the sample better, but that is untested." }
   ];
 
@@ -2008,10 +2008,16 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
     nextWrap.hidden = !p.next;
     document.getElementById("modal-next-text").textContent = p.next || "";
     const arch = document.querySelector(".modal-arch");
-    if (p.photo) {
-      arch.innerHTML = '<img src="' + p.photo + '" alt="" onerror="handleProjectImgError(this, \'' + p.icon + '\')">';
+    if (p.gallery && p.gallery.length) {
+      arch.style.display = "none";
+      arch.innerHTML = "";
     } else {
-      arch.innerHTML = '<svg id="modal-icon"><use href="#' + p.icon + '"/></svg>';
+      arch.style.display = "";
+      if (p.photo) {
+        arch.innerHTML = '<img src="' + p.photo + '" alt="" onerror="handleProjectImgError(this, \'' + p.icon + '\')">';
+      } else {
+        arch.innerHTML = '<svg id="modal-icon"><use href="#' + p.icon + '"/></svg>';
+      }
     }
     const gal = document.getElementById("modal-gallery");
     gal.hidden = !(p.gallery && p.gallery.length);
@@ -2865,7 +2871,7 @@ html.ed-panel-open .ed-bar .ed-hint { display: none; }
     root.querySelectorAll("#photo-count").forEach(n => { n.textContent = ""; });
     root.querySelectorAll("#photo-prev, #photo-next").forEach(n => n.removeAttribute("disabled"));
     const arch = root.querySelector(".modal-arch");
-    if (arch) arch.innerHTML = '<svg id="modal-icon"><use href="#ico-sprout"/></svg>';
+    if (arch) { arch.innerHTML = '<svg id="modal-icon"><use href="#ico-sprout"/></svg>'; arch.style.removeProperty("display"); if (!arch.getAttribute("style")) arch.removeAttribute("style"); }
     const galSave = root.querySelector("#modal-gallery");
     if (galSave) { galSave.innerHTML = ""; galSave.setAttribute("hidden", ""); }
     root.querySelectorAll("[aria-current]").forEach(n => n.removeAttribute("aria-current"));
