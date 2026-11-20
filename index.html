@@ -1039,6 +1039,9 @@ html.js-draw .draw.is-drawn .pop { opacity: 1; }
 .modal-arch svg { width: 45%; color: var(--ink); }
 .modal-arch { overflow: hidden; }
 .modal-arch img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.modal-arch { cursor: zoom-in; }
+.modal-gallery img { cursor: zoom-in; transition: box-shadow 0.2s ease; }
+.modal-gallery figure:hover img { box-shadow: 0 14px 26px -14px rgba(44, 36, 32, 0.6); }
 .modal aside h4 { font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--maroon); margin: 0 0 0.3rem; }
 .modal aside section + section { margin-top: 1.2rem; }
 .modal aside p, .modal aside ul { margin: 0; font-size: 0.92rem; }
@@ -1050,6 +1053,11 @@ html.js-draw .draw.is-drawn .pop { opacity: 1; }
 .tool-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .tool-pills span { font-family: var(--mono); font-size: 0.68rem; border: 1px solid var(--line); border-radius: 999px; padding: 0.2rem 0.6rem; }
 @media (max-width: 700px) { .modal-body { grid-template-columns: 1fr; } }
+.modal-gallery { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.3rem 1.2rem; margin-top: 0.4rem; }
+.modal-gallery .modal-gallery-head { grid-column: 1 / -1; margin: 0; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--maroon); }
+.modal-gallery figure { margin: 0; }
+.modal-gallery img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--line); box-shadow: 0 10px 22px -16px rgba(44, 36, 32, 0.5); }
+.modal-gallery figcaption { margin-top: 0.55rem; font-size: 0.86rem; line-height: 1.5; color: var(--muted); }
 
 /* ---------------- Scroll reveal (same values as the old site) ---------------- */
 html.js-reveal .reveal {
@@ -1897,6 +1905,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
         <section><h4>Key results</h4><ul id="modal-results"></ul></section>
         <section><h4>Tools used</h4><div class="tool-pills" id="modal-tools"></div></section>
       </aside>
+      <div class="modal-gallery" id="modal-gallery" hidden></div>
     </div>
   </div>
 </div>
@@ -1933,6 +1942,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
       tools: ["HTML", "GitHub Pages", "Claude"] },
     { title: "Biosensor", tag: "Projects", icon: "ico-sprout",
       photo: "images/biosensor-clover.jpg",
+      gallery: [{ src: "images/biosensor-gate.jpg", cap: "One sensing site. Each electrode has its own source and drain, and all of them share a common source. The white square is the opening in the insulation over the gate \u2014 where NT-proBNP binds and the sensing happens." }],
       summary: "A biological field-effect transistor (BioFET) for detecting NT-proBNP, a heart-failure marker, from extremely small samples \u2014 using the transistor to amplify a tiny binding event into readable data, explored through two channel designs: Clover and Daisy.",
       problem: "NT-proBNP is a peptide the heart releases when its walls are stretched or strained, so its level in the blood is a key marker for diagnosing and monitoring heart failure. It circulates at very low concentrations (on the order of pg/mL), so a sensor has to pick out a faint signal from a tiny amount of target \u2014 and standard lab assays lean on sizeable samples and bench equipment, which is slow and hard to do at the point of care.",
       role: "Design: created the channel designs, with Clover and Daisy differing in the number of channels, to compare how the sample is delivered to the sensing gate.",
@@ -2004,6 +2014,11 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
     } else {
       arch.innerHTML = '<svg id="modal-icon"><use href="#' + p.icon + '"/></svg>';
     }
+    const gal = document.getElementById("modal-gallery");
+    gal.hidden = !(p.gallery && p.gallery.length);
+    gal.innerHTML = (p.gallery && p.gallery.length)
+      ? '<p class="modal-gallery-head">Inside the design</p>' + p.gallery.map(g => '<figure><img src="' + g.src + '" alt="" loading="lazy"><figcaption>' + g.cap + '</figcaption></figure>').join("")
+      : "";
     document.getElementById("modal-count").textContent = (i + 1) + " / " + PROJECTS.length;
     document.getElementById("modal-prev").disabled = i === 0;
     document.getElementById("modal-next").disabled = i === PROJECTS.length - 1;
@@ -2150,6 +2165,8 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
   const benchItems = () => benchGrid ? [...benchGrid.querySelectorAll(".bench-photo")] : [];
   function showPhoto(li) {
     const items = benchItems(), i = items.indexOf(li);
+    document.getElementById("photo-prev").style.display = "";
+    document.getElementById("photo-next").style.display = "";
     document.getElementById("photo-prev").disabled = i <= 0;
     document.getElementById("photo-next").disabled = i >= items.length - 1;
     document.getElementById("photo-count").textContent = (i + 1) + " / " + items.length;
@@ -2189,9 +2206,32 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
     document.getElementById("photo-overlay-video").pause();
     photoOverlay.classList.remove("open");
     photoOverlay.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-    if (photoReturn) photoReturn.focus();
+    document.body.style.overflow = overlay.classList.contains("open") ? "hidden" : "";
+    if (photoReturn && photoReturn.focus) photoReturn.focus();
   }
+  // Enlarge a single project image (from the case-study modal), no gallery nav.
+  function openProjectPhoto(img) {
+    const bigImg = document.getElementById("photo-overlay-img");
+    const bigVid = document.getElementById("photo-overlay-video");
+    document.getElementById("photo-overlay-video").pause();
+    photoReturn = img;
+    bigVid.hidden = true; bigImg.hidden = false;
+    bigImg.src = img.getAttribute("data-full") || img.src; bigImg.alt = img.alt || "";
+    const cap = img.closest("figure") ? (img.closest("figure").querySelector("figcaption") || {}).innerHTML : "";
+    document.getElementById("photo-overlay-cap").innerHTML = cap || "";
+    photoOverlay.querySelector("figure").classList.remove("has-detail");
+    document.getElementById("photo-count").textContent = "";
+    document.getElementById("photo-prev").style.display = "none";
+    document.getElementById("photo-next").style.display = "none";
+    photoOverlay.classList.add("open");
+    photoOverlay.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    document.getElementById("photo-overlay-close").focus();
+  }
+  overlay.addEventListener("click", e => {
+    const img = e.target.closest(".modal-arch img, .modal-gallery img");
+    if (img && !document.documentElement.classList.contains("site-editing")) { e.stopPropagation(); openProjectPhoto(img); }
+  });
   if (benchGrid && prefersReducedMotion) {
     benchGrid.querySelectorAll("video").forEach(v => { v.removeAttribute("autoplay"); v.pause(); v.controls = true; });
   }
@@ -2783,7 +2823,7 @@ html.ed-panel-open .ed-bar .ed-hint { display: none; }
   }
   function projectsSource() {
     return "const PROJECTS = [\n" + data.PROJECTS.map(p => lit(p, ["title", "tag", "icon"],
-      ["title", "tag", "icon", "photo", "summary", "blurb", "problem", "role", "results", "tools", "process", "next"])).join(",\n") + "\n  ];";
+      ["title", "tag", "icon", "photo", "gallery", "summary", "blurb", "problem", "role", "results", "tools", "process", "next"])).join(",\n") + "\n  ];";
   }
   function stopsSource() {
     return "const STOPS = [\n" + data.STOPS.map(s => lit(s, ["n", "name", "x", "y", "title"],
@@ -2819,6 +2859,8 @@ html.ed-panel-open .ed-bar .ed-hint { display: none; }
     root.querySelectorAll("#photo-prev, #photo-next").forEach(n => n.removeAttribute("disabled"));
     const arch = root.querySelector(".modal-arch");
     if (arch) arch.innerHTML = '<svg id="modal-icon"><use href="#ico-sprout"/></svg>';
+    const galSave = root.querySelector("#modal-gallery");
+    if (galSave) { galSave.innerHTML = ""; galSave.setAttribute("hidden", ""); }
     root.querySelectorAll("[aria-current]").forEach(n => n.removeAttribute("aria-current"));
     const copyBtn = root.querySelector("#copy-email"); if (copyBtn) copyBtn.textContent = "Copy email";
     root.querySelectorAll("script").forEach(s => {
