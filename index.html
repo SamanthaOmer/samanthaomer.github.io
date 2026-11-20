@@ -751,7 +751,7 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 .thought-dots { position: absolute; left: -1.7rem; bottom: -0.9rem; width: 3.4rem; overflow: visible; }
 .bench-grid {
   list-style: none; margin: 0; padding: 18px 6px 22px;
-  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: clamp(0.8rem, 1.6vw, 1.4rem);
+  display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: clamp(0.8rem, 1.6vw, 1.4rem);
 }
 .bench-photo {
   position: relative; margin: 0; padding: 7px 7px 0;
@@ -770,7 +770,8 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 .bench-photo figcaption { padding: 0.45rem 0.1rem 0.6rem; text-align: center; }
 .bench-photo .bench-script { display: block; font-family: var(--script); font-size: 1.12rem; line-height: 1.1; color: var(--maroon); }
 .bench-photo .bench-stage { display: block; margin-top: 0.2rem; font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
-.bench-photo .bench-fig { display: none; }
+.bench-photo .bench-fig, .bench-photo .bench-note { display: none; }
+.bench-photo.bench-photo--diagram img { filter: none; padding: 4px; }
 .bench-photo:nth-child(odd) { --r: -1.6deg; --tr: -3deg; }
 .bench-photo:nth-child(even) { --r: 1.4deg; --tr: 3deg; }
 .bench-photo:nth-child(3n) { --r: -0.5deg; }
@@ -787,6 +788,13 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 .photo-overlay figure { position: relative; margin: 0; padding: 14px 14px 0; background: var(--paper-light); border-radius: 4px; max-width: min(960px, 100%); max-height: 92vh; display: flex; flex-direction: column; box-shadow: 0 24px 50px -20px rgba(0,0,0,0.5); }
 .photo-overlay img, .photo-overlay video { display: block; max-width: 100%; max-height: calc(92vh - 110px); object-fit: contain; margin: 0 auto; }
 .photo-overlay figcaption { padding: 0.7rem 0.2rem 1rem; }
+.photo-overlay figcaption { overflow-y: auto; min-height: 0; flex: 0 1 auto; }
+.photo-overlay img, .photo-overlay video { flex: 0 1 auto; min-height: 0; }
+.photo-overlay .bench-note { display: block; margin-top: 0.9rem; max-width: 62ch; font-family: var(--body); font-size: 0.92rem; line-height: 1.6; color: var(--ink); }
+.photo-overlay .bench-note-lead { display: block; }
+.photo-overlay .bench-steps { display: grid; gap: 0.55rem; margin-top: 0.9rem; padding-top: 0.9rem; border-top: 1px solid var(--line); }
+.photo-overlay .bench-steps > span { display: grid; grid-template-columns: 4.6rem 1fr; gap: 0.8rem; align-items: baseline; color: var(--muted); }
+.photo-overlay .bench-steps b { font-family: var(--display); font-weight: 400; font-size: 1.05rem; color: var(--maroon); }
 .photo-overlay .bench-script { display: block; font-family: var(--script); font-size: 1.6rem; color: var(--maroon); line-height: 1.1; }
 .photo-overlay .bench-fig { display: block; margin-top: 0.3rem; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 .photo-overlay #photo-overlay-close { position: absolute; top: -14px; right: -14px; background: var(--paper-light); z-index: 2; }
@@ -1677,10 +1685,15 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
               <circle cx="40" cy="9" r="7" pathLength="1" fill="var(--paper-light)" stroke="currentColor" stroke-width="1.2" style="--d: 0.5s"/>
               <circle cx="17" cy="28" r="4.2" pathLength="1" fill="var(--paper-light)" stroke="currentColor" stroke-width="1.2" style="--d: 0.7s"/>
             </svg>
-            <p>From wafer to working chip to glowing cells. Click any photo for a closer look.</p>
+            <p>From blueprint to working chip to glowing cells. Click any photo for a closer look.</p>
           </div>
         </div>
         <ul class="bench-grid" id="bench-grid">
+          <li class="bench-photo bench-photo--fit bench-photo--diagram" tabindex="0" role="button" aria-label="Enlarge photo: The blueprint">
+            <span class="tape" aria-hidden="true"></span>
+            <img src="images/thesis/channel-design.png" alt="Diagram of the flow channel: a cell inlet with a serpentine, a three-way intersection with two angled sheath inlets, the electroporation zone, a mRNA inlet joining at 90 degrees, a second serpentine for mixing, and the outlet" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <figcaption><span class="bench-script">The blueprint</span><span class="bench-stage">Design</span><span class="bench-fig">The flow channel and how it evolved, D0 → D2.2</span><span class="bench-note"><span class="bench-note-lead">Cells enter on the left and tumble through a serpentine so fresh membrane keeps facing the field. Two sheath inlets at ±45° pin the cell stream to the centre line, the same distance from each electrode. The mRNA joins after the electroporation zone, so the field never touches it, and a second serpentine mixes it in before the outlet.</span><span class="bench-steps"><span><b>D0</b>A simple 1 mm channel to the EP zone, with the three-inlet intersection and a 45° cargo inlet.</span><span><b>D1</b>Sinusoidal serpentines for cell rotation and mixing, a wider EP zone so the 100 µm electrodes sit flush, and a funnel after the mRNA inlet.</span><span><b>D2</b>Testing showed clogging and channels that were too wide. Sharper curves (FEA showed better mixing), no funnel, the mRNA inlet turned from 45° to 90° to stop leakage, and the EP zone narrowed from 1000 µm to 100 µm, then 50 µm.</span><span><b>D2.1–2.2</b>A retaining wall and a straightened, shortened segment to stop the mold lifting off the wafer.</span></span></span></figcaption>
+          </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Layer by layer">
             <span class="tape" aria-hidden="true"></span>
             <img src="images/thesis/metal-wafer.jpg" alt="Silicon wafer with metal traces and square bump pads" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
