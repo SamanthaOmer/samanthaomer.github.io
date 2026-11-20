@@ -805,6 +805,12 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 .photo-overlay .bench-steps > span { display: grid; grid-template-columns: 4.6rem 1fr; gap: 0.8rem; align-items: baseline; color: var(--muted); }
 .photo-overlay .bench-steps b { font-family: var(--display); font-weight: 400; font-size: 1.05rem; color: var(--maroon); }
 .photo-overlay .bench-takeaway { display: block; margin-top: 1rem; padding: 0.9rem 1.1rem; background: rgba(139, 137, 46, 0.1); border-left: 2px solid var(--olive); border-radius: 0 6px 6px 0; font-size: 0.92rem; line-height: 1.6; color: var(--ink); }
+.photo-overlay figure.has-detail figcaption { text-align: center; }
+.photo-overlay figure.has-detail .bench-note { margin-inline: auto; }
+.photo-overlay figure.has-detail .bench-steps { justify-items: center; }
+.photo-overlay figure.has-detail .bench-steps > span { display: block; max-width: 56ch; }
+.photo-overlay figure.has-detail .bench-steps b { display: block; margin-bottom: 0.15rem; }
+.photo-overlay figure.has-detail .bench-takeaway { border-left: none; border-radius: 8px; }
 .photo-overlay .bench-script { display: block; font-family: var(--script); font-size: 1.6rem; color: var(--maroon); line-height: 1.1; }
 .photo-overlay .bench-fig { display: block; margin-top: 0.3rem; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 .photo-overlay #photo-overlay-close { position: absolute; top: -14px; right: -14px; background: var(--paper-light); z-index: 2; }
@@ -2132,6 +2138,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
       bigImg.alt = img.alt;
     }
     document.getElementById("photo-overlay-cap").innerHTML = li.querySelector("figcaption").innerHTML;
+    photoOverlay.querySelector("figure").classList.toggle("has-detail", !!li.querySelector(".bench-note"));
   }
   function closePhoto() {
     document.getElementById("photo-overlay-video").pause();
