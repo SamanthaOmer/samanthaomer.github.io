@@ -741,9 +741,14 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 
 /* ---------------- Thesis photos: "from the bench" ---------------- */
 .bench { margin-top: clamp(3rem, 6vw, 4.5rem); }
-.bench-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.4rem 1.5rem; margin-bottom: 2.2rem; }
+.bench-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.4rem 1.5rem; margin-bottom: 2.2rem; }
 .bench-head h3 { font-family: var(--display); font-weight: 400; font-size: clamp(1.5rem, 2.6vw, 2rem); margin: 0.3rem 0 0; }
 .bench-head p { margin: 0; max-width: 46ch; color: var(--muted); font-size: 0.95rem; }
+/* Thought bubble: hand-drawn cloud in the site's line-art style */
+.thought { position: relative; max-width: 27rem; margin: 0.8rem 1.2rem 1.4rem 2.6rem; padding: 2.5rem 3.2rem 2.1rem 3.4rem; color: var(--ink); rotate: -1.2deg; }
+.thought p { position: relative; margin: 0; max-width: none; text-align: center; font-size: 0.93rem; line-height: 1.55; color: var(--muted); }
+.thought-cloud { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 10px 14px rgba(44, 36, 32, 0.12)); }
+.thought-dots { position: absolute; left: -1.7rem; bottom: -0.9rem; width: 3.4rem; overflow: visible; }
 .bench-grid {
   list-style: none; margin: 0; padding: 18px 6px 22px;
   display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: clamp(0.8rem, 1.6vw, 1.4rem);
@@ -770,6 +775,7 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 .bench-photo:nth-child(even) { --r: 1.4deg; --tr: 3deg; }
 .bench-photo:nth-child(3n) { --r: -0.5deg; }
 /* Smaller screens: keep one row and let it scroll sideways */
+@media (max-width: 640px) { .thought { margin: 0.8rem 0.4rem 1.6rem 2rem; padding: 2.3rem 2.4rem 2rem 2.6rem; } }
 @media (max-width: 1000px) {
   .bench-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 6px; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
   .bench-grid > .bench-photo { flex: 0 0 clamp(150px, 38vw, 200px); scroll-snap-align: start; }
@@ -1662,7 +1668,17 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
             <span class="eyebrow">From the bench</span>
             <h3>The real chip, in photos</h3>
           </div>
-          <p>From wafer to working chip to glowing cells. Click any photo for a closer look.</p>
+          <div class="thought">
+            <svg class="thought-cloud draw" viewBox="0 0 400 150" preserveAspectRatio="none" aria-hidden="true">
+              <path class="pop" d="M50 60A35 35 0 0 1 105 30A40 40 0 0 1 180 18A40 40 0 0 1 255 22A38 38 0 0 1 330 38A32 32 0 0 1 365 88A32 32 0 0 1 320 128A40 40 0 0 1 245 134A40 40 0 0 1 170 134A38 38 0 0 1 95 126A32 32 0 0 1 50 60Z" fill="var(--paper-light)" stroke="none"/>
+              <path pathLength="1" d="M50 60A35 35 0 0 1 105 30A40 40 0 0 1 180 18A40 40 0 0 1 255 22A38 38 0 0 1 330 38A32 32 0 0 1 365 88A32 32 0 0 1 320 128A40 40 0 0 1 245 134A40 40 0 0 1 170 134A38 38 0 0 1 95 126A32 32 0 0 1 50 60Z" fill="none" stroke="currentColor" stroke-width="1.2" vector-effect="non-scaling-stroke"/>
+            </svg>
+            <svg class="thought-dots draw" viewBox="0 0 60 40" aria-hidden="true">
+              <circle cx="40" cy="9" r="7" pathLength="1" fill="var(--paper-light)" stroke="currentColor" stroke-width="1.2" style="--d: 0.5s"/>
+              <circle cx="17" cy="28" r="4.2" pathLength="1" fill="var(--paper-light)" stroke="currentColor" stroke-width="1.2" style="--d: 0.7s"/>
+            </svg>
+            <p>From wafer to working chip to glowing cells. Click any photo for a closer look.</p>
+          </div>
         </div>
         <ul class="bench-grid" id="bench-grid">
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Layer by layer">
