@@ -744,7 +744,8 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 .bench-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.4rem 1.5rem; margin-bottom: 2.2rem; }
 .bench-head h3 { font-family: var(--display); font-weight: 400; font-size: clamp(1.5rem, 2.6vw, 2rem); margin: 0.3rem 0 0; }
 .bench-head p { margin: 0; max-width: 46ch; color: var(--muted); font-size: 0.95rem; }
-.bench-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.8rem, 3vw, 2.8rem) clamp(1.2rem, 2.4vw, 2.2rem); }
+.bench-grid { --cols: 3; --gap-x: clamp(1.2rem, 2.4vw, 2.2rem); list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(1.8rem, 3vw, 2.8rem) var(--gap-x); }
+.bench-grid > .bench-photo { flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap-x)) / var(--cols)); }
 .bench-photo {
   position: relative; margin: 0; padding: 10px 10px 0;
   background: var(--paper-light);
@@ -770,8 +771,8 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 .bench-photo:nth-child(7) { --r: 1.1deg; --tr: -3deg; }
 .bench-photo:nth-child(8) { --r: -1.2deg; --tr: 2deg; }
 .bench-photo:nth-child(9) { --r: 0.5deg; }
-@media (max-width: 900px) { .bench-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 520px) { .bench-grid { grid-template-columns: 1fr; gap: 2.2rem; } .bench-photo { margin-inline: 6px; } }
+@media (max-width: 900px) { .bench-grid { --cols: 2; } }
+@media (max-width: 520px) { .bench-grid { --cols: 1; --gap-x: 0px; row-gap: 2.2rem; } .bench-photo { margin-inline: 6px; } }
 
 .photo-overlay { position: fixed; inset: 0; z-index: 60; background: rgba(44, 36, 32, 0.6); display: grid; place-items: center; padding: 16px; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s; }
 .photo-overlay.open { opacity: 1; visibility: visible; }
@@ -1656,11 +1657,6 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
           <p>From cleanroom to cell culture: fabrication, flow tests and results from the thesis. Tap a photo to see it larger.</p>
         </div>
         <ul class="bench-grid" id="bench-grid">
-          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: In the cleanroom">
-            <span class="tape" aria-hidden="true"></span>
-            <img src="images/thesis/cleanroom.jpg" alt="Photolithography equipment in a cleanroom lit with yellow light" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">In the cleanroom</span><span class="bench-fig">Fabrication · Photolithography tools at NanoFAB.SDSU, under the yellow light</span></figcaption>
-          </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Layer by layer">
             <span class="tape" aria-hidden="true"></span>
             <img src="images/thesis/metal-wafer.jpg" alt="Silicon wafer with metal traces and square bump pads" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
@@ -1668,12 +1664,12 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Soft lithography">
             <span class="tape" aria-hidden="true"></span>
-            <img src="images/thesis/pdms-in-hand.jpg" alt="Gloved hands holding a clear PDMS block with microfluidic channels" loading="lazy" style="object-position: center 40%" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <img src="images/thesis/pdms-in-hand.jpg" alt="Gloved hands holding a clear PDMS block with microfluidic channels" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
             <figcaption><span class="bench-script">Soft lithography</span><span class="bench-fig">Fabrication · A cast PDMS flow channel, held in gloved hands</span></figcaption>
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: The finished chip">
             <span class="tape" aria-hidden="true"></span>
-            <img src="images/thesis/finished-chip.jpg" alt="Finished microfluidic chip with serpentine channel, electrodes and inlet ports" loading="lazy" style="object-position: center 30%" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <img src="images/thesis/finished-chip.jpg" alt="Finished microfluidic chip with serpentine channel, electrodes and inlet ports" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
             <figcaption><span class="bench-script">The finished chip</span><span class="bench-fig">Fabrication · PDMS channel bonded over the electrodes, inlets punched</span></figcaption>
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Wired up">
@@ -1688,7 +1684,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Folding it together">
             <span class="tape" aria-hidden="true"></span>
-            <img src="images/thesis/mixing-loops.jpg" alt="Microscope view of a looping serpentine channel" loading="lazy" style="object-position: center 30%" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <img src="images/thesis/mixing-loops.jpg" alt="Microscope view of a looping serpentine channel" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
             <figcaption><span class="bench-script">Folding it together</span><span class="bench-fig">Flow test · The serpentine loops of the mixing region under the microscope</span></figcaption>
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: It glows!">
