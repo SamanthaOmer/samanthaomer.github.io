@@ -804,7 +804,15 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 .photo-nav.next { right: -22px; }
 .photo-nav:disabled { opacity: 0.35; cursor: default; }
 .photo-count { position: absolute; bottom: 1rem; right: 1rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; color: var(--muted); }
-@media (max-width: 720px) { .photo-overlay #photo-overlay-close { top: 6px; right: 6px; } .photo-nav.prev { left: 6px; } .photo-nav.next { right: 6px; } }
+@media (max-width: 720px) {
+  .photo-overlay #photo-overlay-close { top: 6px; right: 6px; }
+  .photo-nav { top: 6px; translate: none; }
+  .photo-nav.prev { left: 6px; }
+  .photo-nav.next { left: 54px; right: auto; }
+  .photo-count { top: 1.1rem; bottom: auto; right: auto; left: 50%; translate: -50% 0; }
+  .photo-overlay figure { padding-top: 56px; }
+  .photo-overlay .bench-steps > span { grid-template-columns: 4.2rem 1fr; gap: 0.6rem; }
+}
 
 /* ---------------- Line-art diagrams ---------------- */
 .diagram-scroll { overflow-x: auto; }
@@ -1727,7 +1735,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
           <li class="bench-photo bench-photo--fit" tabindex="0" role="button" aria-label="Enlarge photo: It glows!">
             <span class="tape" aria-hidden="true"></span>
             <img src="images/thesis/gfp-compare.jpg" alt="The same cells side by side under normal light and under 470 nm light, with four cells circled that glow green" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">It glows!</span><span class="bench-stage">Result</span><span class="bench-fig">The same cells under normal light (left) and 470 nm light (right): the circled ones glow with GFP</span></figcaption>
+            <figcaption><span class="bench-script">It glows!</span><span class="bench-stage">Result</span><span class="bench-fig">The same cells under normal light (left) and 470 nm light (right): the circled ones glow with GFP</span><span class="bench-note"><span class="bench-note-lead">The cell test used a plasmid carrying the gene for green fluorescent protein (GFP). A plasmid is far too large to slip through an intact cell membrane, so a cell can only start making GFP if the plasmid got inside through the temporary pores the chip opened. Under 470 nm light, those cells glow green.</span><span class="bench-steps"><span><b>In</b>OVCAR8 cells entered at inlet 1, held on the centre line by PBS sheath streams from inlets 2 and 3.</span><span><b>Pores</b>Between the electrodes, the field opened transient pores at the poles of each cell membrane.</span><span><b>Plasmid</b>The GFP plasmid joined at inlet 4, after the field, and the mixing loops pressed it against the open pores before they resealed.</span><span><b>Glow</b>After culture, the same cells imaged under normal light (left) and 470 nm light (right): the circled cells fluoresce, so the plasmid made it through and is being expressed.</span><span><b>Control</b>Cells left with the same plasmid but never electroporated stayed dark, so the glow comes from the chip, not from the plasmid getting in by itself.</span></span></span></figcaption>
           </li>
         </ul>
       </div>
