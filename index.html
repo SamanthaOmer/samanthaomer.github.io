@@ -767,6 +767,9 @@ html.js-draw .skill:hover .skill-art.is-drawn .blob { transform: scale(1.12) rot
 .bench-photo:nth-child(4) { --r: 1.3deg; --tr: 2deg; }
 .bench-photo:nth-child(5) { --r: -1deg; --tr: -4deg; }
 .bench-photo:nth-child(6) { --r: 0.7deg; }
+.bench-photo:nth-child(7) { --r: 1.1deg; --tr: -3deg; }
+.bench-photo:nth-child(8) { --r: -1.2deg; --tr: 2deg; }
+.bench-photo:nth-child(9) { --r: 0.5deg; }
 @media (max-width: 900px) { .bench-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .bench-grid { grid-template-columns: 1fr; gap: 2.2rem; } .bench-photo { margin-inline: 6px; } }
 
@@ -1650,38 +1653,53 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
             <span class="eyebrow">From the bench</span>
             <h3>The real chip, in photos</h3>
           </div>
-          <p>Fabrication, flow tests and cell results from the thesis. Tap a photo to see it larger.</p>
+          <p>From cleanroom to cell culture: fabrication, flow tests and results from the thesis. Tap a photo to see it larger.</p>
         </div>
         <ul class="bench-grid" id="bench-grid">
-          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: The chip, plumbed in">
+          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: In the cleanroom">
             <span class="tape" aria-hidden="true"></span>
-            <img src="images/thesis/chip-jig.jpg" alt="Microfluidic chip clamped in a pink 3D-printed jig with tubing attached" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">The chip, plumbed in</span><span class="bench-fig">Fig. 44 · The flow chip clamped in its jig, tubing in, ready for cell tests</span></figcaption>
+            <img src="images/thesis/cleanroom.jpg" alt="Photolithography equipment in a cleanroom lit with yellow light" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <figcaption><span class="bench-script">In the cleanroom</span><span class="bench-fig">Fabrication · Photolithography tools at NanoFAB.SDSU, under the yellow light</span></figcaption>
           </li>
-          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Where it starts">
+          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Layer by layer">
             <span class="tape" aria-hidden="true"></span>
-            <img src="images/thesis/wafer.jpg" alt="Silicon wafer with two serpentine channel patterns, held under yellow cleanroom light" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">Where it starts</span><span class="bench-fig">Fig. 50 · Flow-channel master wafer under the cleanroom’s yellow light</span></figcaption>
+            <img src="images/thesis/metal-wafer.jpg" alt="Silicon wafer with metal traces and square bump pads" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <figcaption><span class="bench-script">Layer by layer</span><span class="bench-fig">Fabrication · The wafer after the metal layer: Cr/Pt traces and bump pads</span></figcaption>
+          </li>
+          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Soft lithography">
+            <span class="tape" aria-hidden="true"></span>
+            <img src="images/thesis/pdms-in-hand.jpg" alt="Gloved hands holding a clear PDMS block with microfluidic channels" loading="lazy" style="object-position: center 40%" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <figcaption><span class="bench-script">Soft lithography</span><span class="bench-fig">Fabrication · A cast PDMS flow channel, held in gloved hands</span></figcaption>
+          </li>
+          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: The finished chip">
+            <span class="tape" aria-hidden="true"></span>
+            <img src="images/thesis/finished-chip.jpg" alt="Finished microfluidic chip with serpentine channel, electrodes and inlet ports" loading="lazy" style="object-position: center 30%" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <figcaption><span class="bench-script">The finished chip</span><span class="bench-fig">Fabrication · PDMS channel bonded over the electrodes, inlets punched</span></figcaption>
+          </li>
+          <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Wired up">
+            <span class="tape" aria-hidden="true"></span>
+            <img src="images/thesis/wired-jig.jpg" alt="Microfluidic chip in a pink 3D-printed jig with oscilloscope probes clipped on" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <figcaption><span class="bench-script">Wired up</span><span class="bench-fig">Electrical test · The chip clamped in its jig with probes attached</span></figcaption>
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Three streams, one lane">
             <span class="tape" aria-hidden="true"></span>
-            <img src="images/thesis/flow-intersection.jpg" alt="Microscope view of three coloured streams meeting at a channel junction" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">Three streams, one lane</span><span class="bench-fig">Fig. 56 · Sheath flow squeezing the centre stream at the three-way intersection</span></figcaption>
+            <img src="images/thesis/flow-intersection.jpg" alt="Microscope view of orange and yellow streams meeting at a channel junction" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <figcaption><span class="bench-script">Three streams, one lane</span><span class="bench-fig">Flow test · Sheath flow squeezing the centre stream at the three-way intersection</span></figcaption>
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Folding it together">
             <span class="tape" aria-hidden="true"></span>
-            <img src="images/thesis/mixing-loop.jpg" alt="Microscope view of coloured streams flowing around a loop in the channel" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">Folding it together</span><span class="bench-fig">Fig. 58 · Coloured streams turning through one loop of the mixing region</span></figcaption>
+            <img src="images/thesis/mixing-loops.jpg" alt="Microscope view of a looping serpentine channel" loading="lazy" style="object-position: center 30%" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
+            <figcaption><span class="bench-script">Folding it together</span><span class="bench-fig">Flow test · The serpentine loops of the mixing region under the microscope</span></figcaption>
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: It glows!">
             <span class="tape" aria-hidden="true"></span>
             <img src="images/thesis/gfp-cell.jpg" alt="Bright green fluorescent cell on a dark background" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">It glows!</span><span class="bench-fig">Fig. 65 · GFP expression under 470 nm light, three days after electroporation</span></figcaption>
+            <figcaption><span class="bench-script">It glows!</span><span class="bench-fig">Cell test · GFP expression under 470 nm light, three days after electroporation</span></figcaption>
           </li>
           <li class="bench-photo" tabindex="0" role="button" aria-label="Enlarge photo: Still growing">
             <span class="tape" aria-hidden="true"></span>
             <img src="images/thesis/colonies.jpg" alt="Microscope view of small cell colonies on a green-tinted background" loading="lazy" onerror="handleImgError(this, 'PHOTO', '#e3d6c2')">
-            <figcaption><span class="bench-script">Still growing</span><span class="bench-fig">Fig. 68 · OVCAR8 colonies ten days after going through the chip</span></figcaption>
+            <figcaption><span class="bench-script">Still growing</span><span class="bench-fig">Cell test · OVCAR8 colonies ten days after going through the chip</span></figcaption>
           </li>
         </ul>
       </div>
