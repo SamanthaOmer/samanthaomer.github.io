@@ -1150,6 +1150,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
     <symbol id="ico-sprout" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M50 88V46M50 58C34 58 26 44 28 30c15 0 24 11 22 28M50 50c13 0 23-11 21-24-13 0-22 9-21 24M34 88h32"/></g></symbol>
     <symbol id="ico-sun" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="50" cy="50" r="12"/><circle cx="50" cy="50" r="24"/><path d="M50 14v-6M50 92v-6M14 50H8M92 50h-6M24.5 24.5l-4-4M79.5 79.5l-4-4M24.5 75.5l-4 4M79.5 20.5l-4 4"/></g></symbol>
     <symbol id="ico-spiral" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M50 50a4 4 0 0 1 8 0 8 8 0 0 1-16 0 12 12 0 0 1 24 0 16 16 0 0 1-32 0 20 20 0 0 1 40 0 24 24 0 0 1-48 0 28 28 0 0 1 56 0"/></g></symbol>
+    <symbol id="ico-hex" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M50 15 80 32.5V67.5L50 85 20 67.5V32.5Z"/><circle cx="50" cy="50" r="17"/></g></symbol>
     <symbol id="ico-arches" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M28 82V48a22 22 0 0 1 44 0v34M38 82V50a12 12 0 0 1 24 0v32M18 82h64M50 18v-6"/></g></symbol>
     <symbol id="face" viewBox="0 0 60 60"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><ellipse cx="30" cy="27" rx="12" ry="15"/><path d="M18 25c0-14 24-18 26-2M24 27h.01M36 27h.01M27 34c2 1.5 4 1.5 6 0M12 58c2-10 9-14 18-14s16 4 18 14"/></g></symbol>
   </defs>
@@ -1916,7 +1917,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
 
   // ---------------- Placeholder project data ----------------
   const PROJECTS = [
-    { title: "Graphene-like Carbon Coating", tag: "Projects", icon: "ico-sun",
+    { title: "Graphene-like Carbon Coating", tag: "Projects", icon: "ico-hex",
       summary: "A repeatable process for growing a graphene-like carbon coating on substrates other than silicon, developed at Grapheton.",
       problem: "The coating needed to work on non-silicon substrates and come out the same way run after run.",
       role: "R&D Engineer: developed the synthesis process, designed the test setups and characterized the devices.",
@@ -1940,7 +1941,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
       role: "Owner and editor: planned the content, set up GitHub Pages and kept the site up to date.",
       results: ["Text, photos, links and projects editable without touching code", "Site published at samanthaomer.github.io"],
       tools: ["HTML", "GitHub Pages", "Claude"] },
-    { title: "Biosensor", tag: "Projects", icon: "ico-sprout",
+    { title: "Biosensor", tag: "Projects", icon: "ico-sun",
       gallery: [{ src: "images/biosensor-clover.jpg", group: "Clover \u00b7 four channels", cap: "Clover: the four-channel design. Yellow is the metal, green the glassy-carbon electrodes, white the insulation openings and purple the PDMS flow channel." }, { src: "images/biosensor-gate.jpg", group: "Clover \u00b7 four channels", cap: "One sensing site. Each electrode has its own source and drain, and all of them share a common source. The white square is the opening in the insulation over the gate \u2014 where NT-proBNP binds and the sensing happens." }, { src: "images/biosensor-daisy.jpg", group: "Daisy \u00b7 six channels", cap: "Daisy: the six-channel design \u2014 the same build as Clover with two more sensing channels." }, { src: "images/biosensor-align.jpg", group: "Daisy \u00b7 six channels", cap: "How the layers line up at one sensing site: yellow metal, green glassy-carbon electrode, the white insulation opening over the gate, and the purple PDMS flow channel, all registered together." }, { src: "images/biosensor-wafer.jpg", group: "Daisy \u00b7 six channels", cap: "How the design tiles onto the wafer: several sensors are laid out across one quarter of a wafer, with alignment marks between them, so a batch of devices comes off a single fabrication run." }],
       summary: "A biological field-effect transistor (BioFET) for detecting NT-proBNP, a heart-failure marker, from extremely small samples \u2014 using the transistor to amplify a tiny binding event into readable data, explored through two channel designs, Clover and Daisy. It was fully designed but not fabricated or tested.",
       problem: "NT-proBNP is a peptide the heart releases when its walls are stretched or strained, so its level in the blood is a key marker for diagnosing and monitoring heart failure. It circulates at very low concentrations (on the order of pg/mL), so a sensor has to pick out a faint signal from a tiny amount of target \u2014 and standard lab assays lean on sizeable samples and bench equipment, which is slow and hard to do at the point of care.",
@@ -2429,7 +2430,7 @@ html.ed-panel-open .ed-bar .ed-hint { display: none; }
   "use strict";
   const DRAFT_KEY = "site-editor-draft:" + location.pathname;
   const RESTORED_KEY = "site-editor-restored";
-  const ICONS = ["ico-sun", "ico-arches", "ico-sprout", "ico-spiral"];
+  const ICONS = ["ico-sun", "ico-arches", "ico-sprout", "ico-spiral", "ico-hex"];
   const GENERATED = "#work-grid, #filter-bar, #map-stops, #stop-links, #note-dots, #note-count, #note-title, #note-place, #note-text, #note-list";
   const data = window.SITE_DATA;
 
