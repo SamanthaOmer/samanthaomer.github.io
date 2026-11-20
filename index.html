@@ -1932,13 +1932,13 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
       results: ["Text, photos, links and projects editable without touching code", "Site published at samanthaomer.github.io"],
       tools: ["HTML", "GitHub Pages", "Claude"] },
     { title: "Biosensor", tag: "Projects", icon: "ico-sprout",
-      summary: "A microfabricated biosensor explored through two channel designs, Clover and Daisy.",
-      problem: "Describe what the biosensor needed to detect and what made it hard.",
-      role: "Your title: what you designed, fabricated and tested.",
-      results: ["Add a key result", "Add another result"],
-      tools: ["AutoCAD", "COMSOL"],
-      process: ["Clover: describe this design and what it does well.", "Daisy: describe this design and how it differs from Clover."],
-      next: "What comes next for the biosensor." }
+      summary: "A biological field-effect transistor (BioFET) for detecting NT-proBNP, a heart-failure marker, from extremely small samples \u2014 using the transistor to amplify a tiny binding event into readable data, explored through two channel designs: Clover and Daisy.",
+      problem: "NT-proBNP is a peptide the heart releases when its walls are stretched or strained, so its level in the blood is a key marker for diagnosing and monitoring heart failure. It circulates at very low concentrations (on the order of pg/mL), so a sensor has to pick out a faint signal from a tiny amount of target \u2014 and standard lab assays lean on sizeable samples and bench equipment, which is slow and hard to do at the point of care.",
+      role: "Design and fabrication: designed the device and its two channel layouts, ran simulations and built and characterized the sensor.",
+      results: ["Amplifies the signal from extremely small samples into readable data", "Detects NT-proBNP at reduced sample volumes", "Two channel designs, Clover and Daisy, compared for sample delivery"],
+      tools: ["BioFET", "AutoCAD", "COMSOL", "Microfabrication"],
+      process: ["How a BioFET senses: the transistor\u2019s gate is the sensing surface. When NT-proBNP binds to receptors on the gate, the local charge shifts, which changes the current flowing through the device. That electronic amplification turns a very small amount of captured target into a clear, readable signal, so far less sample is needed than a conventional assay.", "Clover and Daisy: two microfluidic channel designs that route the small sample across the sensing gate, compared for how well each delivers the target to the surface. (Add how the two shapes differ and which performed better.)"],
+      next: "Add what comes next for the biosensor." }
   ];
 
   const grid = document.getElementById("work-grid");
