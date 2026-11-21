@@ -1053,7 +1053,8 @@ html.js-draw .draw.is-drawn .pop { opacity: 1; }
 .tool-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .tool-pills span { font-family: var(--mono); font-size: 0.68rem; border: 1px solid var(--line); border-radius: 999px; padding: 0.2rem 0.6rem; }
 @media (max-width: 700px) { .modal-body { grid-template-columns: 1fr; } }
-.modal-gallery { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.3rem 1.2rem; margin-top: 0.4rem; }
+.modal-gallery { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.3rem 1.2rem; margin-top: 0.4rem; }
+@media (max-width: 560px) { .modal-gallery { grid-template-columns: 1fr; } }
 .modal-gallery .modal-gallery-head { grid-column: 1 / -1; margin: 0; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--maroon); }
 .modal-gallery figure { margin: 0; }
 .modal-gallery img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--line); box-shadow: 0 10px 22px -16px rgba(44, 36, 32, 0.5); }
