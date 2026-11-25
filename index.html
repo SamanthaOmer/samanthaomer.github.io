@@ -1935,6 +1935,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
       results: ["Improved PDMS-substrate adhesion by 75%", "More consistent batches", "New testing procedure that eliminated downtime"],
       tools: ["Soft lithography", "Syringe pumps", "Optical microscopy"] },
     { title: "Lactate Sensing with Carbon Microelectrodes", tag: "Publication", icon: "ico-sprout",
+      gallery: [{ src: "images/lactate-probe.png", maxw: 260, group: "The device", cap: "The full flexible neural probe, with the 0.8 cm shank and the 0.3 cm tapered section marked." }],
       summary: "A glassy-carbon microelectrode sensor that detects lactate indirectly: an enzyme coating turns lactate into hydrogen peroxide, which the electrode reads by fast-scan cyclic voltammetry \u2014 down to 10 nM.",
       problem: "Lactate is an important signalling molecule in the brain \u2014 tied to energy metabolism, ischemia, seizures and neuroprotection \u2014 but it is non-electroactive, so it can\u2019t be detected directly by voltammetry the way dopamine or serotonin can. It needs an indirect strategy on an electrode robust enough for eventual in-vivo use.",
       role: "Co-author on the manuscript, under review at the journal Micromachines.",
@@ -2056,7 +2057,7 @@ html.js-reveal .reveal.is-revealed { opacity: 1; transform: none; }
         if (grp !== lastGroup) { html += '<p class="modal-gallery-head">' + grp + '</p>'; lastGroup = grp; }
         const media = g.video
           ? '<video src="' + g.video + '"' + (g.poster ? ' poster="' + g.poster + '"' : '') + ' autoplay muted loop playsinline preload="metadata" aria-label="' + g.cap.replace(/"/g, "&quot;") + '"></video>'
-          : '<img src="' + g.src + '" alt="" loading="lazy">';
+          : '<img src="' + g.src + '" alt="" loading="lazy"' + (g.maxw ? ' style="max-width: ' + g.maxw + 'px"' : '') + '>';
         html += '<figure>' + media + '<figcaption>' + g.cap + '</figcaption></figure>';
       });
       gal.innerHTML = html;
